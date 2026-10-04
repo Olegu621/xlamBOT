@@ -379,6 +379,14 @@ class WindowController:
         Cheaper and more direct than reading the foreground app, which answers
         about whatever happens to be on screen (a screen saver, a system dialog)
         rather than about the game.
+
+        pidof only knows the packages we name here, and modified Brawl Stars
+        builds ship under their own id - bsd.suitcase.nexusv2 here - so a list
+        of two names silently missed the game that was open in front of the
+        operator and the bot kept announcing that Brawl Stars was not running.
+        When none of the names answer, the foreground is asked instead, using
+        the same prefix rule the panel already trusts, and the package found
+        that way is written to the config so the next check is a cheap pidof.
         """
         for package in (self.BRAWL_STARS_PACKAGE, *KNOWN_BS_PACKAGES):
             try:
@@ -386,7 +394,33 @@ class WindowController:
                     return True
             except Exception as e:
                 print(f"Error checking whether '{package}' is running: {e}")
+        if is_brawl_stars_package(self.device):
+            self._adopt_foreground_package()
+            return True
         return False
+
+    def _adopt_foreground_package(self):
+        """Remember which package the game actually runs under.
+
+        Without this every later launch and stop names a package the device does
+        not have, so the game is never really restarted when it does die.
+        """
+        try:
+            opened = str(self.device.app_current().package or "").strip()
+        except Exception as e:  # noqa: BLE001
+            print(f"Error reading the foreground package: {e}")
+            return
+        if not opened or opened == self.BRAWL_STARS_PACKAGE:
+            return
+        try:
+            general_config = load_toml_as_dict("cfg/general_config.toml")
+            general_config["brawl_stars_package"] = opened
+            save_dict_as_toml(general_config, "cfg/general_config.toml")
+            invalidate_toml_cache("cfg/general_config.toml")
+            self.BRAWL_STARS_PACKAGE = opened
+            print(f"Brawl Stars runs under '{opened}'. Saved that in the config.")
+        except Exception as e:  # noqa: BLE001
+            print(f"Could not save the detected Brawl Stars package: {e}")
 
     def restart_brawl_stars(self):
         self.device.app_stop(self.BRAWL_STARS_PACKAGE)
@@ -398,19 +432,14 @@ class WindowController:
     def is_brawl_stars_running(self):
         try:
             opened_app = self.device.app_current().package.strip()
-            detected_known_package = False
-            for package in KNOWN_BS_PACKAGES:
-                if opened_app == package:
-                    detected_known_package = True
-                    break
-            if detected_known_package:
+            if is_brawl_stars_package(opened_app):
+                # A modified build answers under its own id, so match it the way
+                # the panel does and remember it, rather than comparing against
+                # one hardcoded name and calling the game gone while it is in
+                # front of us.
                 if opened_app != self.BRAWL_STARS_PACKAGE:
-                    general_config = load_toml_as_dict("cfg/general_config.toml")
-                    general_config["brawl_stars_package"] = opened_app
-                    save_dict_as_toml(general_config, "cfg/general_config.toml")
-                    self.BRAWL_STARS_PACKAGE = opened_app
-                    invalidate_toml_cache("cfg/general_config.toml")
-                    print(f"Detected Brawl Stars running under the '{opened_app}' package. Updating configuration to match.")
+                    self._adopt_foreground_package()
+                return True
             return opened_app == self.BRAWL_STARS_PACKAGE.strip()
         except Exception as e:
             print(f"Error checking if Brawl Stars is running: {e}")
