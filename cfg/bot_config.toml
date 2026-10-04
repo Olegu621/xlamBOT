@@ -19,7 +19,11 @@ entity_detection_confidence = 0.55
 state_detection_confidence = 0.75
 seconds_to_hold_attack_after_reaching_max = 1.5
 play_again_on_win = "no"
-current_playstyle = "showdown_survivor.xlambot"
+# Режим, в котором реально играют. Плейстайл пишет в первой строке, для каких
+# режимов он сделан, и панель предупредит, если режим не совпадает: раньше
+# плейстайл для шоудауна молча водили в ограблении, и бот просто прятался.
+game_mode = "heist"
+current_playstyle = "heist_guard.xlambot"
 gas_model = "models/gasDetector.onnx"
 gas_classes = [ "gas", "bush",]
 # Обход газа выключен по умолчанию. Модель gasDetector обучена на шести

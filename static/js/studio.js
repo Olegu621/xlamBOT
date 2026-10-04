@@ -506,6 +506,7 @@
         brawler_pick_mode: ['Как выбирать бойца', 'lowest_trophies, lowest_level, by_name…'],
         brawler_rotation: ['Ротация по списку', 'Бойцы через запятую'],
         current_playstyle: ['Плейстайл', 'Файл .xlambot из папки playstyles'],
+        game_mode: ['Режим игры', 'Сверяется с плейстайлом — предупредит, если режим не тот'],
         target_trophies: ['Цель по трофеям', 'Достигнув, бот остановится'],
         run_for_minutes: ['Длительность работы', '0 — без ограничения, в минутах'],
         max_fps: ['Кадров в секунду', 'auto или число'],
@@ -557,6 +558,22 @@
         ['lowest_level', 'по уровню, с низкого'],
         ['most_trophies', 'по максимальным трофеям'],
         ['by_name', 'по имени'],
+    ];
+
+    // Режимы берём из modes_config.toml на сервере, чтобы список не разошёлся
+    // с тем, что бот считает своим режимом. Пустое значение - режим не задан,
+    // и тогда проверка «плейстайл не для того режима» молчит.
+    const GAME_MODES = [
+        ['', 'не задан'],
+        ['solo_showdown', 'Одиночное шоудаун'],
+        ['duo_showdown', 'Парное шоудаун'],
+        ['trio_showdown', 'Тройное шоудаун'],
+        ['heist', 'Ограбление'],
+        ['bounty', 'Охота за баунти'],
+        ['gem_grab', 'Сбор кристаллов'],
+        ['knockout', 'Нокаут'],
+        ['hot_zone', 'Горячая зона'],
+        ['siege', 'Осада'],
     ];
 
     let settingsKey = '';
@@ -636,8 +653,9 @@
             </div>`;
         }
 
-        if (key === 'brawler_pick_mode') {
-            const options = PICK_MODES.map(([v, text]) => `
+        if (key === 'brawler_pick_mode' || key === 'game_mode') {
+            const list = key === 'game_mode' ? GAME_MODES : PICK_MODES;
+            const options = list.map(([v, text]) => `
                 <option value="${esc(v)}" ${String(value) === String(v) ? 'selected' : ''}>${esc(text)}</option>`).join('');
             return `<div class="field">
                 <label class="field-label" for="${esc(id)}">${esc(label)}${note}</label>

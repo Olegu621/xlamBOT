@@ -495,6 +495,18 @@ select.input {
     word-break: break-word;
 }
 
+/* Предупреждение о настройке: бот работает, но играет не тем, чем должен.
+   Жёлтый, а не красный - ничего не сломалось, но результат будет не тот. */
+.warn-box {
+    padding: 5px 8px;
+    background: rgba(255, 198, 84, 0.08);
+    border: 1px solid rgba(255, 198, 84, 0.34);
+    border-radius: var(--r-xs);
+    color: #ffd98a;
+    font-size: 12px;
+    word-break: break-word;
+}
+
 /* ───────────────────────── управление ───────────────────────── */
 
 .controls { display: flex; gap: 5px; }

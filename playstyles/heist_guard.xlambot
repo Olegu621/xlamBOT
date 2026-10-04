@@ -1,0 +1,95 @@
+{"name": "Heist Guard", "description": "Stays with the team near the own safe, shoots whatever comes into range, and never wanders off on its own", "brawlers": ["all"], "gamemodes": ["heist"], "author": "xlamBOT", "date": "2026-10-04"}
+
+def steps_towards(player_pos, target_pos):
+    """Takes the shortest unobstructed step towards a point.
+
+    The full vector first, then each axis alone. A diagonal often clips a wall
+    that the straight axis would miss, and walking into a wall in Heist means
+    standing still while the enemy safe is being cut.
+    """
+    dx = target_pos[0] - player_pos[0]
+    dy = target_pos[1] - player_pos[1]
+    return [(dx, dy), (dx, 0), (0, dy)]
+
+def pick_open_move(options):
+    """First step that is not into a wall."""
+    for move in options:
+        if not is_path_blocked(player_data, move, walls):
+            return move
+    return options[0]
+
+def away_from(player_pos, other_pos):
+    """Step that opens the distance from a point."""
+    dx = player_pos[0] - other_pos[0]
+    dy = player_pos[1] - other_pos[1]
+    length = math.hypot(dx, dy)
+    if length <= 0:
+        dx, dy, length = 0.0, -1.0, 1.0
+    return [(dx, dy), (-dy, dx), (dy, -dx), (0, -JOYSTICK_RADIUS), (JOYSTICK_RADIUS, 0)]
+
+def in_attack_reach(distance, safe_range, attack_range):
+    """True while the target is close enough to be worth shooting at.
+
+    The safe range counts as in reach too: a brawler whose shot is longer than
+    its comfortable distance still has to hold the target at that distance, so
+    standing there and firing is right, and walking backwards is not.
+    """
+    return distance <= max(attack_range, safe_range) + TILE_SIZE
+
+def rally_point(player_pos):
+    """Where to stand when nothing is in reach.
+
+    The team is the anchor. In Heist your own safe is the only thing that
+    matters, and teammates are standing next to it, so following the nearest
+    one keeps the bot at home. Without this it has no idea where "home" is and
+    drifts across the map - which is what made it look like it was walking into
+    the bushes.
+    """
+    mate_coords, mate_distance = find_closest_teammate(teammate_data, player_pos, walls)
+    if mate_coords is None:
+        return None
+    # Close enough to the teammate already: hold, rather than tailing them
+    # step for step and jittering back and forth.
+    if mate_distance <= TILE_SIZE * 2:
+        return None
+    return mate_coords
+
+safe_range, attack_range, super_range = get_brawler_range(brawler)
+player_pos = get_entity_pos(player_data)
+enemy_coords, enemy_distance = find_closest_enemy(enemy_data, player_pos, walls, "attack")
+
+if is_super_ready and enemy_coords is not None \
+        and enemy_distance <= super_range + TILE_SIZE \
+        and is_enemy_hittable(player_pos, enemy_coords, walls, "super"):
+    use_super()
+
+if is_hypercharge_ready:
+    use_hypercharge()
+
+if enemy_coords is not None and in_attack_reach(enemy_distance, safe_range, attack_range):
+    if is_enemy_hittable(player_pos, enemy_coords, walls, "attack"):
+        attack()
+        # Shoot from where we stand. Heist is won by the safe, not by the duel,
+        # so the bot only gives ground when the enemy is inside its own comfort
+        # distance - closer than that and the brawler has to step back.
+        if enemy_distance < safe_range:
+            movement = pick_open_move(away_from(player_pos, enemy_coords))
+        else:
+            movement = (0.0, 0.0)
+    else:
+        # Wall in the way, so the shot would miss. Step to the side that opens
+        # the line rather than standing and firing into a crate.
+        movement = pick_open_move(away_from(player_pos, enemy_coords))
+else:
+    rally = rally_point(player_pos)
+    if rally is not None:
+        movement = pick_open_move(steps_towards(player_pos, rally))
+    elif not teammate_data:
+        # Alone on the field. Holding position forever never wins a Heist, so
+        # push up towards the enemy safe instead - the own safe is at the
+        # bottom of the screen and the enemy one at the top. Half stick, so a
+        # stray enemy still has time to be answered.
+        movement = pick_open_move([(0.0, -JOYSTICK_RADIUS * 0.5), (-JOYSTICK_RADIUS * 0.5, 0.0),
+                                   (JOYSTICK_RADIUS * 0.5, 0.0)])
+    else:
+        movement = (0.0, 0.0)

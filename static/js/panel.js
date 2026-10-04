@@ -203,6 +203,7 @@
             </div>
 
             <div class="device-body">
+                ${device.mode_warning ? `<div class="warn-box">${escapeHtml(device.mode_warning)}</div>` : ''}
                 ${runtime.last_error ? `<div class="error-box">${escapeHtml(runtime.last_error)}</div>` : ''}
 
                 <div class="controls">
@@ -330,6 +331,25 @@
         if (badge) {
             badge.className = 'badge badge-' + (online ? escapeHtml(status) : 'offline');
             badge.textContent = online ? (STATE_LABELS[status] || status) : 'офлайн';
+        }
+
+        // The mode warning follows the settings, so it can change without the
+        // device list changing. Update it in place instead of leaving whatever
+        // was true when the card was first drawn.
+        const warnSlot = card.querySelector('.device-body');
+        if (warnSlot) {
+            let warn = warnSlot.querySelector('.warn-box');
+            const text = device.mode_warning || '';
+            if (text && (!warn || warn.textContent !== text)) {
+                if (!warn) {
+                    warn = document.createElement('div');
+                    warn.className = 'warn-box';
+                    warnSlot.insertBefore(warn, warnSlot.firstChild);
+                }
+                warn.textContent = text;
+            } else if (!text && warn) {
+                warn.remove();
+            }
         }
 
         const startBtn = card.querySelector('[data-action="start"]');

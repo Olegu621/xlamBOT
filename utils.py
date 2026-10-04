@@ -906,6 +906,64 @@ def load_default_playstyle():
     return load_playstyle_script(current_playstyle)
 
 
+def _mode_key(name):
+    """Fold a mode name to one comparable form.
+
+    Playstyles write "trio showdown", the config writes trio_showdown, and
+    comparing them as written flagged every correct pairing as a mismatch.
+    """
+    return "".join(ch if ch.isalnum() else "_" for ch in str(name).lower()).strip("_")
+
+
+def game_mode_warning(playstyle_info=None, config=None):
+    """Say when the playstyle was not written for the mode being played.
+
+    A playstyle carries the modes it fits in its first line, and nothing used to
+    read that field. So a Showdown survival script could drive a Heist match
+    with no complaint: the bot hides from fights the way you hide in Showdown,
+    which on a Heist map just looks like it is standing in the bushes. Silent
+    and plausible is exactly how this survived so long.
+
+    Returns the warning, or None when the playstyle fits, which is also the
+    answer when either side is unknown - an unlabelled playstyle or an unset
+    mode is not something to nag about.
+
+    A playstyle may also name something that is not a mode at all: the stock
+    scripts say "3v3, 5v5", which means any team game rather than one mode.
+    Those are treated as "no opinion", because warning that a generic script is
+    not written for Heist is noise, and it would fire on every default install.
+    """
+    if config is None:
+        config = load_toml_as_dict("cfg/bot_config.toml")
+    mode = str(config.get("game_mode") or "").strip()
+    if not mode:
+        return None
+    if playstyle_info is None:
+        playstyle_info, _ = load_default_playstyle()
+    declared = [_mode_key(name) for name in (playstyle_info or {}).get("gamemodes") or []]
+    declared = [name for name in declared if name]
+    if not declared or any(name in ("*", "all", "any", "any_mode") for name in declared):
+        return None
+    names = load_toml_as_dict("cfg/modes_config.toml").get("mode") or {}
+    known = {_mode_key(name) for name in names}
+    named = [name for name in declared if name in known]
+    if not named:
+        return None
+    if _mode_key(mode) in named:
+        return None
+    label = names.get(mode, mode)
+    wanted = ", ".join(
+        names.get(next((key for key in names if _mode_key(key) == name), name), name)
+        for name in named)
+    return (f'Плейстайл «{(playstyle_info or {}).get("name") or current_playstyle_name()}» '
+            f'написан для «{wanted}», а игра идёт в режиме «{label}». '
+            f'Бот будет вести себя не так, как задумано в плейстайле.')
+
+
+def current_playstyle_name():
+    return load_toml_as_dict("cfg/bot_config.toml").get("current_playstyle", "")
+
+
 def hash_playstyle(playstyle_info):
     return hashlib.sha256(str(playstyle_info).encode('utf-8')).hexdigest()
 

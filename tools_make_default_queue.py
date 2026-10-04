@@ -25,10 +25,18 @@ sys.path.insert(0, str(ROOT))
 
 
 def canonical_names() -> list[str]:
-    """Канонические имена бойцов из таблицы, на которую опирается play.py."""
-    from utils import load_brawlers_info
+    """Канонические имена бойцов из таблицы, на которую опирается play.py.
 
-    names = [str(key) for key in load_brawlers_info().keys()]
+    Читаем файл напрямую, а не через load_brawlers_info(): тот возвращает
+    ещё и псевдонимы (jess рядом с jessie), которых в самой таблице нет. В
+    очередь должны попадать ровно те имена, что лежат в поставляемой таблице,
+    иначе сверка сборки справедливо ругается.
+    """
+    import json
+
+    table = ROOT / "cfg" / "brawlers_info.json"
+    data = json.loads(table.read_text(encoding="utf-8"))
+    names = [str(key) for key in data.keys()]
     if not names:
         raise RuntimeError("brawlers_info.json пуст или не читается")
     return sorted(names)
@@ -59,10 +67,13 @@ def main() -> int:
         print(f"Не удалось собрать очередь: {error}")
         return 1
 
-    # Проверяем сами себя: имя, которого нет в таблице, уронит плейстайл.
-    from utils import load_brawlers_info
+    # Проверяем сами себя: имя, которого нет в поставляемой таблице, уронит
+    # плейстайл. Сверяемся с тем же файлом, который попадёт в сборку.
+    import json
 
-    known = set(load_brawlers_info().keys())
+    table = json.loads(
+        (ROOT / "cfg" / "brawlers_info.json").read_text(encoding="utf-8"))
+    known = set(table.keys())
     unknown = [e["brawler"] for e in queue if e["brawler"] not in known]
     if unknown:
         print(f"В очереди есть чужие имена: {unknown}")
