@@ -512,6 +512,43 @@ select.input {
 .controls { display: flex; gap: 5px; }
 .controls .btn { flex: 1 1 0; }
 
+/* Обучение стоит особняком от Старт/Пауза/Стоп: он не ругается на работу бота,
+   а пишет кадры. Отдельный цвет, чтобы его не перепутали с «Стоп». */
+.controls .btn-train {
+    flex: 0 0 auto;
+    background: linear-gradient(180deg, #4a8cff, #2f6fe0);
+    border-color: transparent;
+    color: #f2f7ff;
+}
+
+.training-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 20px;
+}
+.training-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10.5px;
+    color: var(--text-faint);
+    white-space: nowrap;
+}
+.training-count-input {
+    width: 52px;
+    padding: 2px 5px;
+    font-size: 11px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+.training-note {
+    font-size: 11px;
+    color: var(--text-faint);
+    line-height: 1.4;
+    flex: 1 1 auto;
+}
+
 /* ───────────────────────── ротация ───────────────────────── */
 
 /* Оба параметра в один блок: их всегда меняют вместе, а две отдельные строки

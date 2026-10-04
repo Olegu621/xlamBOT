@@ -211,6 +211,22 @@
                     <button class="btn btn-primary" data-action="start" data-key="${escapeHtml(key)}" ${startDisabled ? 'disabled' : ''}>Старт</button>
                     <button class="btn ${pauseClass}" data-action="${pauseAction}" data-key="${escapeHtml(key)}" ${isRunning ? '' : 'disabled'}>${pauseLabel}</button>
                     <button class="btn btn-danger" data-action="stop" data-key="${escapeHtml(key)}" ${running ? '' : 'disabled'}>Стоп</button>
+                    <button class="btn btn-train" data-action="training" data-key="${escapeHtml(key)}"
+                            title="Записать матч и потом разметить кадры">Обучение</button>
+                </div>
+
+                <div class="training-row" data-training-row="${escapeHtml(key)}">
+                    <label class="training-count">
+                        кадров
+                        <input class="input training-count-input" type="number" min="1" max="400"
+                               step="1" value="10" data-training-count="${escapeHtml(key)}"
+                               title="Сколько кадров оставить из матча — они размажутся по всему матчу">
+                    </label>
+                    <span class="training-note" data-training-note="${escapeHtml(key)}"></span>
+                    <a class="btn btn-sm btn-ghost hidden" data-training-open="${escapeHtml(key)}"
+                       href="#" target="_blank" rel="noreferrer">Разметить</a>
+                    <button class="btn btn-sm btn-ghost hidden" data-action="training-stop"
+                            data-key="${escapeHtml(key)}">Прервать</button>
                 </div>
 
                 <div class="rotate-bar" data-rotate-bar="${escapeHtml(key)}">
@@ -911,6 +927,10 @@
         // Choosing a brawler is a single click on a cell, not a submit: it must
         // not run through the busy-button path below, which disables the element
         // it was called on and would leave one cell stuck after the redraw.
+        if (action === 'training' || action === 'training-stop') {
+            await toggleTraining(key);
+            return;
+        }
         if (action === 'lock-brawler') {
             const name = button.dataset.brawler || '';
             if (String(lockedBrawlers[key] || '').toLowerCase() === name.toLowerCase()) return;
@@ -1099,6 +1119,81 @@
         } catch (error) {
             console.error('panel snapshot failed', error);
         }
+    }
+
+    /* ------------------------------------------------------------- обучение */
+    /* Запись идёт в фоне, панель только показывает её состояние и предлагает
+       открыть разметку. Раз в пять секунд: чаще незачем, а карточка и так
+       обновляется каждые две. */
+
+    async function refreshTraining() {
+        for (const device of devices) {
+            const note = grid.querySelector(`[data-training-note="${cssEscape(device.key)}"]`);
+            const open = grid.querySelector(`[data-action="training-stop"]`
+                + `[data-key="${cssEscape(device.key)}"]`) || grid.querySelector(
+                `[data-training-open="${cssEscape(device.key)}"]`)?.closest('div');
+            const stopBtn = grid.querySelector(`[data-action="training-stop"]`
+                + `[data-key="${cssEscape(device.key)}"]`);
+            const openLink = grid.querySelector(`[data-training-open="${cssEscape(device.key)}"]`);
+            try {
+                const { data } = await api(`/api/devices/${encodeURIComponent(device.key)}/training`);
+                const current = data.current;
+                const last = (data.sessions || [])[0];
+                if (current && current.recording) {
+                    if (note) note.textContent = `Идёт запись: ${current.frames} из ${current.recorded}`
+                        + (current.frame_count ? ` (оставлю ${current.frame_count})` : '');
+                    if (stopBtn) stopBtn.classList.remove('hidden');
+                    if (openLink) openLink.classList.add('hidden');
+                } else if (last) {
+                    if (note) {
+                        note.textContent = `Записано ${last.recorded}, оставлено ${last.frames}`
+                            + (last.checked ? ` · размечено ${last.checked}` : ' · не размечено');
+                    }
+                    if (stopBtn) stopBtn.classList.add('hidden');
+                    if (openLink) {
+                        openLink.href = `/training/${encodeURIComponent(last.id)}`;
+                        openLink.classList.remove('hidden');
+                    }
+                } else if (note) {
+                    note.textContent = '';
+                }
+            } catch (err) {
+                if (note) note.textContent = '';
+            }
+            void open;
+        }
+    }
+
+    async function toggleTraining(key) {
+        const stopBtn = grid.querySelector(`[data-action="training-stop"][data-key="${cssEscape(key)}"]`);
+        const note = grid.querySelector(`[data-training-note="${cssEscape(key)}"]`);
+        if (stopBtn && !stopBtn.classList.contains('hidden')) {
+            await api(`/api/devices/${encodeURIComponent(key)}/training/stop`, { method: 'POST' });
+            toast('Запись прервана', 'ok');
+            await refreshTraining();
+            return;
+        }
+        if (note) note.textContent = 'Запускаю бота…';
+        const countInput = grid.querySelector(`[data-training-count="${cssEscape(key)}"]`);
+        let frameCount = 10;
+        if (countInput) {
+            const value = Number(countInput.value);
+            if (Number.isFinite(value) && value >= 1) frameCount = Math.min(400, Math.round(value));
+        }
+        const { ok, data } = await api(`/api/devices/${encodeURIComponent(key)}/training/start`, {
+            method: 'POST',
+            body: { interval: 3, frame_count: frameCount },
+        });
+        if (!ok) {
+            toast(data && data.message ? data.message : 'Не удалось начать запись', 'error');
+            if (note) note.textContent = '';
+            return;
+        }
+        toast(data.started_bot
+            ? 'Бот запущен, идёт запись матча'
+            : 'Идёт запись матча', 'ok');
+        await loadDevices();
+        await refreshTraining();
     }
 
     // A dead API used to freeze the panel on stale numbers with no hint at all:

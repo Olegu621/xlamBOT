@@ -249,7 +249,8 @@ class WindowController:
         except Exception:  # noqa: BLE001
             return None, frame_time
 
-    def frame_to_jpeg(self, frame, quality: int = 70, max_width: int = 0) -> bytes:
+    @staticmethod
+    def frame_to_jpeg(frame, quality: int = 70, max_width: int = 0) -> bytes:
         """Encode a frame as JPEG bytes; empty when there is nothing to encode.
 
         max_width scales it down first when it is set. The panel's device preview

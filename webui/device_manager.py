@@ -18,7 +18,7 @@ from adbutils import adb
 import device_profiles
 from bot_instance import run_bot_instance
 from utils import clean_queue, config_scope
-from window_controller import get_device_by_serial, is_brawl_stars_package
+from window_controller import WindowController, get_device_by_serial, is_brawl_stars_package
 
 ANSI_CLEAN_RE = re.compile(r"\x1b\[[0-9;]*[a-zA-Z]")
 MAX_LOG_LINES = 1500
@@ -552,6 +552,30 @@ class DeviceRuntimeManager:
         if data:
             self._snapshots[key] = (data, frame_time, now)
         return data
+
+    def instance_for(self, key: str):
+        """The running bot's own instance, or None when the bot is stopped.
+
+        Used by the training recorder: the frames it saves come from the same
+        scrcpy stream the bot is already receiving, so recording costs the game
+        nothing and no second connection is opened to the device.
+        """
+        with self._lock:
+            return self._instances.get(device_profiles.sanitize_key(key))
+
+    def save_frame_jpeg(self, key: str, frame, path) -> bool:
+        """Write one frame to disk as JPEG. Returns whether it got there."""
+        if frame is None:
+            return False
+        try:
+            encoded = WindowController.frame_to_jpeg(frame, quality=88)
+            if not encoded:
+                return False
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(encoded)
+            return True
+        except Exception:  # noqa: BLE001
+            return False
 
     def telemetry(self, key: str) -> dict[str, Any]:
         """Live progress of one device: state, brawler, trophies, fps counters."""

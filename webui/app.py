@@ -9,6 +9,7 @@ import threading
 from urllib.parse import urlsplit
 
 from flask import Flask, jsonify, render_template, request, send_file
+from pathlib import Path
 from werkzeug.exceptions import HTTPException
 
 from discord_bot import DiscordBot
@@ -17,6 +18,8 @@ from utils import clean_queue, game_mode_warning, gas_mode_warning, get_brawler_
     load_toml_as_dict
 import device_profiles
 from .device_manager import DeviceRuntimeManager
+import training_capture
+from training_capture import TrainingRecorder
 from .runtime import RuntimeManager
 from .services import WebDataService
 
@@ -116,6 +119,9 @@ def create_app(xlambot_main, start_discord_bot=False):
     discord_bot = DiscordBot(runtime_manager, data_service)
     runtime_manager.configure_start_gate(data_service.get_queue_data, data_service.get_auth_state)
     device_manager = DeviceRuntimeManager(xlambot_main, discord_bot)
+    # Один на всё приложение: запись идёт в фоне, и панель не должна её терять
+    # между запросами, как это было бы с записью на каждый вызов.
+    training_recorder = TrainingRecorder(device_manager)
     device_manager.configure_queue_provider(device_profiles.load_queue)
     app.config["runtime_manager"] = runtime_manager
     app.config["data_service"] = data_service
@@ -161,6 +167,12 @@ def create_app(xlambot_main, start_discord_bot=False):
             return None
 
         supplied_token = str(request.headers.get("X-Xlam-UI-Token", ""))
+        if not supplied_token:
+            # <img src> не умеет слать свои заголовки, а кадры для разметки
+            # грузятся именно так. Токен поэтому принимается и в адресе - иначе
+            # страница открывается пустой, с запросами в 403 и без единой
+            # картинки. Сравнение всё то же, и для чужих страниц токена нет.
+            supplied_token = str(request.args.get("t", ""))
         if not hmac.compare_digest(supplied_token, app.config["UI_API_TOKEN"]):
             return jsonify({
                 "ok": False,
@@ -346,6 +358,138 @@ def create_app(xlambot_main, start_discord_bot=False):
         if not serial:
             raise KeyError("A device serial is required.")
         return jsonify(DeviceRuntimeManager.reset_device_display(serial))
+
+    # ───────────────────────── обучение на кадрах ─────────────────────────
+    # Запись матча и разметка разнесены: бот играет сам, а рамки ставит человек
+    # потом, в своём темпе. Иначе разметка держала бы матч открытым.
+
+    @app.get("/api/devices/<path:key>/training")
+    def device_training_status(key: str):
+        key = device_profiles.sanitize_key(key)
+        current = training_recorder.status(key)
+        sessions = [s for s in training_recorder.all_sessions() if s["key"] == key]
+        return jsonify({"ok": True, "current": current, "sessions": sessions[:5]})
+
+    @app.post("/api/devices/<path:key>/training/start")
+    def device_training_start(key: str):
+        """Start recording, and start the bot if it is not already playing.
+
+        The point of the button is one press and a recorded match, so a stopped
+        bot is started here rather than making the operator click twice and
+        wonder why nothing is being written.
+        """
+        key = device_profiles.sanitize_key(key)
+        payload = request.get_json(silent=True) or {}
+        try:
+            interval = float(payload.get("interval") or 3.0)
+        except (TypeError, ValueError):
+            interval = 3.0
+        try:
+            frame_count = int(payload.get("frame_count") or 0)
+        except (TypeError, ValueError):
+            frame_count = 0
+
+        status = device_manager.get_status(key)
+        started_bot = False
+        if not status.get("is_running"):
+            serial = payload.get("serial") or device_manager.resolve_serial(key)
+            result = device_manager.start(key, serial)
+            if not result.get("ok"):
+                raise ValueError(result.get("message") or "Не удалось запустить бота.")
+            started_bot = True
+
+        result = training_recorder.start(key, interval=interval, frame_count=frame_count)
+        if not result.get("ok"):
+            return jsonify({**result, "started_bot": started_bot}), 409
+        return jsonify({**result, "started_bot": started_bot})
+
+    @app.post("/api/devices/<path:key>/training/stop")
+    def device_training_stop(key: str):
+        key = device_profiles.sanitize_key(key)
+        return jsonify(training_recorder.stop(key))
+
+    def _class_choices():
+        """Классы для разметки с русскими подписями, в порядке class_names()."""
+        return [{"value": name,
+                 "label": training_capture.CLASS_LABELS_RU.get(name, name)}
+                for name in training_capture.class_names()]
+
+    @app.get("/api/training/sessions")
+    def training_sessions_list():
+        return jsonify({"ok": True, "sessions": training_recorder.all_sessions(),
+                        "classes": _class_choices()})
+
+    @app.get("/api/training/sessions/<session_id>")
+    def training_session_detail(session_id: str):
+        session = training_recorder.session(session_id)
+        if session is None:
+            raise KeyError("Такой записи нет.")
+        return jsonify({"ok": True, "session": session.detail(),
+                        "classes": _class_choices()})
+
+    @app.get("/api/training/sessions/<session_id>/images/<path:name>")
+    def training_session_image(session_id: str, name: str):
+        session = training_recorder.session(session_id)
+        if session is None:
+            raise KeyError("Такой записи нет.")
+        target = (session.folder / "images" / Path(name).name).resolve()
+        if not str(target).startswith(str(session.folder.resolve())) or not target.exists():
+            raise FileNotFoundError(name)
+        return send_file(target, mimetype="image/jpeg")
+
+    @app.post("/api/training/sessions/<session_id>/labels")
+    def training_session_labels(session_id: str):
+        """Boxes for one frame, in the pixels the operator drew."""
+        session = training_recorder.session(session_id)
+        if session is None:
+            raise KeyError("Такой записи нет.")
+        payload = request.get_json(silent=True) or {}
+        frame = str(payload.get("frame") or "")
+        boxes = payload.get("boxes")
+        if not frame or not isinstance(boxes, list):
+            raise KeyError("Нужны 'frame' и 'boxes'.")
+        saved = session.set_boxes(frame, boxes, bool(payload.get("checked")))
+        if saved is None:
+            raise KeyError("Кадра нет в этой записи.")
+        return jsonify({"ok": True, "session": session.summary(), "frame": saved})
+
+    @app.get("/api/training/sessions/<session_id>/export.zip")
+    def training_session_export(session_id: str):
+        session = training_recorder.session(session_id)
+        if session is None:
+            raise KeyError("Такой записи нет.")
+        summary = session.summary()
+        if summary["frames"] and summary["checked"] < summary["frames"]:
+            raise ValueError(
+                f"Размечено {summary['checked']} из {summary['frames']}. "
+                "Отметьте остальные как пустые, если на них ничего нет.")
+        archive = session.export_zip()
+        return send_file(archive, mimetype="application/zip", as_attachment=True,
+                         download_name=f"gas-dataset-{session_id}.zip")
+
+    @app.get("/training/<session_id>")
+    def training_page(session_id: str):
+        if training_recorder.session(session_id) is None:
+            raise KeyError("Такой записи нет.")
+        # Токен и версия статики обязательны: без токена все запросы разметки
+        # получают 403 и страница выглядит пустой, без версии бракер отдаёт
+        # прошлую версию скрипта - ровно это и случилось при первом запуске.
+        assets = [
+            resolve_project_path("static", "css", "training.css"),
+            resolve_project_path("static", "js", "training.js"),
+        ]
+        newest = 0.0
+        for asset in assets:
+            try:
+                newest = max(newest, os.path.getmtime(asset))
+            except OSError:
+                continue
+        return render_template(
+            "training.html",
+            session_id=session_id,
+            ui_api_token=app.config["UI_API_TOKEN"],
+            asset_version=int(newest) if newest else 0,
+        )
 
     @app.post("/api/devices/selftest")
     def device_selftest():

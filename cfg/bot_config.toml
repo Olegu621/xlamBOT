@@ -44,6 +44,11 @@ gas_classes = [ "gas", "bush",]
 # torch и ultralytics поставил, переобучить можно. Не хватает настоящих
 # кадров газа из Тройного столкновения.
 gas_avoidance = "no"
+# Классы для разметки кадров в панели «Обучение». Взяты из наших же моделей:
+# gasDetector ищет gas и bush, tileDetector - wall, bush и close_bush. Порядок
+# важен: он становится номерами классов в файлах разметки, поэтому менять
+# список можно только вместе с переобучением модели.
+training_classes = "gas,bush,wall,close_bush"
 gas_confidence = 0.25
 gas_sensitivity = 0.05
 gas_reach = 3.0
