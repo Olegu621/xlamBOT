@@ -78,13 +78,18 @@
     const pollers = {};
     const loaders = {
         dashboard: loadDashboard,
-        queue: loadQueue,
+        brawlers: loadBrawlersTab,
         playstyles: loadPlaystyles,
         settings: loadSettings,
         history: loadHistory,
         logs: loadLogs,
     };
     let activeTab = 'dashboard';
+
+    // Какое устройство сейчас редактируется. Объявлено здесь, а не рядом с
+    // настройками: вкладка выбора бойца читает его раньше, чем доходит до
+    // того места, и получал "cannot access before initialization".
+    let settingsKey = '';
 
     function showTab(name) {
         if (!loaders[name]) return;
@@ -211,193 +216,112 @@
             </div>`;
     }
 
-    // ───────────────────────── очередь ─────────────────────────
+    // ───────────────────────── выбор бойца ─────────────────────────
 
-    let queueData = { queue: [], brawlers: [] };
-    let pickedBrawlers = new Set();
+    // Вкладка про бойца вместо прежней очереди. Очереди больше нет: бот играет
+    // на одном выбранном бойце либо выбирает сам, и список с порядком, целями и
+    // счётчиками только путал: он показывал план, которого бот не выполнял.
 
-    async function loadQueue() {
-        const devices = await api('/api/devices');
-        const first = (devices.devices || [])[0];
-        if (!first) {
-            queueData = { queue: [], brawlers: [] };
-            renderQueue();
-            return;
-        }
-        // The roster the bot actually plays from is the device's own queue. The
-        // top-level /api/queue is a separate global list and stays empty in the
-        // normal single-device case, which is why the tab showed nothing.
-        const [queue, brawlers] = await Promise.all([
-            api(`/api/devices/${encodeURIComponent(first.key)}/queue`),
+    async function loadBrawlersTab() {
+        const [devices, catalog] = await Promise.all([
+            api('/api/devices'),
             api('/api/devices/brawlers'),
         ]);
-        queueData = {
-            queue: queue.items || [],
-            brawlers: brawlers.brawlers || [],
-        };
-        pickedBrawlers = new Set(queueData.queue.map((e) => e.brawler));
-        renderQueue();
-    }
+        const list = devices.devices || [];
+        const target = settingsKey || (list[0] && list[0].key) || '';
+        const brawlers = catalog.brawlers || [];
+        if (!target) {
+            view('brawlers').innerHTML = '<div class="empty">Устройство не подключено</div>';
+            return;
+        }
+        const chosen = await api(`/api/devices/${encodeURIComponent(target)}/brawler`);
+        const locked = String(chosen.locked_brawlers || chosen.locked_brawler || '');
+        const deviceOptions = list.map((d) => `
+            <option value="${esc(d.key)}" ${d.key === target ? 'selected' : ''}>
+                ${esc(d.model || d.serial || d.key)}
+            </option>`).join('');
 
-    function renderQueue() {
-        const entries = queueData.queue;
-        const rows = entries.map((entry, index) => `
-            <tr>
-                <td class="nowrap">
-                    <span class="rank">${index + 1}</span>
-                    <span class="brawler-cell">
-                        <img class="brawler-icon" src="/api/assets/brawlers/${encodeURIComponent(entry.brawler)}"
-                             alt="" onerror="this.style.visibility='hidden'">
-                        <span class="brawler-name">${esc(entry.brawler)}</span>
-                    </span>
-                </td>
-                <td class="num">${entry.trophies ?? 0}</td>
-                <td class="num">${entry.wins ?? 0}</td>
-                <td class="num">${entry.win_streak ?? 0}</td>
-                <td>
-                    <label class="switch" title="Бот выбирает этого бойца сам">
-                        <input type="checkbox" data-auto="${esc(entry.brawler)}"
-                            ${entry.automatically_pick ? 'checked' : ''}>
-                        <span class="switch-track"></span>
-                    </label>
-                </td>
-                <td class="num">${esc(entry.push_until ?? '—')}</td>
-                <td class="actions">
-                    <button class="btn btn-sm" data-up="${index}" ${index === 0 ? 'disabled' : ''}>↑</button>
-                    <button class="btn btn-sm" data-down="${index}" ${index === entries.length - 1 ? 'disabled' : ''}>↓</button>
-                    <button class="btn btn-sm btn-danger" data-remove="${esc(entry.brawler)}">Убрать</button>
-                </td>
-            </tr>`).join('');
-
-        const pickable = queueData.brawlers
-            .filter((b) => !pickedBrawlers.has(b.slug))
-            .map((b) => `
-                <button class="brawler-chip" data-add="${esc(b.slug)}">
-                    <img src="${esc(b.icon_url)}" alt="" onerror="this.style.display='none'">
-                    <span>${esc(b.name)}</span>
-                </button>`).join('');
-
-        view('queue').innerHTML = `
+        view('brawlers').innerHTML = `
             <div class="card">
                 <div class="card-head">
                     <div>
-                        <h3 class="card-title">Очередь бойцов</h3>
-                        <p class="card-note">Порядок влияет на то, кого бот поставит первым при ручном выборе</p>
+                        <h3 class="card-title">Боец</h3>
+                        <p class="card-note">${locked
+                            ? `Бот играет только на: <strong>${esc(locked)}</strong>`
+                            : 'Бот выбирает бойца сам по сортировке'}</p>
                     </div>
                     <div class="card-actions">
-                        <button class="btn btn-primary" id="saveQueue">Сохранить</button>
-                        <button class="btn btn-ghost" id="resetQueue">Вернуть как было</button>
-                    </div>
-                </div>
-                <div class="card-body is-tight">
-                    <table class="table">
-                        <thead><tr>
-                            <th>Боец</th><th class="num">Трофеи</th><th class="num">Победы</th>
-                            <th class="num">Серия</th><th>Авто</th><th class="num">Цель</th><th></th>
-                        </tr></thead>
-                        <tbody>${rows || '<tr><td colspan="7" class="empty">Очередь пуста</td></tr>'}</tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-head">
-                    <div>
-                        <h3 class="card-title">Добавить бойца</h3>
-                        <p class="card-note">${pickable ? 'Выберите, кого добавить' : 'Все доступные бойцы уже в очереди'}</p>
+                        <label class="field-label" for="brawlerDevice">Устройство</label>
+                        <select class="input" id="brawlerDevice">${deviceOptions}</select>
+                        ${locked ? '<button class="btn btn-ghost" id="unlockBrawler">Выбирать автоматически</button>' : ''}
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="brawler-picker">${pickable || '<div class="empty">Добавлять нечего</div>'}</div>
+                    <div class="brawler-picker">${brawlers.map((b) => `
+                        <button class="brawler-chip${String(b.name).toLowerCase() === locked.toLowerCase() ? ' is-picked' : ''}"
+                                data-lock-brawler="${esc(b.name)}" title="${esc(b.name)}">
+                            <img src="${esc(b.icon_url)}" alt="" onerror="this.style.display='none'">
+                            <span>${esc(b.name)}</span>
+                        </button>`).join('') || '<div class="empty">Каталог бойцов недоступен</div>'}</div>
                 </div>
             </div>`;
     }
 
+    document.addEventListener('change', async (event) => {
+        if (event.target.id === 'brawlerDevice') {
+            settingsKey = event.target.value;
+            await loadBrawlersTab();
+        }
+    });
+
     document.addEventListener('click', async (event) => {
-        const target = event.target;
-
-        const add = target.closest('[data-add]');
-        if (add) {
-            pickedBrawlers.add(add.dataset.add);
-            queueData.queue.push({
-                brawler: add.dataset.add, trophies: 0, wins: 0,
-                win_streak: 0, push_until: 1000, automatically_pick: true,
-            });
-            renderQueue();
-            return;
-        }
-
-        const remove = target.closest('[data-remove]');
-        if (remove) {
-            const name = remove.dataset.remove;
-            queueData.queue = queueData.queue.filter((e) => e.brawler !== name);
-            pickedBrawlers.delete(name);
-            renderQueue();
-            return;
-        }
-
-        const up = target.closest('[data-up]');
-        if (up) {
-            const i = Number(up.dataset.up);
-            if (i > 0) {
-                const tmp = queueData.queue[i - 1];
-                queueData.queue[i - 1] = queueData.queue[i];
-                queueData.queue[i] = tmp;
-                renderQueue();
-            }
-            return;
-        }
-
-        const down = target.closest('[data-down]');
-        if (down) {
-            const i = Number(down.dataset.down);
-            if (i < queueData.queue.length - 1) {
-                const tmp = queueData.queue[i + 1];
-                queueData.queue[i + 1] = queueData.queue[i];
-                queueData.queue[i] = tmp;
-                renderQueue();
-            }
-            return;
-        }
-
-        if (target.id === 'saveQueue') {
-            if (!settingsKey) {
+        const pick = event.target.closest('[data-lock-brawler]');
+        if (pick) {
+            const key = settingsKey || (await currentDeviceKey());
+            if (!key) {
                 toast('Сначала подключите устройство', 'error');
                 return;
             }
             try {
-                // Пишем в маршрут устройства, откуда читали: глобальный
-                // /api/queue в обычной работе остаётся пустым, и правки
-                // оттуда просто исчезали бы.
-                await api(`/api/devices/${encodeURIComponent(settingsKey)}/queue`, {
+                const done = await api(`/api/devices/${encodeURIComponent(key)}/brawler`, {
                     method: 'POST',
-                    body: { items: queueData.queue },
+                    body: { brawler: pick.dataset.lockBrawler },
                 });
-                toast('Очередь сохранена', 'ok');
-                await loadQueue();
+                if (!done.ok) {
+                    toast((done && done.message) || 'Не удалось выбрать бойца', 'error');
+                    return;
+                }
+                toast(`Бот будет играть только на ${pick.dataset.lockBrawler}`, 'ok');
+                await loadBrawlersTab();
             } catch (error) {
-                toast('Не удалось сохранить: ' + error.message, 'error');
+                toast('Не удалось выбрать бойца: ' + error.message, 'error');
             }
             return;
         }
 
-        if (target.id === 'resetQueue') {
-            await loadQueue();
-            toast('Очередь перечитана с диска');
-            return;
+        if (event.target.id === 'unlockBrawler') {
+            const key = settingsKey || (await currentDeviceKey());
+            if (!key) {
+                toast('Сначала подключите устройство', 'error');
+                return;
+            }
+            try {
+                await api(`/api/devices/${encodeURIComponent(key)}/brawler`, {
+                    method: 'POST', body: { brawler: '' },
+                });
+                toast('Бот снова выбирает бойца сам', 'ok');
+                await loadBrawlersTab();
+            } catch (error) {
+                toast('Не удалось снять выбор: ' + error.message, 'error');
+            }
         }
     });
 
-    document.addEventListener('change', async (event) => {
-        const auto = event.target.closest('[data-auto]');
-        if (!auto) return;
-        const name = auto.dataset.auto;
-        const entry = queueData.queue.find((e) => e.brawler === name);
-        if (entry) {
-            entry.automatically_pick = auto.checked;
-            toast(`${auto.checked ? 'Добавлен' : 'Убран'} в автовыбор: ${name}`);
-        }
-    });
+    async function currentDeviceKey() {
+        const devices = await api('/api/devices');
+        const list = devices.devices || [];
+        return list.length ? list[0].key : '';
+    }
 
     // ───────────────────────── плейстайлы ─────────────────────────
 
@@ -507,6 +431,8 @@
         brawler_rotation: ['Ротация по списку', 'Бойцы через запятую'],
         current_playstyle: ['Плейстайл', 'Файл .xlambot из папки playstyles'],
         game_mode: ['Режим игры', 'Сверяется с плейстайлом — предупредит, если режим не тот'],
+        locked_brawler: ['Играть только на бойце', 'Пусто — выбирать автоматически. Удобнее выбрать на вкладке «Боец»'],
+        preview_interval_ms: ['Частота превью, мс', '800 — примерно 1,25 кадра в секунду, 0 — максимально быстро'],
         target_trophies: ['Цель по трофеям', 'Достигнув, бот остановится'],
         run_for_minutes: ['Длительность работы', '0 — без ограничения, в минутах'],
         max_fps: ['Кадров в секунду', 'auto или число'],
@@ -576,7 +502,6 @@
         ['siege', 'Осада'],
     ];
 
-    let settingsKey = '';
     let settingsSections = {};
     let settingsDraft = {};
 

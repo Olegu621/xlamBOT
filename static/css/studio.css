@@ -199,7 +199,6 @@
     font-weight: 700;
     margin-right: 7px;
 }
-.queue-item.is-current .rank { background: var(--accent); color: var(--accent-ink); }
 
 .brawler-cell { display: flex; align-items: center; min-width: 0; }
 .brawler-icon {

@@ -40,6 +40,11 @@ class StageManager:
         # What the last rotation actually did, so the panel can show proof
         # of the switch instead of only the current brawler.
         self._last_switch = None
+        # Which brawler the one-brawler mode has already put us on, and whether
+        # that pick was confirmed. start_game is called on every lobby tick, so
+        # without this the menu would be reopened constantly.
+        self._lock_name = None
+        self._lock_ok = False
         # The lobby counters are read once per visit, not on every tick: the
         # read is OCR and the lobby is reported several times a second.
         self._lobby_synced = False
@@ -120,11 +125,98 @@ class StageManager:
 
     def _switch_after_games(self):
         """How many games to spend on one brawler; 0 disables the rotation."""
+        if self.locked_brawler():
+            # A locked brawler has no quota: it is the whole plan. Leaving the
+            # counter live would rotate away from it on the next match, which is
+            # the exact opposite of what was asked for.
+            return 0
         raw = load_toml_as_dict("./cfg/bot_config.toml").get("brawler_switch_after_games", 7)
         try:
             return max(0, int(raw))
         except (TypeError, ValueError):
             return 7
+
+    def locked_brawler(self):
+        """The one brawler to play, or "" when the normal rotation is wanted."""
+        raw = load_toml_as_dict("./cfg/bot_config.toml").get("locked_brawler", "") or ""
+        return str(raw).strip().lower()
+
+    def _lock_queue_to(self, name):
+        """Keep exactly one brawler in the queue: the chosen one.
+
+        The queue is still what the rest of the code reads - the trophy observer,
+        the push target, the panel - so locking means shrinking it to one entry
+        rather than teaching everything a second shape of input. The trophies we
+        already knew are carried over, so the per-hour rate keeps its history
+        instead of restarting at zero.
+        """
+        current = self.brawlers_pick_data[0] if self.brawlers_pick_data else None
+        if current and str(current.get("brawler", "")).strip().lower() == name:
+            return False
+        trophies = 0
+        wins = 0
+        for entry in self.brawlers_pick_data:
+            if str(entry.get("brawler", "")).strip().lower() == name:
+                trophies = entry.get("trophies") or 0
+                wins = entry.get("wins") or 0
+                break
+        self.brawlers_pick_data = [{
+            "brawler": name,
+            "type": "trophies",
+            # Far above anything a push can reach: the target branch must not
+            # fire, and the bot must not stop itself for finishing a goal that
+            # was never set.
+            "push_until": 100000,
+            "trophies": trophies,
+            "wins": wins,
+            "win_streak": 0,
+            "automatically_pick": True,
+        }]
+        print(f"Playing one brawler only: {name}.")
+        return True
+
+    def _select_locked_brawler(self, name):
+        """Pick the locked brawler in the menu, a bounded number of times.
+
+        start_game runs on every lobby tick, so an unguarded call here would
+        reopen the brawler menu every couple of seconds forever. The choice is
+        remembered instead: made once, and only redone if the game is later seen
+        on somebody else.
+        """
+        if self._lock_name != name:
+            self._lock_name = name
+            self._lock_ok = False
+        if self._lock_ok:
+            return
+        current = self.current_brawler()
+        if current and str(current).strip().lower() == name:
+            self._lock_ok = True
+            return
+
+        previous = current
+        result = self.Lobby_automation.select_brawler(
+            name, self.get_latest_state, runtime_control=self.runtime_control)
+        for _try in range(self.BRAWLER_PICK_ATTEMPTS):
+            if result not in ("failed", "error", "aborted", "stuck"):
+                break
+            if self._should_stop() or self._should_pause():
+                return
+            print(f"Selecting {name} returned {result!r}, attempt {_try + 1} "
+                  f"of {self.BRAWLER_PICK_ATTEMPTS}")
+            if self._sleep_interruptible(2):
+                return
+            result = self.Lobby_automation.select_brawler(
+                name, self.get_latest_state, runtime_control=self.runtime_control)
+
+        if result == "success":
+            self._lock_ok = True
+            self._adopt_picked_brawler(previous, 0)
+            print(f"On {name}, and staying on it.")
+        elif result in ("aborted", "stuck"):
+            self._lock_ok = True
+        else:
+            print(f"Could not pick {name} ({result!r}). The next lobby tick "
+                  "will try again.")
 
     def _rotation_list(self):
         """Optional explicit rotation; empty means the game's own sort decides."""
@@ -357,6 +449,13 @@ class StageManager:
             return
 
         print("state is lobby, starting game")
+        locked = self.locked_brawler()
+        if locked:
+            # One brawler, chosen by the operator. The queue shrinks to it and
+            # the menu is used to actually get on it, because the game's own
+            # sort would otherwise hand back somebody else.
+            self._lock_queue_to(locked)
+            self._select_locked_brawler(locked)
         values = {
             "trophies": self.Trophy_observer.current_trophies,
             "wins": self.Trophy_observer.current_wins
@@ -373,7 +472,10 @@ class StageManager:
         # sys.exit() and stop. The game already sorts by "Least Trophies" and
         # picks the real minimum, so the only fact the bot needs is the name of
         # the brawler that got selected.
-        if USE_TROPHY_TARGETS and value >= push_current_brawler_till:
+        if USE_TROPHY_TARGETS and value >= push_current_brawler_till and not locked:
+            # and not locked: with one brawler chosen there is no next one to move
+            # on to, and this branch's single-entry case calls sys.exit(), which
+            # would stop a bot that is doing exactly what it was asked to do.
             if len(self.brawlers_pick_data) <= 1:
                 print("Brawler reached required trophies/wins. No more brawlers selected for pushing in the menu. "
                       "Bot will now pause itself until closed.", value, push_current_brawler_till)

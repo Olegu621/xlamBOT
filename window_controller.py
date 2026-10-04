@@ -249,13 +249,25 @@ class WindowController:
         except Exception:  # noqa: BLE001
             return None, frame_time
 
-    def frame_to_jpeg(self, frame, quality: int = 70) -> bytes:
-        """Encode a frame as JPEG bytes; empty when there is nothing to encode."""
+    def frame_to_jpeg(self, frame, quality: int = 70, max_width: int = 0) -> bytes:
+        """Encode a frame as JPEG bytes; empty when there is nothing to encode.
+
+        max_width scales it down first when it is set. The panel's device preview
+        is shown at a fraction of a phone screen, so encoding 1280x720 to then
+        shrink it in the browser costs real CPU for pixels nobody sees.
+        """
         if frame is None:
             return b""
         try:
             import cv2
 
+            if max_width:
+                height, width = frame.shape[:2]
+                if width > max_width:
+                    frame = cv2.resize(
+                        frame,
+                        (int(max_width), max(1, int(height * max_width / width))),
+                        interpolation=cv2.INTER_AREA)
             ok, buffer = cv2.imencode(".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), int(quality)])
             if not ok:
                 return b""

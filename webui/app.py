@@ -364,6 +364,55 @@ def create_app(xlambot_main, start_discord_bot=False):
         device_profiles.save_queue(key, items)
         return jsonify({"ok": True, "items": device_profiles.load_queue(key)})
 
+    @app.get("/api/devices/<path:key>/brawler")
+    def device_brawler(key: str):
+        """The one brawler this device plays, or "" when it rotates."""
+        key = device_profiles.sanitize_key(key)
+        with device_profiles.use_profile(key):
+            locked = str(load_toml_as_dict("cfg/bot_config.toml").get("locked_brawler") or "").strip()
+        return jsonify({"ok": True, "locked_brawler": locked})
+
+    @app.post("/api/devices/<path:key>/brawler")
+    def device_set_brawler(key: str):
+        """Play exactly one brawler, or go back to rotating.
+
+        The name is checked against the same table play.py reads, because a
+        spelling the game does not know would leave the bot stuck on whichever
+        card it happened to be on - which is the failure this whole mode exists
+        to remove.
+        """
+        key = device_profiles.sanitize_key(key)
+        body = request.get_json(silent=True) or {}
+        name = str(body.get("brawler") or "").strip().lower()
+
+        catalog = {str(entry.get("name") or "").strip().lower()
+                   for entry in (data_service.get_brawler_catalog() or [])}
+        if name and name not in catalog:
+            raise KeyError(f"'{name}' is not a known brawler.")
+
+        trophies = 0
+        for entry in device_profiles.load_queue(key):
+            if str(entry.get("brawler", "")).strip().lower() == name:
+                trophies = entry.get("trophies") or 0
+                break
+
+        with device_profiles.use_profile(key):
+            device_profiles.update_settings(
+                key, "cfg/bot_config.toml", {"locked_brawler": name})
+        if name:            device_profiles.save_queue(key, [{
+                "brawler": name,
+                "type": "trophies",
+                # No goal: in this mode there is nothing to finish and move on
+                # from, so a target the bot could reach would only stop it.
+                "push_until": 100000,
+                "trophies": trophies,
+                "wins": 0,
+                "win_streak": 0,
+                "automatically_pick": True,
+            }])
+        return jsonify({"ok": True, "locked_brawler": name,
+                        "items": device_profiles.load_queue(key)})
+
     @app.get("/api/devices/<path:key>/settings")
     def device_settings(key: str):
         return jsonify({"ok": True, "settings": device_profiles.read_settings(key)})
@@ -425,6 +474,11 @@ def create_app(xlambot_main, start_discord_bot=False):
             return ("", 404)
         response = app.response_class(image, mimetype="image/jpeg")
         response.headers["Cache-Control"] = "no-store"
+        # Tell the panel how often this picture is really being refreshed, so the
+        # setting in the settings page is what governs it and not a number
+        # hardcoded in the browser.
+        response.headers["X-Preview-Interval-Ms"] = str(
+            int(device_manager.preview_interval(key) * 1000))
         return response
 
     @app.get("/api/bootstrap")
