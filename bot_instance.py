@@ -21,8 +21,8 @@ from stage_manager import StageManager
 from state_finder import get_state
 from time_management import TimeManagement
 from utils import (
-    cprint, clean_queue, game_mode_warning, load_playstyle_script, load_toml_as_dict,
-    notify_user, save_brawler_data,
+    cprint, clean_queue, game_mode_warning, gas_mode_warning, load_playstyle_script,
+    load_toml_as_dict, notify_user, save_brawler_data,
 )
 
 # Imported as plain modules, not as device-scoped helpers: every instance already
@@ -95,6 +95,9 @@ class BotInstance:
         self.mode_warning = game_mode_warning(self.playstyle_info)
         if self.mode_warning:
             print(f"[{self.device_label}] {self.mode_warning}")
+        gas_warning = gas_mode_warning()
+        if gas_warning:
+            print(f"[{self.device_label}] {gas_warning}")
         self.Play = Play(*self.load_models(), self.window_controller, playstyle_code)
         self.Time_management = TimeManagement()
         self.lobby_automator = LobbyAutomation(self.window_controller)

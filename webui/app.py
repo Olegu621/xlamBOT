@@ -12,8 +12,9 @@ from flask import Flask, jsonify, render_template, request, send_file
 from werkzeug.exceptions import HTTPException
 
 from discord_bot import DiscordBot
-from utils import clean_queue, game_mode_warning, get_brawler_icon_path, resolve_project_path, \
-    resolve_within, save_dict_as_toml, resolve_config_path, load_toml_as_dict
+from utils import clean_queue, game_mode_warning, gas_mode_warning, get_brawler_icon_path, \
+    resolve_project_path, resolve_within, save_dict_as_toml, resolve_config_path, \
+    load_toml_as_dict
 import device_profiles
 from .device_manager import DeviceRuntimeManager
 from .runtime import RuntimeManager
@@ -301,14 +302,17 @@ def create_app(xlambot_main, start_discord_bot=False):
                 device["meta"] = device_profiles.read_profile_meta(device["key"])
             except Exception:
                 device["meta"] = {}
-            # A playstyle written for another mode is computed here, not in the
-            # bot, so the card can say so before the match even starts. Read in
-            # the device's own profile, or one device's mode would speak for all.
+            # Mismatches we can prove: a playstyle written for another mode, and
+            # gas avoidance switched on where the game has no gas. Both are read
+            # in the device's own profile, or one device's mode would speak for
+            # all.
             try:
                 with device_profiles.use_profile(device["key"]):
                     device["mode_warning"] = game_mode_warning()
+                    device["gas_warning"] = gas_mode_warning()
             except Exception:
                 device["mode_warning"] = None
+                device["gas_warning"] = None
         return jsonify({"ok": True, "devices": devices, "profiles": device_profiles.list_profiles()})
 
     @app.get("/api/devices/status")

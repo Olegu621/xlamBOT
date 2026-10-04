@@ -915,6 +915,11 @@ def _mode_key(name):
     return "".join(ch if ch.isalnum() else "_" for ch in str(name).lower()).strip("_")
 
 
+# The only modes the game puts poison gas in. Everything else has no gas to
+# avoid, and the gas model cannot tell a bush from gas anyway.
+SHOWDOWN_MODES = frozenset({"solo_showdown", "duo_showdown", "trio_showdown"})
+
+
 def game_mode_warning(playstyle_info=None, config=None):
     """Say when the playstyle was not written for the mode being played.
 
@@ -958,6 +963,33 @@ def game_mode_warning(playstyle_info=None, config=None):
     return (f'Плейстайл «{(playstyle_info or {}).get("name") or current_playstyle_name()}» '
             f'написан для «{wanted}», а игра идёт в режиме «{label}». '
             f'Бот будет вести себя не так, как задумано в плейстайле.')
+
+
+def gas_mode_warning(config=None):
+    """Warn when gas avoidance is on somewhere the game has no gas.
+
+    Poison gas is a Showdown thing. In Heist, Bounty, Knockout and the rest the
+    green on screen is bushes and map art, and the shipped gas model was trained
+    on exactly that - nine unique Heist frames of Nexus bushes - so it reads
+    those bushes as gas. Turning avoidance on there avoids nothing, it only
+    makes the bot run from a hedge, which is what "it walks into the gas" looks
+    like from the outside.
+
+    Returns the warning, or None when the setting cannot be wrong.
+    """
+    if config is None:
+        config = load_toml_as_dict("cfg/bot_config.toml")
+    if not config_bool(config.get("gas_avoidance"), False):
+        return None
+    mode = _mode_key(config.get("game_mode") or "")
+    if not mode or mode in SHOWDOWN_MODES:
+        return None
+    names = load_toml_as_dict("cfg/modes_config.toml").get("mode") or {}
+    label = names.get(str(config.get("game_mode")), config.get("game_mode"))
+    return (f'Обход газа включён, а в режиме «{label}» газа в игре нет — зелёное '
+            f'на экране это кусты. Модель газа обучена на кустах и принимает их за '
+            f'газ, поэтому бот будет убегать от кустов. Выключите gas_avoidance '
+            f'или играйте в шоудауне.')
 
 
 def current_playstyle_name():
