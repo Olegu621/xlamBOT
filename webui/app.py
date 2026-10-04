@@ -446,8 +446,15 @@ def create_app(xlambot_main, start_discord_bot=False):
         payload = request.get_json(silent=True) or {}
         frame = str(payload.get("frame") or "")
         boxes = payload.get("boxes")
-        if not frame or not isinstance(boxes, list):
-            raise KeyError("Нужны 'frame' и 'boxes'.")
+        if not frame:
+            raise KeyError("Нужен 'frame'.")
+        if boxes is None:
+            # Пустой список - законный ответ: кадр посмотрели и там ничего нет.
+            # Раньше отсутствие поля считалось ошибкой, и клиент, который просто
+            # не прислал рамки, получал 400 вместо отметки "пусто".
+            boxes = []
+        if not isinstance(boxes, list):
+            raise KeyError("'boxes' должен быть списком.")
         saved = session.set_boxes(frame, boxes, bool(payload.get("checked")))
         if saved is None:
             raise KeyError("Кадра нет в этой записи.")
