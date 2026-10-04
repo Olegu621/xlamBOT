@@ -123,13 +123,19 @@ function Build-App {
         throw "В очереди $($unknown.Count) имён, которых нет в таблице бойцов: $names"
     }
 
-    # Личные файлы в сборку попадать не должны.
+    # Личные файлы в сборку попадать не должны. Кадры для обучения gasDetector
+    # из них потом и учат - это чужие игры и чужие трофеи конкретного аккаунта,
+    # и в публичный установщик им тоже нельзя.
     $leaks = Get-ChildItem (Join-Path $AppDir '_internal') -Recurse -File -EA SilentlyContinue |
-        Where-Object { $_.Name -match 'match_history|cfg\.zip|account_state' }
+        Where-Object { $_.Name -match 'match_history|cfg\.zip|account_state|session\.json|frame_\d{4}' }
     if ($leaks) {
-        throw "В сборку попали личные файлы: $($leaks.Name -join ', ')"
+        throw "В сборку попали личные файлы: $((($leaks | Select-Object -First 5).Name) -join ', ')"
     }
-    Write-Host "  личных файлов нет" -ForegroundColor Green
+    $leakDir = Join-Path $AppDir '_internal\training'
+    if (Test-Path $leakDir) {
+        throw "В сборку попала папка training с кадрами для обучения: $leakDir"
+    }
+    Write-Host "  личных файлов нет, кадров обучения нет" -ForegroundColor Green
 
     $size = [math]::Round(((Get-ChildItem $AppDir -Recurse -File | Measure-Object Length -Sum).Sum / 1MB), 1)
     Write-Host "  готово: $size МБ" -ForegroundColor Green
