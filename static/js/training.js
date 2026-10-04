@@ -21,7 +21,7 @@
         gas: { stroke: '#2fe0a6', fill: 'rgba(47, 224, 166, 0.16)', label: 'газ' },
         bush: { stroke: '#ffc654', fill: 'rgba(255, 198, 84, 0.14)', label: 'куст' },
         wall: { stroke: '#4a8cff', fill: 'rgba(74, 140, 255, 0.14)', label: 'стена' },
-        close_bush: { stroke: '#c78cff', fill: 'rgba(199, 140, 255, 0.14)', label: 'ближняя стена' },
+        close_bush: { stroke: '#c78cff', fill: 'rgba(199, 140, 255, 0.14)', label: 'куст вблизи' },
     };
     const PALETTE_FALLBACK = { stroke: '#8f9bb0', fill: 'rgba(143, 155, 176, 0.14)', label: '?' };
     // Список классов расширяемый: он приходит с сервера, и класс без цвета
