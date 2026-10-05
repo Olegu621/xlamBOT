@@ -2,13 +2,13 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 13,
+    "revision": 14,
     "python": "3.13",
-    "size": 600147,
-    "sha256": "eeceed4e6d7791a35da05278c1824815e426292e2567eae63ce0c16adf644ff0",
+    "size": 600351,
+    "sha256": "87ef180c22f3cf76a9dab43f982fde404e08a9a66a7c51ee2763e3396dc8addf",
     "files": {
       "api/api.pyc": "2f986ae10e73ff8674b1645ba8a9902e12e7e173d4849ded6a8310f8f54fb510",
-      "bot_instance.pyc": "9db88a99eb7afebc41e09ee724daf2af2cbf9a2e34058cb6a6ab9f4f179e35d6",
+      "bot_instance.pyc": "708b5b05c039fc33bf31b67e6be6b8e02c504e4951a3b1bc47e99eb5fd03e273",
       "brawler_calibration.pyc": "3ce3eeb319ecb550847a8b546544f4213ead2a5ddae2e2bc0bf4a8a2999083ce",
       "debug_view.pyc": "e0ba930d00221f040510da4003f26ae087354f7baf541dc53bb3a8ace9bbe06c",
       "desktop.pyc": "188eaba33196b4d7c5a9dc986d2c9f8de1acd88610a633a03a57cb63b9fe44b9",
@@ -24,7 +24,7 @@
       "play.pyc": "b7faa478ea4c6a85ad8207aba6c502af4cacceab87c45d15825c6b78a6aec95d",
       "settings_schema.pyc": "28d9acebf4524acd8233aab57226d6fa88cfd6ec06b7bbec55fcbcc172942dc4",
       "setup_wizard.pyc": "9a29f57edaaa80bc5b1158929ae40b94c07970a09d1506de7db9f41c48ed26bc",
-      "stage_manager.pyc": "27aef09e5c9277eb86a27e04bf0557ef84844265ff3f6908d67101af046b43c5",
+      "stage_manager.pyc": "d382e13b89e90c4622ad6e92d49adb8e3e5d97fb040a3bc688a1aec8a4649ce2",
       "state_finder.pyc": "187e1c41fe3529026f884e9db7bafb50512b52b155319dde6bed32c1ca83c25f",
       "static/css/calibration.css": "c470e9e50cb1fa754678f4e449113ee5d852f70a1ab1d8efd54f5d4d37488eda",
       "static/css/interface.css": "6aa59ded821b6d3de1eea5b3364e61c0e76cb61e13e2581d47f3f8f2e6cbc2cb",
@@ -52,7 +52,7 @@
       "training_capture.pyc": "7333a2492aba124cafd96c4b795704f392cac2edd16c1d6b2616cb0b7fc8ca7d",
       "training_models.pyc": "5347e6db116060332000819c8fa7c904024395cd92fb4dede293fb0e5ea4d495",
       "trophy_observer.pyc": "02b43ee889a4e46bc8ee91083136b8a1f7a64840d2a476278ab8e9a0decf63e0",
-      "trophy_reader.pyc": "521e87404300d69147162fce495f85f0ce966ea60c96fe310cee9d46fba4ab2d",
+      "trophy_reader.pyc": "0f4808d30c6931d161b39c6f2fe3f4a68b39316b3f873fbfde5ffa1fbb2451f9",
       "utils.pyc": "76a0830ebca59d606061bda9c409676e633b826f9490a1ed99df7d048d0911da",
       "webui/__init__.pyc": "c004a485dc68e2bb6d91ae4a54bd1ab87343869481cb413d2d0395b1618b92e5",
       "webui/app.pyc": "cd7a68e9a2ca64b4a1ccd9c58d319c045e325a393469a9f3816e59444092a5e0",
@@ -64,5 +64,5 @@
       "window_controller.pyc": "b3dc6725a1dbe6a13b32e9731d7522d49d90570285d101c656c0a5bc3d63162c"
     }
   },
-  "signature": "a8a4edb39a5ec8a5c08f14f69928ebf9c6a7ed2131705575fa78e02724738133c5308a32d9c9f4e88ffcc1bee5fe4cb79436fedc8399778562671b0dad21ff0c"
+  "signature": "4e7171a39dc33940286aa81a1d73397b0ebe9ceae73369fb5ea6ea4466dc1090689da09642e075c98b1ddbf5179bfd2a591aa8851324cba1841251e79e6cb102"
 }
