@@ -1,0 +1,674 @@
+import atexit
+import math
+import random
+from concurrent.futures import ThreadPoolExecutor
+import threading
+import time
+
+import scrcpy
+from adbutils import adb, AdbDevice
+from debug_view import DebugViewPublisher
+from device_lease import DeviceLease
+from utils import config_bool, load_toml_as_dict, save_dict_as_toml, invalidate_toml_cache
+
+brawl_stars_width, brawl_stars_height = 1920, 1080
+
+press_coords_dict = load_toml_as_dict("cfg/buttons_config.toml")
+KNOWN_BS_PACKAGES = ("com.supercell.brawlstars", "bsd.suitcase.release")
+# Приватные сборки отличаются от release только суффиксом: nexusv2, nexus и
+# подобные. Перечислять их по одному бессмысленно, поэтому любое имя семейства
+# bsd.suitcase.* считается игрой.
+PRIVATE_BS_PREFIXES = ("bsd.suitcase.",)
+
+
+def restart_adb_server() -> None:
+    try:
+        adb.server_kill()
+    except Exception:
+        pass
+    time.sleep(0.5)
+    try:
+        adb.server_start()
+    except Exception:
+        pass
+    time.sleep(0.5)
+
+
+def online_devices():
+    out = []
+    for d in adb.device_list():
+        try:
+            state = d.get_state() if hasattr(d, "get_state") else d.state
+        except Exception:
+            state = "device"
+        if state == "device":
+            out.append(d)
+    return out
+
+
+def get_device_by_serial(serial) -> AdbDevice:
+    """The connected ADB device with this serial.
+
+    Several devices can be online at once, so a caller that already knows which
+    phone it means must get that one instead of whichever device discovery
+    happens to prefer. A profile key is a filesystem-safe form of the serial
+    ("127.0.0.1-5555"), so that spelling is accepted too.
+    """
+    wanted = str(serial or "").strip()
+    if not wanted:
+        raise ValueError("No device serial was given.")
+    try:
+        devices = online_devices()
+    except Exception as e:
+        raise ConnectionError(f"Could not list ADB devices: {e}") from e
+
+    wanted_key = wanted.replace(":", "-").lower()
+    for device in devices:
+        if device.serial == wanted or device.serial.replace(":", "-").lower() == wanted_key:
+            return device
+
+    online = [device.serial for device in devices]
+    if online:
+        raise ConnectionError(f"Device '{wanted}' is not connected. Online devices: {online}.")
+    raise ConnectionError(f"No ADB devices are online, so '{wanted}' is unavailable.")
+
+
+def is_brawl_stars_package(target) -> bool:
+    """Whether Brawl Stars is the package in the foreground.
+
+    Accepts either the package name or a device: the panel only has the name it
+    read off `app_current()`, while the bot compares names it was configured
+    with. A missing name simply means the game is not in front.
+    """
+    package = target
+    if not isinstance(target, str):
+        try:
+            package = target.app_current().package
+        except Exception as e:
+            print(f"Error reading the foreground app: {e}")
+            return False
+    package = str(package or "").strip()
+    if not package:
+        return False
+    if any(package == known or package.startswith(f"{known}.")
+           for known in KNOWN_BS_PACKAGES):
+        return True
+    if package.startswith(PRIVATE_BS_PREFIXES):
+        return True
+    # Finally whatever this project was pointed at: the name in general_config
+    # is what the bot launches and stops, so it counts even if it matches no
+    # pattern above.
+    try:
+        configured = load_toml_as_dict(
+            "cfg/general_config.toml").get("brawl_stars_package")
+    except Exception:  # noqa: BLE001
+        configured = None
+    return bool(configured) and package == str(configured).strip()
+
+
+def adb_device_port_sort_key(device: AdbDevice) -> tuple[float, int, str]:
+    """Sort TCP/emulator ADB devices by their effective ADB port."""
+    serial = device.serial
+    if ":" in serial:
+        try:
+            return int(serial.rsplit(":", 1)[1]), 0, serial
+        except ValueError:
+            pass
+    if serial.startswith("emulator-"):
+        try:
+            # Emulator serials contain the console port; ADB uses the next port.
+            return int(serial.removeprefix("emulator-")) + 1, 1, serial
+        except ValueError:
+            pass
+    return float("inf"), 2, serial
+
+
+def discover_device(verbose: bool = False) -> AdbDevice:
+    preferred_port = load_toml_as_dict("cfg/general_config.toml").get("emulator_port")
+
+    def _safe_connect(port: int):
+        dev = adb.connect(f"127.0.0.1:{port}")
+        return dev
+
+    if preferred_port:
+        try:
+            port_str = str(preferred_port).strip()
+            if port_str.isdigit():
+                port_num = int(port_str)
+                if verbose:
+                    print(f"Attempting connection to configured preferred port: {port_num}")
+                try:
+                    _safe_connect(port_num)
+                except Exception:
+                    pass
+
+                devices = online_devices()
+                pref = next((d for d in devices if d.serial.endswith(f"{port_str}")), None)
+                if pref:
+                    if verbose:
+                        print(f"Successfully connected to configured preferred port: {pref.serial}")
+                    return pref
+        except Exception as e:
+            if verbose:
+                print(f"Warning: Error handling preferred port connection: {e}")
+
+    candidates = [5137, 5555, 16384, 7555, 5635, 62001, 62025, 62026, 7556, 7565, 16416] + list(range(5556, 5566)) + list(range(5565, 5756, 10)) + list(range(16385, 16415))
+
+    def _try(port):
+        try:
+            _safe_connect(port)
+        except Exception:
+            pass
+
+    with ThreadPoolExecutor(max_workers=len(candidates)) as executor:
+        executor.map(_try, candidates)
+
+    devices = online_devices()
+    if verbose:
+        print(f"Online devices after scan: {[d.serial for d in devices]}")
+
+    if not devices:
+        raise ConnectionError("No ADB devices came online after scan.")
+
+    if len(devices) == 1:
+        return devices[0]
+
+    sorted_devices = sorted(devices, key=adb_device_port_sort_key)
+    chosen = sorted_devices[0]
+    print(f"Multiple ADB devices online and no port configured. "
+          f"Picking {chosen.serial} (lowest ADB port). Others: "
+          f"{[d.serial for d in sorted_devices[1:]]}")
+    return chosen
+
+class StaleFrameError(ConnectionError):
+    """Drop this decision and wait for a fresh frame."""
+
+class WindowController:
+    def __init__(self, max_fps="auto", serial=None):
+        self.input_lock = threading.RLock()
+        self.input_enabled = True
+        self.active_touches = {}
+        self.gameplay_frame_time = None
+        self.press_coords_dict = load_toml_as_dict("cfg/buttons_config.toml")
+        self.scale_factor = None
+        self.width = None
+        self.height = None
+        self.width_ratio = None
+        self.height_ratio = None
+        self.movement_joystick_x, self.movement_joystick_y = None, None
+        self.original_movement_joystick = (None, None)
+        self.BRAWL_STARS_PACKAGE = load_toml_as_dict("cfg/general_config.toml")["brawl_stars_package"]
+        self.verbose_debug = config_bool(
+            load_toml_as_dict("cfg/debug_settings.toml").get("verbose_debug"),
+            False
+        )
+        # Pinned only when the caller names a device; otherwise discovery picks
+        # one and self.serial is whatever that device turned out to be.
+        self.serial = str(serial).strip() if serial else None
+        print("Connecting to ADB (might take up to 2 minutes)...")
+        try:
+            if self.serial:
+                self.device = get_device_by_serial(self.serial)
+            else:
+                self.device = discover_device(verbose=self.verbose_debug)
+            self.serial = self.device.serial
+            self._device_lease = DeviceLease(self.serial)
+            print(f"Connected to device: {self.serial}")
+
+            self.frame_lock = threading.Lock()
+            self.max_fps = max_fps
+            self.scrcpy_client = scrcpy.Client(device=self.device, max_width=0, bitrate=4000000) if self.max_fps == "auto" else scrcpy.Client(device=self.device, max_width=0, bitrate=4000000, max_fps=self.max_fps)
+            self.last_frame = None
+            self.last_frame_time = 0.0
+            self.last_joystick_pos = (None, None)
+            self.FRAME_STALE_TIMEOUT = 0.75
+            self.re_apply_movement = config_bool(
+                load_toml_as_dict("cfg/debug_settings.toml").get("re_apply_movement"),
+                True
+            )
+            self.debug_view = DebugViewPublisher.from_config()
+
+            def on_frame(frame):
+                if frame is not None:
+                    with self.frame_lock:
+                        self.last_frame = frame
+                        self.last_frame_time = time.time()
+
+            self.scrcpy_client.add_listener(scrcpy.EVENT_FRAME, on_frame)
+            self.scrcpy_client.start(threaded=True)
+            atexit.register(self.close)
+            print("Scrcpy client started successfully.")
+
+        except Exception:
+            if getattr(self, "_device_lease", None):
+                self._device_lease.close()
+            raise Exception(f"Error during ADB/scrcpy initialization\nFailed to connect to the emulator/device.\nMake sure you have ADB enabled in your emulator settings. If you don't know how, check https://vimeo.com/1174882529?fl=pl&fe=s.\n if it still doesn't work, check https://discord.com/channels/1205263029269438574/1227618442073342002/1499331741838610433 to try fixing it.")
+        self.are_we_moving = False
+        self.PID_JOYSTICK = 1
+        self.PID_ATTACK = 2
+        self._watchdog_stop = threading.Event()
+        threading.Thread(target=self._input_watchdog, daemon=True, name="xlambot-input-watchdog").start()
+
+    def latest_frame_copy(self):
+        """Non-blocking snapshot of the newest frame, for the web panel preview.
+
+        Returns ``(frame, timestamp)`` and never waits: the panel polls this
+        several times a second and must not stall behind the capture stream.
+        """
+        frame, frame_time = self.get_latest_frame()
+        if frame is None:
+            return None, 0.0
+        try:
+            return frame.copy(), frame_time
+        except Exception:  # noqa: BLE001
+            return None, frame_time
+
+    @staticmethod
+    def frame_to_jpeg(frame, quality: int = 70, max_width: int = 0) -> bytes:
+        """Encode a frame as JPEG bytes; empty when there is nothing to encode.
+
+        max_width scales it down first when it is set. The panel's device preview
+        is shown at a fraction of a phone screen, so encoding 1280x720 to then
+        shrink it in the browser costs real CPU for pixels nobody sees.
+        """
+        if frame is None:
+            return b""
+        try:
+            import cv2
+
+            if max_width:
+                height, width = frame.shape[:2]
+                if width > max_width:
+                    frame = cv2.resize(
+                        frame,
+                        (int(max_width), max(1, int(height * max_width / width))),
+                        interpolation=cv2.INTER_AREA)
+            ok, buffer = cv2.imencode(".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), int(quality)])
+            if not ok:
+                return b""
+            return buffer.tobytes()
+        except Exception:  # noqa: BLE001
+            return b""
+
+    def get_latest_frame(self):
+        with self.frame_lock:
+            if self.last_frame is None:
+                return None, 0.0
+            return self.last_frame, self.last_frame_time
+
+    def is_stream_alive(self) -> bool:
+        """Whether the scrcpy stream itself is still connected.
+
+        The encoder stops emitting frames while the screen does not change, so a
+        fresh frame proves nothing here: a live stream showing a still screen is
+        a normal pause (a match loading, the emulator backgrounded), not a broken
+        feed, and reconnecting would only throw away a working connection.
+        """
+        client = getattr(self, "scrcpy_client", None)
+        if client is None or not getattr(client, "alive", False):
+            return False
+        thread = getattr(client, "stream_loop_thread", None)
+        if thread is not None and not thread.is_alive():
+            return False
+        return True
+
+    def force_rediscover(self) -> bool:
+        print("Reconnecting to the same ADB device.")
+        try:
+            self.scrcpy_client.stop()
+        except Exception:
+            pass
+        self.release_all_inputs()
+        try:
+            if self.serial:
+                # Stay on the phone this instance was started for: with several
+                # devices online, discovery would otherwise hand back another.
+                new_dev = get_device_by_serial(self.serial)
+            else:
+                new_dev = discover_device(self.verbose_debug)
+        except (ConnectionError, ValueError):
+            return False
+        self.device = new_dev
+        self.serial = self.device.serial
+        print(f"Re-discovered device: {self.serial}")
+        return True
+
+    def reconnect_scrcpy(self, max_retries=3):
+        for attempt in range(1, max_retries + 1):
+            print(f"Scrcpy reconnect attempt {attempt}/{max_retries}")
+            try:
+                self.scrcpy_client.stop()
+            except Exception:
+                pass
+            time.sleep(1)
+
+            with self.frame_lock:
+                self.last_frame = None
+                self.last_frame_time = 0.0
+
+            self.are_we_moving = False
+            self.last_joystick_pos = (None, None)
+
+            try:
+                _ = self.device.get_state()
+            except Exception:
+                if not self.force_rediscover():
+                    print("Device gone and re-discovery failed.")
+                    time.sleep(2 * attempt)
+                    continue
+
+            def on_frame(frame):
+                if frame is not None:
+                    with self.frame_lock:
+                        self.last_frame = frame
+                        self.last_frame_time = time.time()
+
+            try:
+                self.scrcpy_client = scrcpy.Client(device=self.device, max_width=0, bitrate=4000000) if self.max_fps == "auto" else scrcpy.Client(device=self.device, max_width=0, bitrate=4000000, max_fps=self.max_fps)
+                self.scrcpy_client.add_listener(scrcpy.EVENT_FRAME, on_frame)
+                self.scrcpy_client.start(threaded=True)
+            except Exception as e:
+                print(f"Scrcpy client creation failed: {e}")
+                time.sleep(2 * attempt)
+                continue
+
+            deadline = time.time() + 8
+            while time.time() < deadline:
+                _, ft = self.get_latest_frame()
+                if ft > 0 and (time.time() - ft) < 2:
+                    print(f"Scrcpy feed restored on attempt {attempt}")
+                    return True
+                time.sleep(0.5)
+
+            print(f"Attempt {attempt} did not restore frame feed")
+            time.sleep(2 * attempt)
+
+        print("All scrcpy reconnect attempts exhausted")
+        return False
+
+    def launch_brawl_stars(self):
+        """Bring Brawl Stars back to the foreground.
+
+        A game that only lost the foreground is merely re-launched, while a dead
+        process is restarted outright: stopping a live game would throw away the
+        match it is in the middle of.
+        """
+        if self.brawl_stars_process_alive():
+            self.device.app_start(self.BRAWL_STARS_PACKAGE)
+            time.sleep(2)
+            print("Brawl Stars brought back to the foreground.")
+            return
+        self.restart_brawl_stars()
+
+    def brawl_stars_process_alive(self) -> bool:
+        """Whether the Brawl Stars process is running on the device.
+
+        Cheaper and more direct than reading the foreground app, which answers
+        about whatever happens to be on screen (a screen saver, a system dialog)
+        rather than about the game.
+
+        pidof only knows the packages we name here, and modified Brawl Stars
+        builds ship under their own id - bsd.suitcase.nexusv2 here - so a list
+        of two names silently missed the game that was open in front of the
+        operator and the bot kept announcing that Brawl Stars was not running.
+        When none of the names answer, the foreground is asked instead, using
+        the same prefix rule the panel already trusts, and the package found
+        that way is written to the config so the next check is a cheap pidof.
+        """
+        for package in (self.BRAWL_STARS_PACKAGE, *KNOWN_BS_PACKAGES):
+            try:
+                if self.device.shell(["pidof", package], timeout=5).strip():
+                    return True
+            except Exception as e:
+                print(f"Error checking whether '{package}' is running: {e}")
+        if is_brawl_stars_package(self.device):
+            self._adopt_foreground_package()
+            return True
+        return False
+
+    def _adopt_foreground_package(self):
+        """Remember which package the game actually runs under.
+
+        Without this every later launch and stop names a package the device does
+        not have, so the game is never really restarted when it does die.
+        """
+        try:
+            opened = str(self.device.app_current().package or "").strip()
+        except Exception as e:  # noqa: BLE001
+            print(f"Error reading the foreground package: {e}")
+            return
+        if not opened or opened == self.BRAWL_STARS_PACKAGE:
+            return
+        try:
+            general_config = load_toml_as_dict("cfg/general_config.toml")
+            general_config["brawl_stars_package"] = opened
+            save_dict_as_toml(general_config, "cfg/general_config.toml")
+            invalidate_toml_cache("cfg/general_config.toml")
+            self.BRAWL_STARS_PACKAGE = opened
+            print(f"Brawl Stars runs under '{opened}'. Saved that in the config.")
+        except Exception as e:  # noqa: BLE001
+            print(f"Could not save the detected Brawl Stars package: {e}")
+
+    def restart_brawl_stars(self):
+        self.device.app_stop(self.BRAWL_STARS_PACKAGE)
+        time.sleep(1)
+        self.device.app_start(self.BRAWL_STARS_PACKAGE)
+        time.sleep(3)
+        print("Brawl stars restarted successfully.")
+
+    def is_brawl_stars_running(self):
+        try:
+            opened_app = self.device.app_current().package.strip()
+            if is_brawl_stars_package(opened_app):
+                # A modified build answers under its own id, so match it the way
+                # the panel does and remember it, rather than comparing against
+                # one hardcoded name and calling the game gone while it is in
+                # front of us.
+                if opened_app != self.BRAWL_STARS_PACKAGE:
+                    self._adopt_foreground_package()
+                return True
+            return opened_app == self.BRAWL_STARS_PACKAGE.strip()
+        except Exception as e:
+            print(f"Error checking if Brawl Stars is running: {e}")
+            return False
+
+    def screenshot(self):
+        frame, frame_time = self.get_latest_frame()
+
+        deadline = time.time() + 15
+        while frame is None:
+            if time.time() > deadline:
+                raise ConnectionError(
+                    "No frame received from scrcpy within 15s. "
+                    "Check USB/emulator connection."
+                )
+            print("Waiting for first frame...")
+            time.sleep(0.1)
+            frame, frame_time = self.get_latest_frame()
+
+        age = time.time() - frame_time
+        if frame_time > 0 and age > self.FRAME_STALE_TIMEOUT:
+            print(f"WARNING: scrcpy frame is {age:.1f}s stale -- feed may be frozen")
+
+        if not self.width or not self.height:
+            self.width = frame.shape[1]
+            self.height = frame.shape[0]
+            if (self.width, self.height) != (brawl_stars_width, brawl_stars_height):
+                print(f"WARNING: Unexpected resolution: {self.width}x{self.height}. Expected {brawl_stars_width}x{brawl_stars_height}. Please set your emulator resolution to 1920x1080 for best results.")
+            self.width_ratio = self.width / brawl_stars_width
+            self.height_ratio = self.height / brawl_stars_height
+            movement_joystick = self.press_coords_dict.get("movement_joystick", [180, 900])
+            self.movement_joystick_x, self.movement_joystick_y = movement_joystick[0] * self.width_ratio, movement_joystick[1] * self.height_ratio
+            self.original_movement_joystick = (self.movement_joystick_x, self.movement_joystick_y)
+            self.scale_factor = min(self.width_ratio, self.height_ratio)
+        self.last_screenshot_time = frame_time
+        return frame
+
+    def reset_to_default_resolution(self):
+        print("Resetting window controller dimensions to 1920x1080 and updating scale ratios...")
+        self.width = brawl_stars_width
+        self.height = brawl_stars_height
+        self.width_ratio = self.width / brawl_stars_width
+        self.height_ratio = self.height / brawl_stars_height
+        movement_joystick = self.press_coords_dict.get("movement_joystick", [180, 900])
+        self.movement_joystick_x, self.movement_joystick_y = movement_joystick[0] * self.width_ratio, movement_joystick[1] * self.height_ratio
+        self.original_movement_joystick = (self.movement_joystick_x, self.movement_joystick_y)
+        self.scale_factor = min(self.width_ratio, self.height_ratio)
+
+    def touch_down(self, x, y, pointer_id=0):
+        self._send_touch(x, y, scrcpy.ACTION_DOWN, pointer_id)
+
+    def touch_move(self, x, y, pointer_id=0):
+        self._send_touch(x, y, scrcpy.ACTION_MOVE, pointer_id)
+
+    def touch_up(self, x, y, pointer_id=0):
+        self._send_touch(x, y, scrcpy.ACTION_UP, pointer_id)
+
+    def move(self, x, y):
+        if not self.are_we_moving:
+            if self.original_movement_joystick[0] is not None:
+                self.movement_joystick_x = self.original_movement_joystick[0] + random.randint(-5, 5) * self.width_ratio
+                self.movement_joystick_y = self.original_movement_joystick[1] + random.randint(-5, 5) * self.height_ratio
+            else:
+                self.movement_joystick_x = 180 * self.width_ratio + random.randint(-5, 5) * self.width_ratio
+                self.movement_joystick_y = 900 * self.height_ratio + random.randint(-5, 5) * self.height_ratio
+        target_x = self.movement_joystick_x + x
+        target_y = self.movement_joystick_y + y
+        if not self.are_we_moving:
+            self.touch_down(self.movement_joystick_x, self.movement_joystick_y, pointer_id=self.PID_JOYSTICK)
+            time.sleep(0.05)
+            self.touch_move(target_x, target_y, pointer_id=self.PID_JOYSTICK)
+            self.are_we_moving = True
+            self.last_joystick_pos = (target_x, target_y)
+            return
+
+        if not self.re_apply_movement and self.last_joystick_pos == (target_x, target_y):
+            return
+
+        self.touch_move(target_x, target_y, pointer_id=self.PID_JOYSTICK)
+        self.last_joystick_pos = (target_x, target_y)
+
+    def release_movement(self):
+        if self.are_we_moving:
+            self.touch_up(self.movement_joystick_x, self.movement_joystick_y, pointer_id=self.PID_JOYSTICK)
+            self.are_we_moving = False
+            self.last_joystick_pos = (None, None)
+
+    def click(self, x: int, y: int, delay=0.02, already_include_ratio=True, touch_up=True, touch_down=True):
+        if not already_include_ratio:
+            x = x * self.width_ratio
+            y = y * self.height_ratio
+        if touch_down: self.touch_down(x, y, pointer_id=self.PID_ATTACK)
+        time.sleep(delay)
+        if touch_up: self.touch_up(x, y, pointer_id=self.PID_ATTACK)
+
+    def press(self, key, delay=0.02, touch_up=True, touch_down=True):
+        if key not in self.press_coords_dict:
+            return
+        x, y = self.press_coords_dict[key]
+        target_x = x * self.width_ratio
+        target_y = y * self.height_ratio
+        self.click(target_x, target_y, delay, touch_up=touch_up, touch_down=touch_down)
+
+    def type_text(self, text: str) -> bool:
+        """Type ASCII text into the currently focused Android input field."""
+        text = str(text)
+        if not text:
+            return True
+        if not text.isascii():
+            print(f"Cannot type non-ASCII text through ADB: {text!r}")
+            return False
+
+        try:
+            # Android's `input text` command uses %s to represent a space.
+            self.device.shell(["input", "text", text.replace(" ", "%s")], timeout=5)
+            return True
+        except Exception as exc:
+            print(f"Failed to type text through ADB: {exc}")
+            return False
+
+    def swipe(self, start_x, start_y, end_x, end_y, duration=0.2):
+        dist_x = end_x - start_x
+        dist_y = end_y - start_y
+        distance = math.sqrt(dist_x ** 2 + dist_y ** 2)
+
+        if distance == 0:
+            return
+
+        step_len = 25
+        steps = max(int(distance / step_len), 1)
+        step_delay = duration / steps
+
+        self.touch_down(int(start_x), int(start_y), pointer_id=self.PID_ATTACK)
+        for i in range(1, steps + 1):
+            t = i / steps
+            cx = start_x + dist_x * t
+            cy = start_y + dist_y * t
+            time.sleep(step_delay)
+            self.touch_move(int(cx), int(cy), pointer_id=self.PID_ATTACK)
+        self.touch_up(int(end_x), int(end_y), pointer_id=self.PID_ATTACK)
+
+    def close(self):
+        self.input_enabled = False
+        if hasattr(self, "_watchdog_stop"):
+            self._watchdog_stop.set()
+        self.release_all_inputs()
+        try:
+            self.debug_view.close()
+        except Exception as exc:
+            print(f"Debug view close failed: {exc}")
+        self.stop_scrcpy_with_timeout()
+        if getattr(self, "_device_lease", None):
+            self._device_lease.close()
+
+    def stop_scrcpy_with_timeout(self, timeout=2.0):
+        def stop_client():
+            try:
+                self.scrcpy_client.stop()
+            except Exception as exc:
+                print(f"Scrcpy stop failed: {exc}")
+
+        stop_thread = threading.Thread(target=stop_client, daemon=True, name="scrcpy-stop")
+        stop_thread.start()
+        stop_thread.join(timeout=timeout)
+        if stop_thread.is_alive():
+            print("Scrcpy stop is still running in the background; continuing shutdown.")
+
+    def frame_is_fresh(self, stamp=None):
+        if stamp is None:
+            _, stamp = self.get_latest_frame()
+        return bool(stamp and 0 <= time.time() - stamp <= self.FRAME_STALE_TIMEOUT)
+
+    def release_all_inputs(self):
+        with self.input_lock:
+            for pointer, (x, y) in list(self.active_touches.items()):
+                try:
+                    self.scrcpy_client.control.touch(int(x), int(y), scrcpy.ACTION_UP, pointer)
+                except Exception:
+                    pass
+            self.active_touches.clear()
+            self.are_we_moving = False
+            self.last_joystick_pos = (None, None)
+
+    def _send_touch(self, x, y, action, pointer):
+        with self.input_lock:
+            if action != scrcpy.ACTION_UP:
+                if not self.input_enabled or not self.is_stream_alive():
+                    self.release_all_inputs()
+                    raise ConnectionError("Input rejected: stopped controller or disconnected stream")
+                if self.gameplay_frame_time is not None and (not self.frame_is_fresh() or not self.frame_is_fresh(self.gameplay_frame_time)):
+                    self.release_all_inputs()
+                    raise StaleFrameError("Input rejected: stale gameplay frame")
+                self.active_touches[pointer] = (x, y)
+            try:
+                self.scrcpy_client.control.touch(int(x), int(y), action, pointer)
+            except Exception as error:
+                self.release_all_inputs()
+                raise ConnectionError("Touch failed on " + str(self.serial)) from error
+            if action == scrcpy.ACTION_UP:
+                self.active_touches.pop(pointer, None)
+
+    def _input_watchdog(self):
+        while not self._watchdog_stop.wait(0.1):
+            if not self.frame_is_fresh() or (self.gameplay_frame_time is not None and not self.frame_is_fresh(self.gameplay_frame_time)):
+                self.release_all_inputs()

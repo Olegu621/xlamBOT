@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="xlam-ui-token" content="{{ ui_api_token }}">
+    <title>xlamBOT — панель управления</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/api/assets/support/xlambot_logo.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/panel.css') }}?v={{ asset_version }}">
+</head>
+<body class="panel-body">
+    <header class="panel-header">
+        <div class="panel-header-left">
+            <img class="panel-logo" src="/api/assets/support/xlambot_logo.png" alt="xlamBOT">
+            <div>
+                <h1 class="panel-title">Управление ботами</h1>
+                <p class="panel-subtitle">Мульти-устройство ADB · xlamBOT</p>
+            </div>
+        </div>
+        <div class="panel-header-right">
+            <span class="stat-chip"><span class="stat-chip-label">Устройств</span><span id="deviceCount" class="stat-chip-value">0</span></span>
+            <span class="stat-chip" id="runningChip"><span class="stat-chip-label">Играют</span><span id="runningCount" class="stat-chip-value">0</span></span>
+            <button id="startAllBtn" class="btn btn-primary" type="button">Запустить все</button>
+            <button id="stopAllBtn" class="btn btn-danger" type="button">Остановить</button>
+            <button id="refreshBtn" class="btn btn-ghost" type="button">Обновить</button>
+            <span id="pollAge" class="poll-age">нет связи</span>
+            <a class="btn btn-ghost channel-link" href="https://t.me/xlamModz" target="_blank" rel="noreferrer" title="Канал с обновлениями xlamBOT">Канал xlamModz</a>
+            <a class="btn btn-ghost" href="/" title="Настройки, редактор очереди, плейстайлы и история">Настройки</a>
+        </div>
+    </header>
+
+    <section class="connect-bar">
+        <input id="connectAddress" class="input" type="text" placeholder="127.0.0.1:5555" autocomplete="off">
+        <button id="connectBtn" class="btn" type="button">Подключить по TCP</button>
+        <button id="disconnectBtn" class="btn btn-ghost" type="button">Отключить</button>
+        <span class="connect-hint">
+            Эмулятор: <code>emulator-5554</code> · TCP: <code>127.0.0.1:5555</code> · USB — просто подключите телефон
+        </span>
+    </section>
+
+    <section class="connect-bar" aria-label="Обновления бота">
+        <label><input id="autoUpdates" type="checkbox"> Автообновление скриптов</label>
+        <span id="updateStatus" role="status">Проверка обновлений…</span>
+        <button id="checkUpdates" class="btn btn-ghost" type="button">Проверить версию</button>
+    </section>
+    <main id="deviceGrid" class="device-grid"></main>
+
+    <div id="noDevices" class="empty-state hidden">
+        <h2>Устройства не найдены</h2>
+        <p>Подключите телефон по USB с включённой отладкой, запустите эмулятор или подключите устройство по TCP выше.</p>
+    </div>
+
+    <!-- Подтверждение необратимых действий. Нативный <dialog> сам удерживает
+         фокус и закрывается по Escape, поэтому ловушку фокуса писать не нужно. -->
+    <dialog id="confirmDialog" class="modal">
+        <form method="dialog" class="modal-card">
+            <h3 class="modal-title" id="confirmTitle">Подтвердите действие</h3>
+            <p class="modal-text" id="confirmText">Точно?</p>
+            <div class="modal-actions">
+                <button class="btn" value="cancel">Отмена</button>
+                <button class="btn btn-danger" value="ok" id="confirmOk">Очистить</button>
+            </div>
+        </form>
+    </dialog>
+
+    <div id="toast" class="toast hidden"></div>
+    <script src="{{ url_for('static', filename='js/ui-session.js') }}?v={{ asset_version }}"></script><script src="{{ url_for('static', filename='js/panel.js') }}?v={{ asset_version }}"></script>
+    <script src="{{ url_for('static', filename='js/updates.js') }}?v={{ asset_version }}"></script>
+</body>
+</html>
