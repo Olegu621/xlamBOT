@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 6,
+    "revision": 7,
     "python": "3.13",
-    "size": 464597,
-    "sha256": "393d0de819ccca0285e3765ab7845bdddf73810cfea35ad3dd881969c72baf9b",
+    "size": 561237,
+    "sha256": "1274e0dacdca0b1f7bc64557daff3dd452af5158c5085772e4479dc04672a59f",
     "files": {
       "api/api.pyc": "2f986ae10e73ff8674b1645ba8a9902e12e7e173d4849ded6a8310f8f54fb510",
       "bot_instance.pyc": "20dad2034eb7c902f25aee85c4c25d6f358b08a8756c7deb2373c3133e206a33",
@@ -28,7 +28,7 @@
       "static/css/calibration.css": "c470e9e50cb1fa754678f4e449113ee5d852f70a1ab1d8efd54f5d4d37488eda",
       "static/css/interface.css": "3aeff5749ceb7c591debbca98d750a6f057714085a753e669fefa21c5a11dd00",
       "static/css/panel.css": "0efa4e6745b082f9a6909446f3c1e9421ec2975173592c07a27c9345a813bd12",
-      "static/css/sprites.css": "8f12077e09e46278ac3d8abdaeeaaff9741ed38028a1187f2cf3c3e29ee5ab6a",
+      "static/css/sprites.css": "1777e7b9a99d6b62b10c26525b156a92929285cb32088f26c55150b2bf3cbcce",
       "static/css/studio.css": "4a36187b87a9148234a59b82e17e3fa0d1f7ff993578930fb8b72c10be074bd8",
       "static/css/training.css": "60f52e1784b71138b8b789b85746c126c055c385586b6776c9f2f3439ce1fb99",
       "static/js/calibration.js": "c99f2b3aae6bd397d5846ba794b270db6ebcbf08898191a601e184125afa4395",
@@ -38,13 +38,13 @@
       "static/js/training.js": "17232eb844422ab9108c761b2d8965dfd06d974e55c66bfd5443fd0c41723961",
       "static/js/ui-session.js": "d95379354038d9a8a4758f9595b8c6a52b7ae41993f3457d65af655e77291ccc",
       "static/js/updates.js": "8c1aca2c771f4a012de7358c0e08c2bb9711664a167e9ea81a584b3361cf69e0",
-      "templates/_navigation.html": "af0298c9b147ec9bdf7a587f557e097e8059a5aa9f01b01f3e4089a05b6e2b26",
+      "templates/_navigation.html": "5b6cd6d74da3517b40086694f966532e4e354ead28e924a46a38faf9e6973a3b",
       "templates/_sprites.html": "6eda429333f3888839fe8ceb9e031af4a88f3805f9265bca96b41689079f134b",
       "templates/calibration.html": "d4b411429110d4debb8faf76291a8aee394a90dd6314fc13887254674bc31b67",
       "templates/index.html": "9614622048d2bb6a27b65a5f1c387c24ddcac3f7f9e695e8809d287c9332cbff",
       "templates/panel.html": "f41c3fe950bee91402e2d8293ed763ec28dedc2be0f2f335feb7b4067340b795",
       "templates/sessions.html": "5e4218a6e36f6d15838cee41c47a775163277985d49322cb0b977924f65cfb27",
-      "templates/training.html": "775a7e6046b0e5ad06b09c9e318d9e5dce848a90ffbd3175ad7811ceaac32efe",
+      "templates/training.html": "d374fbade6ea2cbe4dd624171d340a1ac11b25f47a43d6f8fb9aa3dc46cbe570",
       "time_management.pyc": "8d8a86b3b57bd565ce20b1cfd7544dd9ada082c105484224ea1f7b3e6c2aaf68",
       "training_capture.pyc": "8bde03d561d88b2adfdf59a3c1b1f143be6c414d58cac85d6d2b920bd9463cd5",
       "training_models.pyc": "5347e6db116060332000819c8fa7c904024395cd92fb4dede293fb0e5ea4d495",
@@ -59,5 +59,5 @@
       "window_controller.pyc": "a53f47bc47b410a4aea06baee5e87f54a8965a15ed6bd9b943fd1bb0ff1c97ee"
     }
   },
-  "signature": "8df1c771a8cc457ec5dd1bafb6a20010fb196d454edf54816bc8b8547ab81ef53d15f5688424c59a92b48ad462e2ca57f8e3f281f7fd27bcf1cb617c85a4f403"
+  "signature": "cc03dda124ad4b1f0545c60863487334ed36fec6527517ed2f2a0e1c5d3b33d8b84ad554f46edc549f393273bbb835706547e6aa7c82255d4323b95d4934b80d"
 }
