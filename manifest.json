@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 3,
+    "revision": 4,
     "python": "3.13",
-    "size": 395033,
-    "sha256": "300860b409d91744f155c143eb306a1103d275ab9a9c6a38c0a5e1f78f6e2634",
+    "size": 395032,
+    "sha256": "42e366f1d3c0fd9e46b763f31fc27366b71f7fb3b936d2250c2994b0f2f80b3f",
     "files": {
       "api/api.pyc": "2f986ae10e73ff8674b1645ba8a9902e12e7e173d4849ded6a8310f8f54fb510",
       "bot_instance.pyc": "20dad2034eb7c902f25aee85c4c25d6f358b08a8756c7deb2373c3133e206a33",
@@ -44,7 +44,7 @@
       "training_models.pyc": "5347e6db116060332000819c8fa7c904024395cd92fb4dede293fb0e5ea4d495",
       "trophy_observer.pyc": "ec98a8009e8c7fd277c4a6c9695b6998ec558ff384253ba3133e15653aa94846",
       "trophy_reader.pyc": "c17aa8054ebaaf9859626cfbec7f555f045d280771fbfc6f6458988a81b3089b",
-      "utils.pyc": "02f8dea792df44a1b6b5b50edec9471c1f697fbf74ba1a3ddee34ca672264af3",
+      "utils.pyc": "0a8a06335f6d4817dc5017a2c192011b70cf5195fc9604b67760bde3694a2cea",
       "webui/__init__.pyc": "c004a485dc68e2bb6d91ae4a54bd1ab87343869481cb413d2d0395b1618b92e5",
       "webui/app.pyc": "fdd47b66d38ec0cea032a6128f13ad3544b27f808a2bc48c70faf1d03124c1b9",
       "webui/device_manager.pyc": "a770e46e5409a844b96938515746051ecf3788176c3cb36ab62382877ceed7b0",
@@ -53,5 +53,5 @@
       "window_controller.pyc": "a53f47bc47b410a4aea06baee5e87f54a8965a15ed6bd9b943fd1bb0ff1c97ee"
     }
   },
-  "signature": "39bee14b9262382636ee83f206e0eba1797b42816f6bb011f223bd91c90ddd5ecd7e0f63916e2de3ef0514963be4e3ddaf0ebc089277b51fcb3cb3ff69e12e01"
+  "signature": "73b28bd6007878f12764dc145a02759e3ff95d98af53e85f9e6156e369a5bea08db785c601283aac9274ffd66f04e3e60ce2df9368354e1c5de9f5d596864907"
 }

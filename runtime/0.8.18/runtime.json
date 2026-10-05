@@ -1,0 +1,45 @@
+{
+  "version": "0.8.18",
+  "unpacked_bytes": 778075337,
+  "files": 822,
+  "path": "runtime/0.8.18",
+  "sha256": "28c6367fa03edb564325cc52aa4759395576eb39a962b6eeec7ab42d3a3c8089",
+  "bytes": 341306554,
+  "parts": [
+    {
+      "name": "part-1.bin",
+      "bytes": 50331648,
+      "sha256": "f0ab5813b9613da4a7b0b08e81d9eec25a95fa0dcb41e88ce41f397cf6a1e1dd"
+    },
+    {
+      "name": "part-2.bin",
+      "bytes": 50331648,
+      "sha256": "68b2b40c8b77db4c9c1653f9bdc6f2bd8be9b6bb44b1549ab46fba39e3c41b11"
+    },
+    {
+      "name": "part-3.bin",
+      "bytes": 50331648,
+      "sha256": "96a591f508a6a301d1e4bf55746a33e8a2496797d6a95b9d4cc761859e9800f3"
+    },
+    {
+      "name": "part-4.bin",
+      "bytes": 50331648,
+      "sha256": "adebeca3508736e9883bf329fea9451dc08249bb8c91d6262b0720728c758d34"
+    },
+    {
+      "name": "part-5.bin",
+      "bytes": 50331648,
+      "sha256": "6e654886f7b573a909c09e825a860acb043087ada7cdcc56a9bfbac5a6f27a50"
+    },
+    {
+      "name": "part-6.bin",
+      "bytes": 50331648,
+      "sha256": "b0a6e7745bde009624a770c8a0b7754cbffa1a99408ff17dbdaf6696d54abb3f"
+    },
+    {
+      "name": "part-7.bin",
+      "bytes": 39316666,
+      "sha256": "5d930ba3c255bebbdf8c83770fc21284db7335fd55b73261b1ad7b853379f3a9"
+    }
+  ]
+}
