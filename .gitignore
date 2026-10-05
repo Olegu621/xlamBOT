@@ -1,4 +1,7 @@
-dist/
-*.pem
-*.key
-__pycache__/
+/*
+!README.md
+!LICENSE
+!.gitignore
+!manifest.json
+!scripts.zip
+!xlamBOT-Web-Setup-0.8.16.exe
