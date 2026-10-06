@@ -10,3 +10,13 @@
 !/static/
 
 !/NOTICE.md
+!/.github/
+!/CONTRIBUTING.md
+!/tools/
+!/tests/
+!/requirements-ci.txt
+
+# Local validation artifacts must never enter the distribution.
+**/__pycache__/
+**/*.py[cod]
+/.ci-cache/
