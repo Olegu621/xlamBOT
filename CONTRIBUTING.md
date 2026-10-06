@@ -67,3 +67,10 @@ The canonical repository is **Olegu621/xlamBOT**. Work in **bsdedus/xlamBOT**, s
 Distribution CI verifies the existing Ed25519 signature, archive/file hashes, safe ZIP inventory, Python 3.13 bytecode headers, and JavaScript syntax in both resource channels. It tests the validator against malformed updates. It does not execute the packaged bytecode, download the large runtime, or test gameplay. Standalone resources may be newer than the signed script bundle.
 
 Python sources are absent from this public distribution. Share a source repository with the other developer and run behavior tests there. Changes to `scripts.zip` require rebuilding, incrementing the revision, updating hashes and signing with the publisher's existing private key. Never commit private keys or account data; keep the canonical update repository unchanged unless a new bootstrap is intentionally released. Protect `main` with PR review and the distribution check after this workflow is merged.
+
+
+## Репозиторий исходников и соответствие ревизий
+
+Python-исходники находятся в закрытом [Olegu621/xlamBOT-source](https://github.com/Olegu621/xlamBOT-source). Для работы нужен доступ к этому репозиторию. Тег `bot-revision-24` соответствует текущему подписанному обновлению: проверено совпадение всех 71 файлов после компиляции. Там находятся точки запуска EXE, управление устройствами, веб-панель, шаблоны настроек и инструменты публикации.
+
+Каждое следующее обновление собирается через `tools/publish.py` в репозитории исходников. Публикация требует успешного сохранения кода на GitHub и отправки тега `bot-revision-N`; повторно использовать номер ревизии нельзя. `source-provenance.json` в каталоге результата связывает SHA-256 пакета с source commit. Изменения объединяйте через PR, затем собирайте подписанное обновление и открывайте PR с артефактами сюда. Releases содержат только установщик. Закрытый ключ подписи, профили устройств и записи обучения не коммитятся.
