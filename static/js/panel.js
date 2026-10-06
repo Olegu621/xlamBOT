@@ -202,7 +202,7 @@
                 </div>
             </div>
 
-            <div class="live-diagnostics" data-diagnostics="${escapeHtml(key)}"></div><details class="observation-report"><summary>Разбор наблюдения</summary><pre data-observation="${escapeHtml(key)}"></pre><button class="btn btn-ghost" type="button" data-replay="${escapeHtml(key)}">Повторный анализ без управления</button><pre data-replay-result="${escapeHtml(key)}" hidden></pre></details>
+            <div class="live-diagnostics" data-diagnostics="${escapeHtml(key)}"></div><details class="observation-report"><summary>Разбор наблюдения</summary><pre data-observation="${escapeHtml(key)}"></pre><button class="btn btn-ghost" type="button" data-replay="${escapeHtml(key)}">Повторный анализ без управления</button><pre data-replay-result="${escapeHtml(key)}" hidden></pre><div class="audit-controls"><label>Матчей для аудита <input type="number" min="1" max="100" value="10" data-audit-count="${escapeHtml(key)}"></label><button class="btn btn-ghost" data-audit="start" data-key="${escapeHtml(key)}">Начать аудит</button><button class="btn btn-ghost" data-audit="stop" data-key="${escapeHtml(key)}">Остановить аудит</button><button class="btn btn-ghost" data-audit="export" data-key="${escapeHtml(key)}">Скачать аудит</button></div><p class="muted">Аудит сохраняет кадры и причины смерти локально. Дополнительный анализ использует GPU и может снизить FPS.</p><pre data-audit-status="${escapeHtml(key)}"></pre></details>
             <div class="device-body">
                 ${device.mode_warning ? `<div class="warn-box">${escapeHtml(device.mode_warning)}</div>` : ''}
                 ${device.gas_warning ? `<div class="warn-box">${escapeHtml(device.gas_warning)}</div>` : ''}
@@ -1255,3 +1255,35 @@ document.addEventListener('click', async event => {
  try {const response=await fetch(`/api/devices/${encodeURIComponent(key)}/replay`,{headers:{'X-Xlam-UI-Token':document.querySelector('meta[name="xlam-ui-token"]').content}});const result=await response.json();output.hidden=false;output.textContent=JSON.stringify(result.replay||result,null,2);}
  catch(error){output.hidden=false;output.textContent=error.message;}finally{button.disabled=false;}
 });
+
+(() => {
+ const headers={'X-Xlam-UI-Token':document.querySelector('meta[name="xlam-ui-token"]').content,'Content-Type':'application/json'};
+ const translate=text=>window.XlamI18n?window.XlamI18n.t(text):text;
+ async function show(card,key){
+  const response=await fetch(`/api/audit/devices/${encodeURIComponent(key)}`,{headers});
+  const {audit}=await response.json();
+  const output=card.querySelector('[data-audit-status]');
+  if(output){const states={idle:'не запущен',starting:'запускается',running:'идёт запись',stopping:'останавливается',stopped:'остановлен',completed:'завершён',error:'ошибка'};output.textContent=translate(`Завершено: ${audit.completed}/${audit.target} · ${states[audit.state]||audit.state}`)+(audit.error?'\n'+translate(audit.error):'');}
+ }
+ document.addEventListener('click',async event=>{
+  const button=event.target.closest('[data-audit]');if(!button)return;
+  const card=button.closest('.device-card'),key=button.dataset.key,action=button.dataset.audit;
+  const output=card.querySelector('[data-audit-status]');button.disabled=true;
+  try{
+   const url=`/api/audit/devices/${encodeURIComponent(key)}/${action}`;
+   if(action==='export'){
+    const response=await fetch(url,{headers});if(!response.ok){const error=await response.json();throw Error(error.message||response.statusText);}
+    const objectUrl=URL.createObjectURL(await response.blob()),link=document.createElement('a');
+    link.href=objectUrl;link.download='xlamBOT-match-audit.zip';link.click();setTimeout(()=>URL.revokeObjectURL(objectUrl),30000);
+   }else{
+    const target=Number(card.querySelector('[data-audit-count]').value);
+    const response=await fetch(url,{method:'POST',headers,body:JSON.stringify({target})});const result=await response.json();
+    if(!response.ok||!result.ok)throw Error(result.message||response.statusText);
+    await show(card,key);
+   }
+  }catch(error){output.textContent=translate(error.message);}finally{button.disabled=false;}
+ });
+ setInterval(()=>document.querySelectorAll('.device-card').forEach(card=>{
+  const output=card.querySelector('[data-audit-status]');if(output&&output.closest('details').open)show(card,output.dataset.auditStatus).catch(()=>{});
+ }),8000);
+})();

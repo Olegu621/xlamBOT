@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 22,
+    "revision": 23,
     "python": "3.13",
-    "size": 1256688,
-    "sha256": "f7461de5c9939089f968c27dabae8b95b1c2155dc15bd7293ac3a79cac82e7a9",
+    "size": 1264208,
+    "sha256": "f9b9036a01f9b0eb4f2fbab8467728a31b86fec3089ba6ba5639d0aec25626c0",
     "files": {
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
       "api/api.pyc": "2f986ae10e73ff8674b1645ba8a9902e12e7e173d4849ded6a8310f8f54fb510",
@@ -26,7 +26,7 @@
       "lobby_automation.pyc": "22491a591097f45053f51427b5b63951143ff6e01b791f37d84f6e06a453b59c",
       "main.pyc": "8ceab71f4051542f886839c424ed899b7f094b69dbb87d4049216bf8ee5dd945",
       "make_icon.pyc": "720c5fa6f219fed87eaf56656308988a32c5600d28a8aa1c9d451a67fdb3ba15",
-      "match_audit.pyc": "7481aee00a37b1a74fb11a44e0b9dc9229d22e571ae9c42ec5472988b13ce1ec",
+      "match_audit.pyc": "7cce05ff0323f410a6508a3846fe5dd5b03b810a90f0138d87e46e24373cbcd8",
       "navigation_safety.pyc": "bc80d79019fa0bc702ada0c541a88545a83945065da1720840e5cc479dd5fab5",
       "panel.pyc": "f34bdd3825c481ccce2935c8e2c5eed64144bc1da2e2d517da6f1669b614a61e",
       "play.pyc": "d86d3e1072434fcb07c5c644f6cc6f12ffd9e299d1e912499b74027bc6c722a9",
@@ -43,8 +43,8 @@
       "static/css/studio.css": "4a36187b87a9148234a59b82e17e3fa0d1f7ff993578930fb8b72c10be074bd8",
       "static/css/training.css": "60f52e1784b71138b8b789b85746c126c055c385586b6776c9f2f3439ce1fb99",
       "static/js/calibration.js": "2110c54ed071deb7a13ae09d3d16c896fe7da57c34b57d530485548958741480",
-      "static/js/i18n.js": "1ac6663f33591cb2f9a5077280dd855bbb01c55947d2b43f07c40b3d2df5a9c6",
-      "static/js/panel.js": "695ef5582d694056fe8a8aafd0c647f6c83e1c2e714a5380e62134ea7aad0456",
+      "static/js/i18n.js": "d8e137f09c120bf4c927e856a2027e0a9b81ffb6b3448ed0b6ed1d01e5bf0d78",
+      "static/js/panel.js": "39ad515fb9eb6388d66d1a68773fad466b8c161259fe32a5fa84d9f146de3470",
       "static/js/resource_updates.js": "35407f094a62fde51b606e8734074b6edcb31bbb57eff94b4e9bfb961e9e3278",
       "static/js/sessions.js": "1bff6df2937e7e03c4fc41f99c305a24618b690030593b99b65d790d1ca5e5ba",
       "static/js/settings-fields.js": "aeb816b54255237fcf9e8c40b2cd88064a33e77c646797bab8200f1687af0dd6",
@@ -68,7 +68,8 @@
       "trophy_reader.pyc": "66e0abe7ff786392937d2b429268d4b13f083b59c0029eb093700139b51a4382",
       "utils.pyc": "ffdd328f03def08ff541667179bed4aa671c3dee0887f865d8a17bf911af5357",
       "webui/__init__.pyc": "c004a485dc68e2bb6d91ae4a54bd1ab87343869481cb413d2d0395b1618b92e5",
-      "webui/app.pyc": "87d1a3663b98f355ed59440c06c721e780b7fd9bb1dfafcc8f4c09345784dc68",
+      "webui/app.pyc": "7acf4619d3fa64af1661d8f8a975b3d1d3383272b96bf5d731064c5f0e401ffb",
+      "webui/audit_service.pyc": "ab96f2ee264207fd9e94dd06ac14d077cbb8a1ec4bf2f7da9a0ff08a88f58359",
       "webui/device_manager.pyc": "732dc0a7fc3a4eadb5e4b3b2b8850833845136343fc16c9de20adce9f5ebf966",
       "webui/preferences.pyc": "ea8348e42d596711b4dc1feb674fc942a9864c73e00d40c6eeca3f9c637af5ca",
       "webui/resource_updates.pyc": "e222b729fccdab8dcb314c20f76c7f9dbcbbc6b94b132f37ab1fe96e0bf8230a",
@@ -78,5 +79,5 @@
       "window_controller.pyc": "0200202914c68da1617ee78e41018e2eec43a7b8cfa67fbb07255d3ddf5c7a09"
     }
   },
-  "signature": "894904bff10d0310c3315aa9903d3a63175068f0f2c83b1d5341d618dee2c905020c40185cb4404671dfb9205e382926a8ecd74ae50ddfcbb768a08df08bcf06"
+  "signature": "632f477113624727a126d9c3bbf08e01edcf76b89354489f1745c8a7451829ae9a4e3d252111b5e1fe5535284897c1fba471305a69ec82ec12e4e45d09277c0e"
 }
