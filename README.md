@@ -2,6 +2,8 @@
 
 [Совместная работа и Pull Request / Contributing](CONTRIBUTING.md) · [Автоматические проверки / CI](https://github.com/Olegu621/xlamBOT/actions/workflows/distribution-ci.yml)
 
+**Telegram — подготовка бета-выпуска / Upcoming beta:** уведомления и удалённое управление подготовлены в репозитории исходников. В текущем подписанном пакете этой интеграции ещё нет. [Подключение, возможности и порядок выпуска / Setup and release status](docs/telegram.md).
+
 **[Скачать установщик 0.8.18 — около 2,9 МБ](https://github.com/Olegu621/xlamBOT/releases/latest/download/xlamBOT-Web-Setup-0.8.18.exe)**
 
 В релизах находится только установщик. Программа, модели и подписанные пакеты обновления хранятся в этом репозитории: `runtime/0.8.18/`, `manifest.json`, `scripts.zip`. Python-исходники и закрытые ключи не публикуются.
