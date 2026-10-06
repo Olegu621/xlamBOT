@@ -2,15 +2,15 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 31,
+    "revision": 32,
     "python": "3.13",
-    "size": 1280521,
-    "sha256": "9420227154949e56779c29301bbb3765f3ae81cd791ebfeadfc8e79564fada70",
+    "size": 1281275,
+    "sha256": "8d254526510cc778efb0c0de2d1c8be559acc6f2553b7c18e0b6d008f108cf41",
     "files": {
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
       "api/api.pyc": "2f986ae10e73ff8674b1645ba8a9902e12e7e173d4849ded6a8310f8f54fb510",
       "baseline_navigation.pyc": "b5cc1bbf178ae3c7bf0ef118db0a195df21d68682d37f90a3acb63da622def60",
-      "bot_instance.pyc": "6a217eb86855489f2b56153f637bafa3e9fb91a033785a1d09060ba873075fe7",
+      "bot_instance.pyc": "e9f224a20acdb50961aa00018151a1fa37295117432badb6dfb6cb1925adc83e",
       "brawler_calibration.pyc": "ac710c9060e4ce63ac7748182fdf1fa65deac9efba5642fa88a07b56f68d7fe7",
       "capture_transport.pyc": "0166217e02565382ecff6e575bb914f8633e8400db4c366449e83e048b08056b",
       "debug_view.pyc": "b06d23f4a57e65ac41158a5eb9717af328da75e196d69599d5c6ee91e8672792",
@@ -27,14 +27,14 @@
       "main.pyc": "8ceab71f4051542f886839c424ed899b7f094b69dbb87d4049216bf8ee5dd945",
       "make_icon.pyc": "720c5fa6f219fed87eaf56656308988a32c5600d28a8aa1c9d451a67fdb3ba15",
       "match_audit.pyc": "7cce05ff0323f410a6508a3846fe5dd5b03b810a90f0138d87e46e24373cbcd8",
-      "navigation_safety.pyc": "564a8d2b32e50219190e3d0732984ff27887bea12d93bea28128ed2331203346",
+      "navigation_safety.pyc": "0a8fbc230db716e99ca0b367d729c7e7f0e4ef0e50e4cbc0af341c05bf0ae85d",
       "panel.pyc": "f34bdd3825c481ccce2935c8e2c5eed64144bc1da2e2d517da6f1669b614a61e",
       "play.pyc": "1aff3d2bcc892892455ac4e8f7bbe2a81ef1aa5be3a0aca6cdaa7bd2ba5c8ff3",
       "replay_navigation.pyc": "93ffe850ee7697b11a1dd37a84a31a8759f8496d24d5737bf2774d8c692cadbc",
       "reward_choice.pyc": "606c4c1e5d377599b671b31d9491d6dda7fdef896e4017b1410a926945116a8c",
       "settings_schema.pyc": "31ba995d3400711ab7048dad8b93367b4fe556b3d7c27b5a7dd1620cabea5190",
       "setup_wizard.pyc": "9a29f57edaaa80bc5b1158929ae40b94c07970a09d1506de7db9f41c48ed26bc",
-      "stage_manager.pyc": "4ce60cf78d522eaac83e36d2734048501b20b9a9795570275c9d0d2e478f6690",
+      "stage_manager.pyc": "cffd31a9bf2e8ec34a70f1b23131efa50ac4e888b98f07fcdc083818e864e944",
       "state_finder.pyc": "b2d0ef239638387cd09ac349d5d1780c2a4fd6eda593cd9635852148033916ab",
       "static/css/calibration.css": "c470e9e50cb1fa754678f4e449113ee5d852f70a1ab1d8efd54f5d4d37488eda",
       "static/css/interface.css": "d72ff6c72b46321b7ce091b038919aa66a8883b6d938ae22c6e73823ffb5ac37",
@@ -81,8 +81,8 @@
       "webui/runtime.pyc": "c5b4045af223b4af90d34d3409a8e30f61745e368ac974f290f31b4b000345ec",
       "webui/services.pyc": "8fff4b77f4dbb178ef75eaa581b935fb538225513e25595e6e01379d7d7c88e3",
       "webui/settings_schema.pyc": "9d052d260987c1c928f6ac19b355ec50b2d8995f91590f5778632607d9e726e9",
-      "window_controller.pyc": "0200202914c68da1617ee78e41018e2eec43a7b8cfa67fbb07255d3ddf5c7a09"
+      "window_controller.pyc": "a8023e8cdfbfc5be28729fa8903214cd09de11ca4ec2edb3abfbae6b65660adb"
     }
   },
-  "signature": "d474fac33ad79e24306c013659335efc431e16d2baf5898b36b727a01d8b45851b3275abdb09e9cd199dbf044741c54646dca60ee24d81d386531e8f0aa5f609"
+  "signature": "c075e668e75b30d7ae0ab571e79bc4df096390fca17a31d573575ef84fa9a9b5000bfb1da2517cf7212b673047621c24afe57d94dad3faf670a1340819d3610f"
 }
