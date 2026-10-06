@@ -22,6 +22,70 @@
     let lastLogText = {};    // key -> last log array (to avoid re-render churn)
     let expanded = {};       // key -> logs open?
     let cardKeys = '';       // signature of the rendered device set
+    const THINKING_LEVELS = ['low', 'medium', 'high', 'maximum'];
+    const thinkingByKey = {};
+    function thinkingLabels() {
+        return window.XlamI18n?.language === 'en'
+            ? ['Low', 'Medium', 'High', 'Maximum']
+            : ['Низкий', 'Средний', 'Высокий', 'Максимальный'];
+    }
+    function renderThinking(key, preview) {
+        const widget = grid.querySelector(`[data-thinking-control="${cssEscape(key)}"]`);
+        if (!widget) return;
+        const state = thinkingByKey[key] || {};
+        const slider = widget.querySelector('input');
+        const index = THINKING_LEVELS.indexOf(preview || state.saved || 'medium');
+        const en = window.XlamI18n?.language === 'en';
+        const labels = thinkingLabels();
+        slider.value = index;
+        slider.disabled = !state.saved || !!state.busy;
+        slider.setAttribute('aria-label', en ? 'Thinking level' : 'Уровень думалки');
+        slider.setAttribute('aria-valuetext', labels[index]);
+        widget.style.setProperty('--thinking-fill', `${index / 3 * 100}%`);
+        widget.querySelector('[data-thinking-label]').textContent = labels[index];
+        widget.querySelector('[data-thinking-caption]').textContent = en ? 'Thinking depth' : 'Глубина анализа';
+        const thought = state.thought || {};
+        const recommendation = thought.active === state.saved && THINKING_LEVELS.includes(thought.recommended)
+            ? labels[THINKING_LEVELS.indexOf(thought.recommended)] : (en ? 'measuring in battle…' : 'измеряю в бою…');
+        widget.querySelector('[data-thinking-note]').textContent = state.busy
+            ? (en ? 'Saving…' : 'Сохраняю…')
+            : `${en ? 'Recommended' : 'Рекомендую'}: ${recommendation}`;
+        widget.querySelector('[data-thinking-reset]').disabled = !state.saved || !!state.busy || state.saved === 'medium';
+        widget.querySelector('[data-thinking-reset]').title = en ? 'Restore Medium for this device' : 'Вернуть средний для этого устройства';
+        widget.querySelector('[data-thinking-reset]').setAttribute('aria-label', en ? 'Restore Medium for this device' : 'Вернуть средний для этого устройства');
+        widget.querySelectorAll('[data-thinking-stop]').forEach((dot, i) => {
+            dot.classList.toggle('is-selected', i === index);
+            dot.title = labels[i];
+        });
+    }
+    async function saveThinking(key, level) {
+        const state = thinkingByKey[key];
+        if (!state || state.busy || !THINKING_LEVELS.includes(level)) return;
+        if (level === state.saved) { renderThinking(key); return; }
+        state.busy = true;
+        renderThinking(key, level);
+        try {
+            const result = await api(`/api/devices/${encodeURIComponent(key)}/settings`, {
+                method: 'POST', body: {section: 'cfg/general_config.toml', values: {thinking_mode: level}},
+            });
+            if (!result.ok || !result.data.ok) throw new Error(result.data.message || (window.XlamI18n?.language === 'en' ? 'Could not save thinking level' : 'Не удалось сохранить уровень думалки'));
+            state.saved = level;
+        } catch (error) { toast(error.message, 'error'); }
+        finally { state.busy = false; renderThinking(key); }
+    }
+    grid.addEventListener('input', event => {
+        if (event.target.matches('[data-thinking-slider]'))
+            renderThinking(event.target.dataset.thinkingSlider, THINKING_LEVELS[Number(event.target.value)]);
+    });
+    grid.addEventListener('change', event => {
+        if (event.target.matches('[data-thinking-slider]'))
+            saveThinking(event.target.dataset.thinkingSlider, THINKING_LEVELS[Number(event.target.value)]);
+    });
+    grid.addEventListener('click', event => {
+        const reset = event.target.closest('[data-thinking-reset]');
+        if (reset) saveThinking(reset.dataset.thinkingReset, 'medium');
+    });
+    window.addEventListener('xlam-language-changed', () => devices.forEach(d => renderThinking(d.key)));
 
     const STATE_LABELS = {
         idle: 'ожидает', running: 'работает', paused: 'пауза',
@@ -202,7 +266,18 @@
                 </div>
             </div>
 
-            <div class="live-diagnostics" data-diagnostics="${escapeHtml(key)}"></div><div class="thinking-summary" data-thinking="${escapeHtml(key)}"></div><details class="observation-report"><summary>Разбор наблюдения</summary><pre data-observation="${escapeHtml(key)}"></pre><button class="btn btn-ghost" type="button" data-replay="${escapeHtml(key)}">Повторный анализ без управления</button><pre data-replay-result="${escapeHtml(key)}" hidden></pre><div class="audit-controls"><label>Матчей для аудита <input type="number" min="1" max="100" value="10" data-audit-count="${escapeHtml(key)}"></label><button class="btn btn-ghost" data-audit="start" data-key="${escapeHtml(key)}">Начать аудит</button><button class="btn btn-ghost" data-audit="stop" data-key="${escapeHtml(key)}">Остановить аудит</button><button class="btn btn-ghost" data-audit="export" data-key="${escapeHtml(key)}">Скачать аудит</button></div><p class="muted">Аудит сохраняет кадры и причины смерти локально. Дополнительный анализ использует GPU и может снизить FPS.</p><pre data-audit-status="${escapeHtml(key)}"></pre></details>
+            <div class="live-diagnostics" data-diagnostics="${escapeHtml(key)}"></div>
+            <section class="thinking-control" data-thinking-control="${escapeHtml(key)}">
+                <div class="thinking-head"><span class="thinking-bolt" aria-hidden="true">ϟ</span>
+                    <div><span class="thinking-level" data-thinking-label>Средний</span><span class="thinking-caption" data-thinking-caption>Глубина анализа</span></div>
+                    <button type="button" class="thinking-reset" data-thinking-reset="${escapeHtml(key)}" title="Вернуть средний для этого устройства" aria-label="Вернуть средний для этого устройства" disabled>↺</button>
+                </div>
+                <div class="thinking-track"><div class="thinking-stops" aria-hidden="true">${THINKING_LEVELS.map(() => '<span data-thinking-stop></span>').join('')}</div>
+                    <input type="range" min="0" max="3" step="1" value="1" data-thinking-slider="${escapeHtml(key)}" aria-label="Уровень думалки" disabled>
+                </div>
+                <p class="thinking-note" data-thinking-note>Рекомендация появится во время боя</p>
+            </section>
+            <details class="observation-report"><summary>Разбор наблюдения</summary><pre data-observation="${escapeHtml(key)}"></pre><button class="btn btn-ghost" type="button" data-replay="${escapeHtml(key)}">Повторный анализ без управления</button><pre data-replay-result="${escapeHtml(key)}" hidden></pre><div class="audit-controls"><label>Матчей для аудита <input type="number" min="1" max="100" value="10" data-audit-count="${escapeHtml(key)}"></label><button class="btn btn-ghost" data-audit="start" data-key="${escapeHtml(key)}">Начать аудит</button><button class="btn btn-ghost" data-audit="stop" data-key="${escapeHtml(key)}">Остановить аудит</button><button class="btn btn-ghost" data-audit="export" data-key="${escapeHtml(key)}">Скачать аудит</button></div><p class="muted">Аудит сохраняет кадры и причины смерти локально. Дополнительный анализ использует GPU и может снизить FPS.</p><pre data-audit-status="${escapeHtml(key)}"></pre></details>
             <div class="device-body">
                 ${device.mode_warning ? `<div class="warn-box">${escapeHtml(device.mode_warning)}</div>` : ''}
                 ${device.gas_warning ? `<div class="warn-box">${escapeHtml(device.gas_warning)}</div>` : ''}
@@ -323,6 +398,10 @@
             return;
         }
         const bot = settings.bot_config || {};
+        const saved = settings.general_config?.thinking_mode || 'medium';
+        const thoughtState = thinkingByKey[key] || (thinkingByKey[key] = {});
+        if (!thoughtState.busy) thoughtState.saved = THINKING_LEVELS.includes(saved) ? saved : 'medium';
+        renderThinking(key);
         const input = grid.querySelector(`[data-switch-input="${cssEscape(key)}"]`);
         if (input && document.activeElement !== input && bot.brawler_switch_after_games != null) {
             input.value = bot.brawler_switch_after_games;
@@ -468,12 +547,10 @@
             const providers = Object.values(telemetry.providers || {});
             const gpu = providers.length ? providers.every(p => p.includes('CPU')) ? 'CPU' : providers.some(p => p.includes('CPU')) ? 'GPU + CPU' : 'GPU' : '—';
             const life = telemetry.life || {};
-            const thinkingOutput=card.querySelector('[data-thinking]'), thought=telemetry.thinking||{};
-            if(thinkingOutput){
-                const names=en?{low:'Low',medium:'Medium',high:'High',maximum:'Maximum'}:{low:'Низкий',medium:'Средний',high:'Высокий',maximum:'Максимальный'};
-                const recommendation=thought.recommended?names[thought.recommended]:(en?'measuring in battle…':'измеряю в бою…');
-                thinkingOutput.textContent=thought.active?`${en?'Thinking':'Думалка'}: ${names[thought.active]} · ${thought.profile.directions} ${en?'directions':'направлений'} · ${en?'recommended':'рекомендую'}: ${recommendation}`:'';
-            }
+            const thoughtState = thinkingByKey[key] || (thinkingByKey[key] = {});
+            thoughtState.thought = telemetry.thinking || {};
+            const slider = grid.querySelector(`[data-thinking-slider="${cssEscape(key)}"]`);
+            if (!slider || document.activeElement !== slider) renderThinking(key);
             diagnostics.textContent = `${gpu} · ${fps} FPS · ${en ? 'capture' : 'захват'} ${capture} FPS · ${en ? 'gas vetoes' : 'обходов газа'} ${telemetry.gas?.prevented_entries || 0}`;
             diagnostics.title = `${en ? 'Confirmed deaths / inferred deaths / respawns' : 'Подтверждённые смерти / предполагаемые смерти / возрождения'}: ${life.confirmed_deaths || 0} / ${life.inferred_deaths || 0} / ${life.respawns || 0}`;
         }
