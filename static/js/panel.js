@@ -1314,9 +1314,6 @@
     }, 1000);
 
     async function init() {
-        await loadBrawlers();
-        await loadDevices();
-        for (const device of devices) await applyLockedBrawler(device.key);
         setInterval(cycle, POLL_MS);
         // Chained rather than on a fixed interval, so changing the refresh rate
         // takes effect on the next picture instead of at the next tick of a
@@ -1327,6 +1324,11 @@
         };
         snapshotLoop();
         setInterval(loadLogs, LOG_POLL_MS);
+        // An unavailable roster must not prevent device discovery and polling.
+        await cycle();
+        loadBrawlers().then(() => devices.forEach(d => renderBrawlerGrid(d.key)))
+            .catch(error => console.error('brawler roster unavailable', error));
+        devices.forEach(d => applyLockedBrawler(d.key));
     }
 
     init();
