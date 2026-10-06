@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 26,
+    "revision": 28,
     "python": "3.13",
-    "size": 1271790,
-    "sha256": "b9df08255e080d6e482c4f03ad98d95cb259398f268732bacb8b7bcd1bd43778",
+    "size": 1271828,
+    "sha256": "ed0d0ee69cc29c6162a8b4048f607ef7a658d6732db32720f01ba1ab7125b712",
     "files": {
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
       "api/api.pyc": "2f986ae10e73ff8674b1645ba8a9902e12e7e173d4849ded6a8310f8f54fb510",
@@ -38,7 +38,7 @@
       "state_finder.pyc": "db8a0ced8f14a529537334a58ad5f4060caf5c05b607198765a5ebe5db3ac4e5",
       "static/css/calibration.css": "c470e9e50cb1fa754678f4e449113ee5d852f70a1ab1d8efd54f5d4d37488eda",
       "static/css/interface.css": "d72ff6c72b46321b7ce091b038919aa66a8883b6d938ae22c6e73823ffb5ac37",
-      "static/css/panel.css": "e74e2082444522e852b07de560668d0e4bdd420e90d8cef6971e312c63c8a80d",
+      "static/css/panel.css": "e1282160673bea5728c13ef38e2e68dc65886b03a6f7f6d19ddc0f17d642939d",
       "static/css/sprites.css": "1777e7b9a99d6b62b10c26525b156a92929285cb32088f26c55150b2bf3cbcce",
       "static/css/studio.css": "4a36187b87a9148234a59b82e17e3fa0d1f7ff993578930fb8b72c10be074bd8",
       "static/css/training.css": "60f52e1784b71138b8b789b85746c126c055c385586b6776c9f2f3439ce1fb99",
@@ -80,5 +80,5 @@
       "window_controller.pyc": "0200202914c68da1617ee78e41018e2eec43a7b8cfa67fbb07255d3ddf5c7a09"
     }
   },
-  "signature": "4bff9d664f7045e4beff16f34384cfe201ab6e33f1f88c025afc75c3f326247bedd76ab88bec888587f197d2f555bf513b154d87e29f29fb6121293a2209570b"
+  "signature": "fb94329df6ce33e90adaabe81c97496f8e7b3f9a9aaaa88f2dd18a58391d4abaef37fa236f9d2e4c7226dcc1c6a0970748ef645cff4407e31c1db30e8ea0940b"
 }
