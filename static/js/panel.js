@@ -98,7 +98,7 @@
         lobby: 'лобби', match: 'матч', match_making: 'поиск матча',
         brawler_selection: 'выбор бойца', brawler_choice: 'выбор награды', shop: 'магазин', popup: 'окно',
         connection_lost: 'нет связи', idle_disconnect: 'перезагрузка связи', prestige_milestone: 'престиж',
-        trophy_reward: 'награда', star_drop_regular: 'звёздное дропание',
+        trophy_reward: 'награда', reward_received: 'награда', star_drop_regular: 'звёздное дропание',
         star_drop_angelic: 'звёздное дропание', star_drop_demonic: 'звёздное дропание',
         star_drop_starr_nova: 'звёздное дропание',
     };
