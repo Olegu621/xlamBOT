@@ -202,7 +202,7 @@
                 </div>
             </div>
 
-            <div class="live-diagnostics" data-diagnostics="${escapeHtml(key)}"></div><details class="observation-report"><summary>Разбор наблюдения</summary><pre data-observation="${escapeHtml(key)}"></pre><button class="btn btn-ghost" type="button" data-replay="${escapeHtml(key)}">Повторный анализ без управления</button><pre data-replay-result="${escapeHtml(key)}" hidden></pre><div class="audit-controls"><label>Матчей для аудита <input type="number" min="1" max="100" value="10" data-audit-count="${escapeHtml(key)}"></label><button class="btn btn-ghost" data-audit="start" data-key="${escapeHtml(key)}">Начать аудит</button><button class="btn btn-ghost" data-audit="stop" data-key="${escapeHtml(key)}">Остановить аудит</button><button class="btn btn-ghost" data-audit="export" data-key="${escapeHtml(key)}">Скачать аудит</button></div><p class="muted">Аудит сохраняет кадры и причины смерти локально. Дополнительный анализ использует GPU и может снизить FPS.</p><pre data-audit-status="${escapeHtml(key)}"></pre></details>
+            <div class="live-diagnostics" data-diagnostics="${escapeHtml(key)}"></div><div class="thinking-summary" data-thinking="${escapeHtml(key)}"></div><details class="observation-report"><summary>Разбор наблюдения</summary><pre data-observation="${escapeHtml(key)}"></pre><button class="btn btn-ghost" type="button" data-replay="${escapeHtml(key)}">Повторный анализ без управления</button><pre data-replay-result="${escapeHtml(key)}" hidden></pre><div class="audit-controls"><label>Матчей для аудита <input type="number" min="1" max="100" value="10" data-audit-count="${escapeHtml(key)}"></label><button class="btn btn-ghost" data-audit="start" data-key="${escapeHtml(key)}">Начать аудит</button><button class="btn btn-ghost" data-audit="stop" data-key="${escapeHtml(key)}">Остановить аудит</button><button class="btn btn-ghost" data-audit="export" data-key="${escapeHtml(key)}">Скачать аудит</button></div><p class="muted">Аудит сохраняет кадры и причины смерти локально. Дополнительный анализ использует GPU и может снизить FPS.</p><pre data-audit-status="${escapeHtml(key)}"></pre></details>
             <div class="device-body">
                 ${device.mode_warning ? `<div class="warn-box">${escapeHtml(device.mode_warning)}</div>` : ''}
                 ${device.gas_warning ? `<div class="warn-box">${escapeHtml(device.gas_warning)}</div>` : ''}
@@ -468,6 +468,12 @@
             const providers = Object.values(telemetry.providers || {});
             const gpu = providers.length ? providers.every(p => p.includes('CPU')) ? 'CPU' : providers.some(p => p.includes('CPU')) ? 'GPU + CPU' : 'GPU' : '—';
             const life = telemetry.life || {};
+            const thinkingOutput=card.querySelector('[data-thinking]'), thought=telemetry.thinking||{};
+            if(thinkingOutput){
+                const names=en?{low:'Low',medium:'Medium',high:'High',maximum:'Maximum'}:{low:'Низкий',medium:'Средний',high:'Высокий',maximum:'Максимальный'};
+                const recommendation=thought.recommended?names[thought.recommended]:(en?'measuring in battle…':'измеряю в бою…');
+                thinkingOutput.textContent=thought.active?`${en?'Thinking':'Думалка'}: ${names[thought.active]} · ${thought.profile.directions} ${en?'directions':'направлений'} · ${en?'recommended':'рекомендую'}: ${recommendation}`:'';
+            }
             diagnostics.textContent = `${gpu} · ${fps} FPS · ${en ? 'capture' : 'захват'} ${capture} FPS · ${en ? 'gas vetoes' : 'обходов газа'} ${telemetry.gas?.prevented_entries || 0}`;
             diagnostics.title = `${en ? 'Confirmed deaths / inferred deaths / respawns' : 'Подтверждённые смерти / предполагаемые смерти / возрождения'}: ${life.confirmed_deaths || 0} / ${life.inferred_deaths || 0} / ${life.respawns || 0}`;
         }
