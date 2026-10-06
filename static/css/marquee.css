@@ -1,0 +1,31 @@
+/* Animate only a decorative copy; the original text remains accessible. */
+.text-marquee {
+    -webkit-text-fill-color: transparent;
+    overflow: hidden;
+}
+.text-marquee.marquee-static { position: relative; }
+.text-marquee::after {
+    content: attr(data-marquee-text) / "";
+    position: absolute;
+    left: var(--marquee-left, 0px);
+    top: var(--marquee-top, 0px);
+    color: var(--marquee-ink);
+    -webkit-text-fill-color: var(--marquee-ink);
+    white-space: pre;
+    text-align: left;
+    pointer-events: none;
+    animation: xlam-text-marquee var(--marquee-duration, 8s) linear infinite;
+}
+@keyframes xlam-text-marquee {
+    0%, 15% { transform: translateX(0); }
+    45%, 60% { transform: translateX(var(--marquee-distance)); }
+    90%, 100% { transform: translateX(0); }
+}
+.marquee-offscreen::after,
+.marquee-suspended .text-marquee::after,
+.text-marquee:hover::after,
+.text-marquee:focus-visible::after { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+    .text-marquee { -webkit-text-fill-color: inherit; }
+    .text-marquee::after { display: none; }
+}
