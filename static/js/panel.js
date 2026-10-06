@@ -97,7 +97,7 @@
     const GAME_STATE_LABELS = {
         lobby: 'лобби', match: 'матч', match_making: 'поиск матча',
         brawler_selection: 'выбор бойца', brawler_choice: 'выбор награды', shop: 'магазин', popup: 'окно',
-        connection_lost: 'нет связи', prestige_milestone: 'престиж',
+        connection_lost: 'нет связи', idle_disconnect: 'перезагрузка связи', prestige_milestone: 'престиж',
         trophy_reward: 'награда', star_drop_regular: 'звёздное дропание',
         star_drop_angelic: 'звёздное дропание', star_drop_demonic: 'звёздное дропание',
         star_drop_starr_nova: 'звёздное дропание',
@@ -277,7 +277,6 @@
                 </div>
                 <p class="thinking-note" data-thinking-note>Рекомендация появится во время боя</p>
             </section>
-            <details class="observation-report"><summary>Разбор наблюдения</summary><pre data-observation="${escapeHtml(key)}"></pre><button class="btn btn-ghost" type="button" data-replay="${escapeHtml(key)}">Повторный анализ без управления</button><pre data-replay-result="${escapeHtml(key)}" hidden></pre><div class="audit-controls"><label>Матчей для аудита <input type="number" min="1" max="100" value="10" data-audit-count="${escapeHtml(key)}"></label><button class="btn btn-ghost" data-audit="start" data-key="${escapeHtml(key)}">Начать аудит</button><button class="btn btn-ghost" data-audit="stop" data-key="${escapeHtml(key)}">Остановить аудит</button><button class="btn btn-ghost" data-audit="export" data-key="${escapeHtml(key)}">Скачать аудит</button></div><p class="muted">Аудит сохраняет кадры и причины смерти локально. Дополнительный анализ использует GPU и может снизить FPS.</p><pre data-audit-status="${escapeHtml(key)}"></pre></details>
             <div class="device-body">
                 ${device.mode_warning ? `<div class="warn-box">${escapeHtml(device.mode_warning)}</div>` : ''}
                 ${device.gas_warning ? `<div class="warn-box">${escapeHtml(device.gas_warning)}</div>` : ''}
@@ -533,12 +532,6 @@
         .join('');
 
     function renderTelemetry(key, telemetry) {
-        const report = grid.querySelector(`[data-observation="${cssEscape(key)}"]`);
-        if (report) {
-            const en = window.XlamI18n?.language === 'en';
-            const state = {state:telemetry.detected_state, movement:telemetry.movement, motion:telemetry.motion_state, latency_ms:telemetry.latency, life:telemetry.life};
-            report.textContent = JSON.stringify(state, null, 2);
-        }
         const diagnostics = grid.querySelector(`[data-diagnostics="${cssEscape(key)}"]`);
         if (diagnostics) {
             const en = window.XlamI18n?.language === 'en';
@@ -546,13 +539,12 @@
             const capture = Number.isFinite(telemetry.capture_fps) ? telemetry.capture_fps.toFixed(1) : '—';
             const providers = Object.values(telemetry.providers || {});
             const gpu = providers.length ? providers.every(p => p.includes('CPU')) ? 'CPU' : providers.some(p => p.includes('CPU')) ? 'GPU + CPU' : 'GPU' : '—';
-            const life = telemetry.life || {};
             const thoughtState = thinkingByKey[key] || (thinkingByKey[key] = {});
             thoughtState.thought = telemetry.thinking || {};
             const slider = grid.querySelector(`[data-thinking-slider="${cssEscape(key)}"]`);
             if (!slider || document.activeElement !== slider) renderThinking(key);
             diagnostics.textContent = `${gpu} · ${fps} FPS · ${en ? 'capture' : 'захват'} ${capture} FPS · ${en ? 'gas vetoes' : 'обходов газа'} ${telemetry.gas?.prevented_entries || 0}`;
-            diagnostics.title = `${en ? 'Confirmed deaths / inferred deaths / respawns' : 'Подтверждённые смерти / предполагаемые смерти / возрождения'}: ${life.confirmed_deaths || 0} / ${life.inferred_deaths || 0} / ${life.respawns || 0}`;
+            diagnostics.title = en ? 'Live inference and capture performance' : 'Текущая скорость распознавания и захвата';
         }
         const live = { brawler: telemetry.brawler, trophies: telemetry.trophies };
         const previous = liveByKey[key];
@@ -582,12 +574,12 @@
                 ? `${label} · кадр застрял (${Math.round(age)} с)`
                 : label;
             stateEl.className = 'preview-state' + (stale ? ' is-stale' : '')
-                + (telemetry.detected_state === 'connection_lost' ? ' is-alert' : '');
+                + (['connection_lost', 'idle_disconnect'].includes(telemetry.detected_state) ? ' is-alert' : '');
             stateEl.title = stale
                 ? `Последний кадр пришёл ${Math.round(age)} с назад. Поток видео, `
                   + 'скорее всего, завис: бот жив, но ничего не видит. '
                   + 'Помогает перезапуск бота.'
-                : (telemetry.detected_state === 'connection_lost'
+                : (['connection_lost', 'idle_disconnect'].includes(telemetry.detected_state)
                     ? 'Игра потеряла связь с сервером и показывает окно с кнопкой '
                       + '«RETRY LOGIN». Бот закрывает его сам.'
                     : '');
@@ -1332,43 +1324,4 @@
     }
 
     init();
-})();
-
-document.addEventListener('click', async event => {
- const button=event.target.closest('[data-replay]');if(!button)return;
- const key=button.dataset.replay, card=button.closest('.device-card'), output=card.querySelector('[data-replay-result]');button.disabled=true;
- try {const response=await fetch(`/api/devices/${encodeURIComponent(key)}/replay`,{headers:{'X-Xlam-UI-Token':document.querySelector('meta[name="xlam-ui-token"]').content}});const result=await response.json();output.hidden=false;output.textContent=JSON.stringify(result.replay||result,null,2);}
- catch(error){output.hidden=false;output.textContent=error.message;}finally{button.disabled=false;}
-});
-
-(() => {
- const headers={'X-Xlam-UI-Token':document.querySelector('meta[name="xlam-ui-token"]').content,'Content-Type':'application/json'};
- const translate=text=>window.XlamI18n?window.XlamI18n.t(text):text;
- async function show(card,key){
-  const response=await fetch(`/api/audit/devices/${encodeURIComponent(key)}`,{headers});
-  const {audit}=await response.json();
-  const output=card.querySelector('[data-audit-status]');
-  if(output){const states={idle:'не запущен',starting:'запускается',running:'идёт запись',stopping:'останавливается',stopped:'остановлен',completed:'завершён',error:'ошибка'};output.textContent=translate(`Завершено: ${audit.completed}/${audit.target} · ${states[audit.state]||audit.state}`)+(audit.error?'\n'+translate(audit.error):'');}
- }
- document.addEventListener('click',async event=>{
-  const button=event.target.closest('[data-audit]');if(!button)return;
-  const card=button.closest('.device-card'),key=button.dataset.key,action=button.dataset.audit;
-  const output=card.querySelector('[data-audit-status]');button.disabled=true;
-  try{
-   const url=`/api/audit/devices/${encodeURIComponent(key)}/${action}`;
-   if(action==='export'){
-    const response=await fetch(url,{headers});if(!response.ok){const error=await response.json();throw Error(error.message||response.statusText);}
-    const objectUrl=URL.createObjectURL(await response.blob()),link=document.createElement('a');
-    link.href=objectUrl;link.download='xlamBOT-match-audit.zip';link.click();setTimeout(()=>URL.revokeObjectURL(objectUrl),30000);
-   }else{
-    const target=Number(card.querySelector('[data-audit-count]').value);
-    const response=await fetch(url,{method:'POST',headers,body:JSON.stringify({target})});const result=await response.json();
-    if(!response.ok||!result.ok)throw Error(result.message||response.statusText);
-    await show(card,key);
-   }
-  }catch(error){output.textContent=translate(error.message);}finally{button.disabled=false;}
- });
- setInterval(()=>document.querySelectorAll('.device-card').forEach(card=>{
-  const output=card.querySelector('[data-audit-status]');if(output&&output.closest('details').open)show(card,output.dataset.auditStatus).catch(()=>{});
- }),8000);
 })();
