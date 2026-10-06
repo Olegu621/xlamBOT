@@ -338,10 +338,6 @@
                         <h3 class="card-title">Плейстайлы</h3>
                         <p class="card-note">Сейчас выполняется: <strong>${esc(activeName || 'не выбран')}</strong></p>
                     </div>
-                    <div class="card-actions">
-                        <input class="input" id="playstyleFile" type="file" accept=".xlambot,.pyla" style="max-width:230px">
-                        <button class="btn" id="importPlaystyle">Загрузить</button>
-                    </div>
                 </div>
                 <div class="card-body">
                     ${items.length ? `<div class="playstyle-grid">${items.map((item) => `
@@ -358,8 +354,6 @@
                             <div class="playstyle-actions">
                                 <button class="btn btn-sm btn-primary" data-activate="${esc(item.filename)}"
                                     ${item.filename === activeName ? 'disabled' : ''}>Включить</button>
-                                <button class="btn btn-sm btn-danger" data-delete-playstyle="${esc(item.filename)}"
-                                    ${item.filename === activeName ? 'disabled' : ''}>Удалить</button>
                             </div>
                         </div>`).join('')}</div>`
                         : '<div class="empty"><strong>Плейстайлов нет</strong>Загрузите файл .xlambot</div>'}
@@ -383,42 +377,6 @@
             return;
         }
 
-        const del = event.target.closest('[data-delete-playstyle]');
-        if (del) {
-            if (!confirm('Удалить плейстайл ' + del.dataset.deletePlaystyle + '?')) return;
-            try {
-                await api(`/api/playstyles/${encodeURIComponent(del.dataset.deletePlaystyle)}`,
-                    { method: 'DELETE' });
-                toast('Плейстайл удалён', 'ok');
-                await loadPlaystyles();
-            } catch (error) {
-                toast('Не удалось удалить: ' + error.message, 'error');
-            }
-            return;
-        }
-
-        if (event.target.id === 'importPlaystyle') {
-            const input = document.getElementById('playstyleFile');
-            if (!input || !input.files || !input.files.length) {
-                toast('Сначала выберите файл', 'error');
-                return;
-            }
-            const form = new FormData();
-            form.append('file', input.files[0]);
-            try {
-                const response = await window.XlamSession.fetch('/api/playstyles/import', {
-                    method: 'POST',
-                    headers: { 'X-Xlam-UI-Token': TOKEN },
-                    body: form,
-                });
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.message || 'не удалось');
-                toast('Плейстайл загружен', 'ok');
-                await loadPlaystyles();
-            } catch (error) {
-                toast('Не удалось загрузить: ' + error.message, 'error');
-            }
-        }
     });
 
     // ───────────────────────── настройки ─────────────────────────

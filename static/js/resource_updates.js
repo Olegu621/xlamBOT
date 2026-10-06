@@ -16,7 +16,7 @@
     document.body.appendChild(notice);
 
     async function api(path, data) {
-        const response = await fetch(path, {method: data ? 'POST' : 'GET',
+        const response = await window.XlamSession.fetch(path, {method: data ? 'POST' : 'GET',
             headers: {'X-Xlam-UI-Token': token, 'Content-Type': 'application/json'},
             body: data ? JSON.stringify(data) : undefined, cache: 'no-store'});
         const result = await response.json();
@@ -77,7 +77,7 @@
                 refreshWhenReady();
             }
         } catch (error) {
-            if (sourceStatus) sourceStatus.textContent = 'Проверка недоступна: ' + error.message;
+            if (sourceStatus) sourceStatus.textContent = 'Нет связи с локальной панелью. Проверьте, что бот запущен, и обновите страницу.';
         } finally { checking = false; }
     }
 
