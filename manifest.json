@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 16,
+    "revision": 17,
     "python": "3.13",
-    "size": 600980,
-    "sha256": "76fe33a59843d6a42530a51f11e7af82d9b3a92ff231b9c4638c6e8d1ff5bcb5",
+    "size": 600941,
+    "sha256": "baa2f121c4b0bd6c0f56aaf175c13b473fcb532056a9a5d308b89a652617ba3d",
     "files": {
       "api/api.pyc": "2f986ae10e73ff8674b1645ba8a9902e12e7e173d4849ded6a8310f8f54fb510",
       "bot_instance.pyc": "708b5b05c039fc33bf31b67e6be6b8e02c504e4951a3b1bc47e99eb5fd03e273",
@@ -52,7 +52,7 @@
       "training_capture.pyc": "7333a2492aba124cafd96c4b795704f392cac2edd16c1d6b2616cb0b7fc8ca7d",
       "training_models.pyc": "5347e6db116060332000819c8fa7c904024395cd92fb4dede293fb0e5ea4d495",
       "trophy_observer.pyc": "02b43ee889a4e46bc8ee91083136b8a1f7a64840d2a476278ab8e9a0decf63e0",
-      "trophy_reader.pyc": "16892f396dbfdb8913055bc279713487a1f6f597912a3ed20bed38d51d035c3f",
+      "trophy_reader.pyc": "ceaf0cde2f69dc364daec6d5ede4f8dc6d2df2c41c6eb25aa696bf570474b0c5",
       "utils.pyc": "76a0830ebca59d606061bda9c409676e633b826f9490a1ed99df7d048d0911da",
       "webui/__init__.pyc": "c004a485dc68e2bb6d91ae4a54bd1ab87343869481cb413d2d0395b1618b92e5",
       "webui/app.pyc": "cd7a68e9a2ca64b4a1ccd9c58d319c045e325a393469a9f3816e59444092a5e0",
@@ -64,5 +64,5 @@
       "window_controller.pyc": "b3dc6725a1dbe6a13b32e9731d7522d49d90570285d101c656c0a5bc3d63162c"
     }
   },
-  "signature": "f9f387b8f3fc0cace27eb2bfcbf008d857844d319b35a0879f77bdd355898a7e6225c13858fb4bbc39dec097cca396ca2b7fd9ffb224ccfe720d93a318303b03"
+  "signature": "58c2383a5ee79996f71f2ff79b73767efb3204e02065009c5b111e415c5c3637e711782bab8b50fb24c8fd79691fa91a86f7b30b8b9ea398cbb0c7cdf2c40e00"
 }
