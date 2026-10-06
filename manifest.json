@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 25,
+    "revision": 26,
     "python": "3.13",
-    "size": 1271695,
-    "sha256": "40c33502aea337fb37134e0e928b10a85e840ebd5e92d0d9f400f2face941332",
+    "size": 1271790,
+    "sha256": "b9df08255e080d6e482c4f03ad98d95cb259398f268732bacb8b7bcd1bd43778",
     "files": {
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
       "api/api.pyc": "2f986ae10e73ff8674b1645ba8a9902e12e7e173d4849ded6a8310f8f54fb510",
@@ -44,7 +44,7 @@
       "static/css/training.css": "60f52e1784b71138b8b789b85746c126c055c385586b6776c9f2f3439ce1fb99",
       "static/js/calibration.js": "2110c54ed071deb7a13ae09d3d16c896fe7da57c34b57d530485548958741480",
       "static/js/i18n.js": "6e0fb6f382eb5315857740b28cf76b94f7d3624be35920606bd295be1d9c150c",
-      "static/js/panel.js": "8de69d0b7ab637834eecf2a998e74e7da31d72062b140b41a0457483c117f119",
+      "static/js/panel.js": "afaf6b0daeba7cf867bb267eb8df52850e8037f93656dcf2143d6b012c63462e",
       "static/js/resource_updates.js": "35407f094a62fde51b606e8734074b6edcb31bbb57eff94b4e9bfb961e9e3278",
       "static/js/sessions.js": "1bff6df2937e7e03c4fc41f99c305a24618b690030593b99b65d790d1ca5e5ba",
       "static/js/settings-fields.js": "f52ece08bf5517b7c6b5aa3658315449a7c36200a5abbbf52a15b0677a6fbc12",
@@ -80,5 +80,5 @@
       "window_controller.pyc": "0200202914c68da1617ee78e41018e2eec43a7b8cfa67fbb07255d3ddf5c7a09"
     }
   },
-  "signature": "63dcb11c45c085ff4b6675df96586d793f57b800b751d596dbb786f19678a027e8930b3bd352376f12c138fc3de670ed152e4fca569c9a67bb1751f3d6c57f08"
+  "signature": "4bff9d664f7045e4beff16f34384cfe201ab6e33f1f88c025afc75c3f326247bedd76ab88bec888587f197d2f555bf513b154d87e29f29fb6121293a2209570b"
 }
