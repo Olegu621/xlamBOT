@@ -1,5 +1,7 @@
 # xlamBOT
 
+[Совместная работа и Pull Request / Contributing](CONTRIBUTING.md) · [Автоматические проверки / CI](https://github.com/Olegu621/xlamBOT/actions/workflows/distribution-ci.yml)
+
 **[Скачать установщик 0.8.18 — около 2,9 МБ](https://github.com/Olegu621/xlamBOT/releases/latest/download/xlamBOT-Web-Setup-0.8.18.exe)**
 
 В релизах находится только установщик. Программа, модели и подписанные пакеты обновления хранятся в этом репозитории: `runtime/0.8.18/`, `manifest.json`, `scripts.zip`. Python-исходники и закрытые ключи не публикуются.
