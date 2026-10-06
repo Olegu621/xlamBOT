@@ -22,12 +22,12 @@
     let lastLogText = {};    // key -> last log array (to avoid re-render churn)
     let expanded = {};       // key -> logs open?
     let cardKeys = '';       // signature of the rendered device set
-    const THINKING_LEVELS = ['low', 'medium', 'high', 'maximum'];
+    const THINKING_LEVELS = ['low', 'standard', 'medium', 'high', 'maximum'];
     const thinkingByKey = {};
     function thinkingLabels() {
         return window.XlamI18n?.language === 'en'
-            ? ['Low', 'Medium', 'High', 'Maximum']
-            : ['Низкий', 'Средний', 'Высокий', 'Максимальный'];
+            ? ['Low', 'Standard', 'Medium', 'High', 'Maximum']
+            : ['Низкий', 'Стандарт', 'Средний', 'Высокий', 'Максимальный'];
     }
     function renderThinking(key, preview) {
         const widget = grid.querySelector(`[data-thinking-control="${cssEscape(key)}"]`);
@@ -41,7 +41,7 @@
         slider.disabled = !state.saved || !!state.busy;
         slider.setAttribute('aria-label', en ? 'Thinking level' : 'Уровень думалки');
         slider.setAttribute('aria-valuetext', labels[index]);
-        widget.style.setProperty('--thinking-fill', `${index / 3 * 100}%`);
+        widget.style.setProperty('--thinking-fill', `${index / (THINKING_LEVELS.length - 1) * 100}%`);
         widget.querySelector('[data-thinking-label]').textContent = labels[index];
         widget.querySelector('[data-thinking-caption]').textContent = en ? 'Thinking depth' : 'Глубина анализа';
         const thought = state.thought || {};
@@ -50,9 +50,9 @@
         widget.querySelector('[data-thinking-note]').textContent = state.busy
             ? (en ? 'Saving…' : 'Сохраняю…')
             : `${en ? 'Recommended' : 'Рекомендую'}: ${recommendation}`;
-        widget.querySelector('[data-thinking-reset]').disabled = !state.saved || !!state.busy || state.saved === 'medium';
-        widget.querySelector('[data-thinking-reset]').title = en ? 'Restore Medium for this device' : 'Вернуть средний для этого устройства';
-        widget.querySelector('[data-thinking-reset]').setAttribute('aria-label', en ? 'Restore Medium for this device' : 'Вернуть средний для этого устройства');
+        widget.querySelector('[data-thinking-reset]').disabled = !state.saved || !!state.busy || state.saved === 'standard';
+        widget.querySelector('[data-thinking-reset]').title = en ? 'Restore original thinking for this device' : 'Вернуть стандартную думалку для этого устройства';
+        widget.querySelector('[data-thinking-reset]').setAttribute('aria-label', en ? 'Restore original thinking for this device' : 'Вернуть стандартную думалку для этого устройства');
         widget.querySelectorAll('[data-thinking-stop]').forEach((dot, i) => {
             dot.classList.toggle('is-selected', i === index);
             dot.title = labels[i];
@@ -83,7 +83,7 @@
     });
     grid.addEventListener('click', event => {
         const reset = event.target.closest('[data-thinking-reset]');
-        if (reset) saveThinking(reset.dataset.thinkingReset, 'medium');
+        if (reset) saveThinking(reset.dataset.thinkingReset, 'standard');
     });
     window.addEventListener('xlam-language-changed', () => devices.forEach(d => renderThinking(d.key)));
 
@@ -270,10 +270,10 @@
             <section class="thinking-control" data-thinking-control="${escapeHtml(key)}">
                 <div class="thinking-head"><span class="thinking-bolt" aria-hidden="true">ϟ</span>
                     <div><span class="thinking-level" data-thinking-label>Средний</span><span class="thinking-caption" data-thinking-caption>Глубина анализа</span></div>
-                    <button type="button" class="thinking-reset" data-thinking-reset="${escapeHtml(key)}" title="Вернуть средний для этого устройства" aria-label="Вернуть средний для этого устройства" disabled>↺</button>
+                    <button type="button" class="thinking-reset" data-thinking-reset="${escapeHtml(key)}" title="Вернуть стандартную думалку для этого устройства" aria-label="Вернуть стандартную думалку для этого устройства" disabled>↺</button>
                 </div>
                 <div class="thinking-track"><div class="thinking-stops" aria-hidden="true">${THINKING_LEVELS.map(() => '<span data-thinking-stop></span>').join('')}</div>
-                    <input type="range" min="0" max="3" step="1" value="1" data-thinking-slider="${escapeHtml(key)}" aria-label="Уровень думалки" disabled>
+                    <input type="range" min="0" max="${THINKING_LEVELS.length - 1}" step="1" value="2" data-thinking-slider="${escapeHtml(key)}" aria-label="Уровень думалки" disabled>
                 </div>
                 <p class="thinking-note" data-thinking-note>Рекомендация появится во время боя</p>
             </section>
