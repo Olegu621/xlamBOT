@@ -15,6 +15,7 @@
 !/tools/
 !/tests/
 !/requirements-ci.txt
+!/docs/
 
 # Local validation artifacts must never enter the distribution.
 **/__pycache__/
