@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 24,
+    "revision": 25,
     "python": "3.13",
-    "size": 1269873,
-    "sha256": "6fac170bcbe66fb2e91a174051c83191f7e061fe9499b8f8566ad052e8612e64",
+    "size": 1271695,
+    "sha256": "40c33502aea337fb37134e0e928b10a85e840ebd5e92d0d9f400f2face941332",
     "files": {
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
       "api/api.pyc": "2f986ae10e73ff8674b1645ba8a9902e12e7e173d4849ded6a8310f8f54fb510",
@@ -38,13 +38,13 @@
       "state_finder.pyc": "db8a0ced8f14a529537334a58ad5f4060caf5c05b607198765a5ebe5db3ac4e5",
       "static/css/calibration.css": "c470e9e50cb1fa754678f4e449113ee5d852f70a1ab1d8efd54f5d4d37488eda",
       "static/css/interface.css": "d72ff6c72b46321b7ce091b038919aa66a8883b6d938ae22c6e73823ffb5ac37",
-      "static/css/panel.css": "0efa4e6745b082f9a6909446f3c1e9421ec2975173592c07a27c9345a813bd12",
+      "static/css/panel.css": "e74e2082444522e852b07de560668d0e4bdd420e90d8cef6971e312c63c8a80d",
       "static/css/sprites.css": "1777e7b9a99d6b62b10c26525b156a92929285cb32088f26c55150b2bf3cbcce",
       "static/css/studio.css": "4a36187b87a9148234a59b82e17e3fa0d1f7ff993578930fb8b72c10be074bd8",
       "static/css/training.css": "60f52e1784b71138b8b789b85746c126c055c385586b6776c9f2f3439ce1fb99",
       "static/js/calibration.js": "2110c54ed071deb7a13ae09d3d16c896fe7da57c34b57d530485548958741480",
       "static/js/i18n.js": "6e0fb6f382eb5315857740b28cf76b94f7d3624be35920606bd295be1d9c150c",
-      "static/js/panel.js": "bbf63b2727e24abba74f601e62e7f33f0254e94ea2a61b6c6596364004acba84",
+      "static/js/panel.js": "8de69d0b7ab637834eecf2a998e74e7da31d72062b140b41a0457483c117f119",
       "static/js/resource_updates.js": "35407f094a62fde51b606e8734074b6edcb31bbb57eff94b4e9bfb961e9e3278",
       "static/js/sessions.js": "1bff6df2937e7e03c4fc41f99c305a24618b690030593b99b65d790d1ca5e5ba",
       "static/js/settings-fields.js": "f52ece08bf5517b7c6b5aa3658315449a7c36200a5abbbf52a15b0677a6fbc12",
@@ -80,5 +80,5 @@
       "window_controller.pyc": "0200202914c68da1617ee78e41018e2eec43a7b8cfa67fbb07255d3ddf5c7a09"
     }
   },
-  "signature": "ff902bef43e86dfb4a134a71faff66a4b08da9dd2d27adcd477a9e2e91de6a9d3a8430ef909c4480016a252ba7d3da22deacc1c1c7726e05b83571c71deda102"
+  "signature": "63dcb11c45c085ff4b6675df96586d793f57b800b751d596dbb786f19678a027e8930b3bd352376f12c138fc3de670ed152e4fca569c9a67bb1751f3d6c57f08"
 }
