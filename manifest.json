@@ -2,13 +2,13 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 17,
+    "revision": 18,
     "python": "3.13",
-    "size": 600941,
-    "sha256": "baa2f121c4b0bd6c0f56aaf175c13b473fcb532056a9a5d308b89a652617ba3d",
+    "size": 601157,
+    "sha256": "1f96cdc09b9388ca660e85b0beca74b98fae44bac5c0cad62a3e3c54fd001e54",
     "files": {
       "api/api.pyc": "2f986ae10e73ff8674b1645ba8a9902e12e7e173d4849ded6a8310f8f54fb510",
-      "bot_instance.pyc": "708b5b05c039fc33bf31b67e6be6b8e02c504e4951a3b1bc47e99eb5fd03e273",
+      "bot_instance.pyc": "bb4f8e6626bd0ddc64b37fecf1d5e385c3c408c56b20617b4876c165828bcbc0",
       "brawler_calibration.pyc": "ac710c9060e4ce63ac7748182fdf1fa65deac9efba5642fa88a07b56f68d7fe7",
       "debug_view.pyc": "e0ba930d00221f040510da4003f26ae087354f7baf541dc53bb3a8ace9bbe06c",
       "desktop.pyc": "188eaba33196b4d7c5a9dc986d2c9f8de1acd88610a633a03a57cb63b9fe44b9",
@@ -64,5 +64,5 @@
       "window_controller.pyc": "b3dc6725a1dbe6a13b32e9731d7522d49d90570285d101c656c0a5bc3d63162c"
     }
   },
-  "signature": "58c2383a5ee79996f71f2ff79b73767efb3204e02065009c5b111e415c5c3637e711782bab8b50fb24c8fd79691fa91a86f7b30b8b9ea398cbb0c7cdf2c40e00"
+  "signature": "b54af4130900039cc4f0c31178c5d9a54176bcfc91bc83967a6ea241893a454630a49fa55ac28003552a2d68ceca5dc8e132b0c622ea2d82a4998a01b9ec1701"
 }
