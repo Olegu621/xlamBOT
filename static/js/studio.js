@@ -508,7 +508,7 @@
     Object.assign(SECTION_LABELS,{general_config:'Подключение и производительность',bot_config:'Игра и поведение',time_tresholds:'Интервалы действий',webhook_config:'Уведомления',debug_settings:'Диагностика',buttons_config:'Кнопки и калибровка',login:'Доступ',modes_config:'Выбор игрового режима'});
     const secretKeys=new Set(['key','discord_bot_token','telegram_token','webhook_url']);
     const advancedKeys=new Set(['buttons_config','lobby_config','modes_config','login','debug_settings']);
-    const choices={thinking_mode:[['low','Низкий'],['medium','Средний'],['high','Высокий'],['maximum','Максимальный']],cpu_or_gpu:[['auto','Автоматически'],['cpu','CPU — процессор'],['gpu','GPU — видеокарта']],interface_mode:[['browser','Веб-панель'],['desktop','Окно программы']]};
+    const choices={thinking_mode:[['low','Низкий'],['standard','Стандарт'],['medium','Средний'],['high','Высокий'],['maximum','Максимальный']],cpu_or_gpu:[['auto','Автоматически'],['cpu','CPU — процессор'],['gpu','GPU — видеокарта']],interface_mode:[['browser','Веб-панель'],['desktop','Окно программы']]};
     function languageCard(){return `<div class="card"><div class="card-head"><div><h3 class="card-title">Language</h3><p class="card-note">Язык всех страниц, подсказок и сообщений панели. Общий для всех устройств.</p></div></div><div class="card-body"><label class="field-label" for="languageChoice">Language</label><select id="languageChoice" class="input"><option value="ru" ${document.documentElement.lang==='ru'?'selected':''}>Russian</option><option value="en" ${document.documentElement.lang==='en'?'selected':''}>English</option></select></div></div>`;}
     async function loadSettings() {
         const devicesData=await api('/api/devices');
