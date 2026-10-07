@@ -41,9 +41,24 @@
  const grid=document.getElementById('deviceGrid');
  if(new URLSearchParams(location.search).has('device'))document.body.classList.add('device-detail-page');
  if(grid){new MutationObserver(enhance).observe(grid,{childList:true,subtree:true});enhance();}
- document.addEventListener('pointerover',event=>{const el=event.target.closest('.flyout');if(el&&event.pointerType!=='touch'&&!el.contains(event.relatedTarget))el.open=true;});
+ function placeFlyout(el){
+  const panel=el.querySelector(':scope > .flyout-body');if(!panel)return;
+  for(const prop of ['left','right','top','bottom','max-height'])panel.style.removeProperty(prop);
+  if(!el.open||innerWidth<=760)return;
+  const rect=el.getBoundingClientRect(),above=Math.max(0,rect.top-22),below=Math.max(0,innerHeight-rect.bottom-22);
+  const preferBelow=el.matches('.personal-tuning,.studio-more');
+  const natural=panel.offsetHeight;
+  const down=preferBelow ? below>=natural||below>above : !(above>=natural||above>=below);
+  panel.style.maxHeight=Math.max(100,down?below:above)+'px';
+  const left=Math.max(12,Math.min(rect.left,innerWidth-panel.offsetWidth-12));
+  panel.style.left=(left-rect.left)+'px';panel.style.right='auto';
+  panel.style.top=down?'calc(100% + 10px)':'auto';panel.style.bottom=down?'auto':'calc(100% + 10px)';
+ }
+ document.addEventListener('toggle',event=>{if(event.target.matches('.flyout'))placeFlyout(event.target);},true);
+ window.addEventListener('resize',()=>document.querySelectorAll('.flyout[open]').forEach(placeFlyout));
+ document.addEventListener('pointerover',event=>{const el=event.target.closest('.flyout');if(el&&innerWidth>760&&event.pointerType!=='touch'&&!el.contains(event.relatedTarget))el.open=true;});
  document.addEventListener('pointerout',event=>{const el=event.target.closest('.flyout');if(el&&!el.contains(event.relatedTarget)&&el.dataset.pinned!=='true'&&!el.contains(document.activeElement))el.open=false;});
- document.addEventListener('focusin',event=>{const el=event.target.closest('.flyout');if(el)el.open=true;});
+ document.addEventListener('focusin',event=>{const el=event.target.closest('.flyout');if(el&&innerWidth>760)el.open=true;});
  document.addEventListener('focusout',event=>{const el=event.target.closest('.flyout');if(el&&!el.contains(event.relatedTarget)&&el.dataset.pinned!=='true')el.open=false;});
  document.addEventListener('click',event=>{
   const summary=event.target.closest('.flyout > summary');
@@ -68,5 +83,12 @@
    for(const input of [think,mode]){input.addEventListener('input',paint);input.addEventListener('change',async()=>{think.disabled=mode.disabled=true;status.textContent=text('Сохраняю…','Saving…');try{await api(`/api/devices/${encodeURIComponent(key)}/settings`,{section:input===think?'cfg/general_config.toml':'cfg/bot_config.toml',values:input===think?{thinking_mode:levels[think.value]}:{work_mode:Number(mode.value)}});status.textContent=text('Сохранено для этого устройства','Saved for this device');}catch(e){status.textContent=e.message;host.dataset.mounted='';await mountControl(host,key);}finally{think.disabled=mode.disabled=false;}});}
   }catch(e){host.querySelector('[data-save-state]').textContent=e.message;host.dataset.mounted='';}
  }
+ window.addEventListener('xlam-language-changed',()=>{
+  document.querySelectorAll('.panel-customizer').forEach(el=>el.remove());
+  enhance();
+  document.querySelectorAll('[data-personal-control]').forEach(host=>{
+   host.dataset.mounted='';mountControl(host,host.dataset.personalControl);
+  });
+ });
  window.XlamDeviceExperience={mountControl,escape};
 })();

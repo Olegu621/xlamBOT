@@ -1,0 +1,138 @@
+/* Shared finishing layer: readable controls, bounded overlays and small screens. */
+:root { --text-faint: #a0abc0; }
+button, a, summary, input, select { touch-action: manipulation; }
+.page-heading > div, .device-id, .device-head-right,
+.personal-device-card, .tr-brand > div { min-width: 0; }
+.page-heading h1 { text-wrap: balance; }
+.page-heading p, .workspace-intro, .field-hint { text-wrap: pretty; }
+.btn, .calibration-body button { max-width: 100%; }
+.device-name, .device-serial, .personal-device-card h3,
+.calibration-identity, .session-device { overflow-wrap: anywhere; }
+.device-serial { opacity: 1 !important; }
+.stat-box-label, .stat-box-note, .field-hint,
+.settings-group-hint, .calibration-body .muted,
+.tr-inspector .tr-note, .tr-inspector #trClassHelp,
+.tr-inspector summary, .tr-coordinates { font-size: 12px; }
+.field-label, .tr-inspector label { font-size: 13px; }
+.stat-box-value { font-variant-numeric: tabular-nums; }
+.stat-box-wide { grid-column: 1 / -1; }
+.panel-hero { isolation: isolate; gap: 24px; }
+.panel-hero > div:first-child { flex: 1; min-width: 0; }
+.hero-art { width: 260px; }
+.panel-overview .stat-chip { min-height: 64px; }
+.device-card:has(.device-tuning.is-open),
+.device-card:has(.flyout[open]),
+.personal-device-card:has(.flyout[open]) { position: relative; z-index: 100; }
+.brawler-picker.disclosure { overflow: visible; }
+.brawler-picker > .flyout-body { left: 0; right: auto; }
+.flyout[open] > .flyout-body { margin: 0; }
+.tuning-panel { max-height: calc(100dvh - 40px); overflow-y: auto; overscroll-behavior: contain; }
+.flyout-body { max-height: calc(100dvh - 40px); overflow-y: auto; overscroll-behavior: contain; }
+.flyout-body .brawler-grid { padding-top: 8px; }
+.personal-device-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.device-select-bar { flex-wrap: wrap; }
+.device-select-bar label { flex-shrink: 0; }
+.device-select-bar select { flex: 1; min-width: 140px; }
+.studio-header:has(.studio-more[open]) { z-index: 110; }
+.studio-more::after { bottom: auto; top: 100%; }
+.studio-more .flyout-body { padding: 12px; }
+.studio-more .flyout-body .studio-tab { margin: 0; min-height: 40px; }
+.library-filters > * { min-width: 0; }
+.session-card-body h3 { overflow-wrap: anywhere; }
+.session-actions { flex-wrap: wrap; }
+.session-actions .btn { min-width: 0; }
+.confirm-dialog { max-width: calc(100vw - 32px); max-height: calc(100dvh - 32px); overflow: auto; }
+.resource-notice, .toast, .tr-toast { max-width: calc(100vw - 32px); overflow-wrap: anywhere; }
+.calibration-body .calibration-identity { white-space: normal; }
+.calibration-body .numbers input { min-width: 0; }
+.calibration-body .toolbar button { white-space: normal; text-align: left; }
+.tr-header, .tr-header-right { flex-wrap: wrap; }
+.tr-header-right { justify-content: flex-end; min-width: 0; }
+.tr-inspector .tr-note { line-height: 1.65; }
+.tr-inspector #trSkip, .tr-inspector #trEmpty { white-space: normal; text-align: left; font-size: 12px; }
+.tr-class { min-height: 36px; }
+.tr-object { gap: 10px; }
+.tr-object small { white-space: nowrap; }
+.tr-toast { z-index: 200; }
+@media (max-width: 1050px) {
+  .hero-art { width: 200px; transform: scale(.75); }
+  .calibration-body > main { grid-template-columns: 1fr; }
+  .calibration-body .calibration-targets { max-height: 220px; }
+  .calibration-body .numbers { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  html { scroll-padding-top: 80px; }
+  .app-nav > a { min-width: 44px; min-height: 44px; }
+  .app-page .btn, .calibration-body button,
+  .studio-tab, .tr-body .btn { min-height: 44px; }
+  .app-page input:not([type=checkbox]):not([type=range]),
+  .app-page select, .tr-body select { min-height: 44px; font-size: 14px; }
+  .panel-hero { padding: 24px; min-height: 170px; }
+  .panel-hero h1 { font-size: 30px; }
+  .panel-hero p { font-size: 13px; max-width: none; }
+  /* Keep decorative portraits away from the text on narrow screens. */
+  .panel-hero .hero-art { display: none; }
+  .panel-hero .page-kicker { font-size: 10px; }
+  .panel-overview .stat-chip { min-width: 0; }
+  .panel-overview .stat-chip-label { font-size: 12px; white-space: normal; }
+  .device-card { container-type: normal; }
+  .device-head-right { max-width: 100%; }
+  .device-main .stat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .controls > .panel-customizer { flex: 0 0 auto; }
+  .controls > .panel-customizer > summary { min-width: 44px; width: 44px; }
+  .flyout[open] > .flyout-body,
+  .personal-tuning[open] > .flyout-body,
+  .studio-more[open] > .flyout-body,
+  .brawler-picker[open] > .flyout-body,
+  .device-tuning .tuning-panel,
+  .device-tuning.opens-up .tuning-panel {
+    position: fixed; inset: auto 12px 12px; width: auto;
+    max-width: none; max-height: calc(100dvh - 90px);
+    overflow-y: auto; overscroll-behavior: contain; z-index: 120;
+  }
+  .flyout-body { padding: 20px; border-radius: 20px; }
+  .layout-option { min-height: 44px; }
+  .device-route-nav { gap: 10px; }
+  .device-route-title { width: 100%; order: -1; overflow-wrap: anywhere; }
+  .studio-header { position: static; }
+  .studio-tabs { gap: 5px; }
+  .studio-tabs .studio-tab { font-size: 12px; padding: 10px; }
+  .studio-decoration { display: none; }
+  .studio-header .page-heading { padding-right: 0; }
+  .device-select-bar > a { width: 100%; }
+  .personal-device-card { padding: 20px; }
+  .calibration-body .calibration-actions > button { width: 100%; flex-basis: 100%; }
+  .calibration-body .calibration-actions .muted { margin: 0; }
+  .calibration-body .toolbar { padding: 14px; }
+  .tr-header { gap: 16px; }
+  .tr-header-right { width: 100%; gap: 8px; }
+  .tr-header-right .tr-progress { flex-basis: 100%; }
+  .tr-header-right .btn { flex: 1; font-size: 12px; white-space: normal; }
+  .tr-actions { gap: 6px; }
+  .tr-actions .btn { font-size: 12px; }
+  .tr-classes { gap: 6px; }
+  .tr-class { font-size: 12px; }
+  .tr-main { align-items: stretch; }
+  .tr-strip { max-height: 60dvh; }
+  .resource-notice { inset: auto 16px 16px; }
+}
+@media (max-width: 360px) {
+  .page-heading h1, .panel-hero h1 { font-size: 26px; }
+  .panel-overview .stat-chip { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .panel-overview .page-tools .btn { min-width: 0; flex: 1 1 calc(50% - 8px); }
+  .panel-overview .page-tools .btn:first-child { flex-basis: 100%; }
+  .device-head { padding: 16px; }
+  .device-main { padding: 0 16px; }
+  .device-body { padding: 16px; }
+  .controls > .btn-primary { min-width: 100px; }
+  .device-main .stat-grid { gap: 5px; }
+  .stat-box { padding: 10px 6px; }
+  .stat-box-label { font-size: 11px; }
+  .calibration-body .numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .session-card, .tuning-panel, .btn { transition: none !important; }
+}
+
+.personal-tuning .flyout-body input[type=range] { padding: 0; border: 0; background: transparent; min-height: 30px; }
