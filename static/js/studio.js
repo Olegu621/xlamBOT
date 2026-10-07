@@ -89,7 +89,30 @@
     // Какое устройство сейчас редактируется. Объявлено здесь, а не рядом с
     // настройками: вкладка выбора бойца читает его раньше, чем доходит до
     // того места, и получал "cannot access before initialization".
-    let settingsKey = '';
+    let settingsKey = new URLSearchParams(location.search).get('device') || '';
+    let deviceSelectorReady = false;
+    function syncSelectedDevice() {
+        const selector=document.getElementById('personalDeviceSelect');
+        if(selector)selector.value=settingsKey;
+        document.querySelectorAll('.studio-header a[href="/panel"]').forEach(a=>a.dataset.selectedPanel='true');
+        document.querySelectorAll('[data-personal-panel],[data-selected-panel]').forEach(a=>a.href='/panel?device='+encodeURIComponent(settingsKey));
+        history.replaceState(null,'','/?device='+encodeURIComponent(settingsKey));
+    }
+
+    async function setupDeviceSelector() {
+        const data=await api('/api/devices');const list=data.devices||[];
+        if(!list.some(d=>d.key===settingsKey))settingsKey=list[0]?.key||'';
+        const host=document.createElement('div');host.className='device-select-bar';
+        const en=document.documentElement.lang==='en';
+        host.innerHTML=`<label for="personalDeviceSelect">${en?'Your emulator':'Твой эмулятор'}</label><select id="personalDeviceSelect" class="input">${list.map(d=>`<option value="${esc(d.key)}" ${d.key===settingsKey?'selected':''}>${esc(d.display_name||d.serial)}</option>`).join('')}</select><a class="btn btn-ghost" data-personal-panel href="/panel?device=${encodeURIComponent(settingsKey)}">${en?'Open bot panel →':'Панель этого бота →'}</a>`;
+        document.querySelector('.studio-main').prepend(host);
+        host.querySelector('select').addEventListener('change',event=>{
+            if(settingsDirty && !confirm(en?'Discard unsaved changes?':'Сбросить несохранённые изменения?')){event.target.value=settingsKey;return;}
+            settingsKey=event.target.value;settingsDirty=false;syncSelectedDevice();
+            history.replaceState(null,'','/?device='+encodeURIComponent(settingsKey));
+            host.querySelector('a').href='/panel?device='+encodeURIComponent(settingsKey);showTab(activeTab);
+        });deviceSelectorReady=true;syncSelectedDevice();showTab(activeTab);
+    }
 
     function showTab(name) {
         if (!loaders[name]) return;
@@ -120,6 +143,7 @@
     // ───────────────────────── обзор ─────────────────────────
 
     async function loadDashboard() {
+        if (document.activeElement?.closest('.personal-tuning') || document.querySelector('.personal-tuning[open]')) return;
         const devicesData = await api('/api/devices');
         const devices = devicesData.devices || [];
         // Ростер подставляется ниже, из маршрута устройства: глобальный
@@ -148,72 +172,9 @@
         }, { trophies: 0, wins: 0 });
         const auto = queue.filter((entry) => entry.automatically_pick).length;
 
-        view('dashboard').innerHTML = `
-            <div class="kpi-grid" style="margin-bottom:12px">
-                <div class="kpi">
-                    <div class="kpi-label">Устройств</div>
-                    <div class="kpi-value">${devices.length}</div>
-                    <div class="kpi-note">${running} с запущенной игрой</div>
-                </div>
-                <div class="kpi">
-                    <div class="kpi-label">В очереди</div>
-                    <div class="kpi-value">${queue.length}</div>
-                    <div class="kpi-note">${auto} на автовыборе</div>
-                </div>
-                <div class="kpi">
-                    <div class="kpi-label">Трофеев в ростере</div>
-                    <div class="kpi-value">${totals.trophies.toLocaleString(window.XlamI18n?.locale||'ru-RU')}</div>
-                    <div class="kpi-note">${totals.wins} побед всего</div>
-                </div>
-                <div class="kpi">
-                    <div class="kpi-label">Ботов в работе</div>
-                    <div class="kpi-value">${rows.filter((r) => r.t.state === 'running').length}</div>
-                    <div class="kpi-note">по панели бота</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-head">
-                    <div>
-                        <h3 class="card-title">Устройства</h3>
-                        <p class="card-note">Состояние видно с панели бота — там же запуск и остановка</p>
-                    </div>
-                    <div class="card-actions">
-                        <a class="btn btn-ghost" href="/panel">Открыть панель бота</a>
-                    </div>
-                </div>
-                <div class="card-body is-tight">
-                    <table class="table">
-                        <thead><tr>
-                            <th>Устройство</th><th>Игра</th>
-                            <th class="num">Боец</th><th class="num">Ротация</th>
-                            <th class="num">Трофеи</th><th class="num">В работе</th><th>Состояние</th>
-                        </tr></thead>
-                        <tbody>
-                        ${rows.length ? rows.map((row) => {
-                            const t = row.t;
-                            const state = t.state || 'idle';
-                            const tagClass = state === 'running' ? 'is-up'
-                                : state === 'error' ? 'is-down'
-                                : state === 'paused' ? 'is-warn' : '';
-                            return `<tr>
-                                <td>
-                                    <strong>${esc(row.device.display_name || row.device.model || row.device.serial)}</strong>
-                                    <div class="muted mono" style="font-size:10px">${esc(row.device.serial)}</div>
-                                </td>
-                                <td>${row.device.brawl_stars_running ? 'запущена' : '<span class="muted">нет</span>'}</td>
-                                <td class="num">${esc(t.brawler || '—')}</td>
-                                <td class="num">${t.games_on_brawler != null && t.switch_after_games != null
-                                    ? `${t.games_on_brawler}/${t.switch_after_games}` : '—'}</td>
-                                <td class="num">${t.account_total != null ? t.account_total : '—'}</td>
-                                <td class="num">${uptime(t.uptime_seconds)}</td>
-                                <td><span class="tag ${tagClass}">${esc(state)}</span></td>
-                            </tr>`;
-                        }).join('') : `<tr><td colspan="7" class="empty">Устройства не найдены</td></tr>`}
-                        </tbody>
-                    </table>
-                </div>
-            </div>`;
+        const en=document.documentElement.lang==='en';
+        view('dashboard').innerHTML=`<div class="personal-device-grid">${rows.map(({device,t})=>`<article class="personal-device-card"><a class="personal-device-link" href="/panel?device=${encodeURIComponent(device.key)}"><h3>${esc(device.display_name||device.model||device.serial)} <span aria-hidden="true">↗</span></h3><p>${en?'Open this device’s bot panel':'Открыть панель этого бота'}</p><span class="personal-device-status">${t.is_running?(en?'Bot is running':'Бот работает'):(en?'Ready to start':'Готов к запуску')}</span></a><div data-personal-control="${esc(device.key)}"></div></article>`).join('')||`<div class="empty">${en?'Start your emulator to connect':'Запусти эмулятор, чтобы подключить устройство'}</div>`}</div>`;
+        view('dashboard').querySelectorAll('[data-personal-control]').forEach(host=>window.XlamDeviceExperience?.mountControl(host,host.dataset.personalControl));
     }
 
     // ───────────────────────── выбор бойца ─────────────────────────
@@ -269,7 +230,7 @@
 
     document.addEventListener('change', async (event) => {
         if (event.target.id === 'brawlerDevice') {
-            settingsKey = event.target.value;
+            settingsKey = event.target.value; syncSelectedDevice();
             await loadBrawlersTab();
         }
     });
@@ -386,7 +347,7 @@
     const HINTS = {
         brawler_switch_after_games: ['Игр на бойца до смены', '0 — не менять бойца'],
         brawler_pick_mode: ['Как выбирать бойца', 'lowest_trophies, lowest_level, by_name…'],
-        brawler_rotation: ['Ротация по списку', 'Бойцы через запятую'],
+        brawler_rotation: ['Очередь по списку', 'Бойцы через запятую'],
         current_playstyle: ['Плейстайл', 'Файл .xlambot из папки playstyles'],
         game_mode: ['Режим игры', 'Сверяется с плейстайлом — предупредит, если режим не тот'],
         locked_brawler: ['Играть только на бойце', 'Пусто — выбирать автоматически. Удобнее выбрать на вкладке «Боец»'],
@@ -511,7 +472,7 @@
         }
         if(event.target.id==='settingsDevice'){
             if(settingsDirty){event.target.value=settingsKey;toast('Сначала сохраните изменения или нажмите «Вернуть сохранённые».','error');return;}
-            settingsKey=event.target.value;await loadSettings();return;
+            settingsKey=event.target.value;syncSelectedDevice();await loadSettings();return;
         }
         const field=event.target.closest('[data-setting]');if(!field)return;
         const section=field.dataset.section,key=field.dataset.setting;
@@ -694,7 +655,7 @@
             logsKey = event.target.value;
             loadLogs();
         }
-        if(event.target.id==='historyDevice'){settingsKey=event.target.value;loadHistory();}
+        if(event.target.id==='historyDevice'){settingsKey=event.target.value;syncSelectedDevice();loadHistory();}
     });
 
     document.addEventListener('click', async (event) => {
@@ -732,6 +693,6 @@
 
     // ───────────────────────── старт ─────────────────────────
 
-    showTab('dashboard');
+    setTimeout(setupDeviceSelector,0);
     trackPollAge();
 })();
