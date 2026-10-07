@@ -2,12 +2,12 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 44,
+    "revision": 45,
     "python": "3.13",
-    "size": 1284970,
-    "sha256": "59e1194e570c28d87ae3510adf103a2a91d059a57d91be4795e20dea62749ce1",
+    "size": 1287583,
+    "sha256": "73efd97259b2ec8771ab902c3eb2b925aba945c808d62183dc5d470eb04a8a89",
     "files": {
-      "ability_buttons.pyc": "a8593309852ecab7bd65a8f4b00cc3cdfdae0a522027cd93c47b9c7361229619",
+      "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
       "api/api.pyc": "2f986ae10e73ff8674b1645ba8a9902e12e7e173d4849ded6a8310f8f54fb510",
       "battle_memory.pyc": "d6c9d845b40c44f2a27b6723a79fb15b2dd445b41a0b5ae56d47c0d285a31b27",
@@ -33,7 +33,7 @@
       "main.pyc": "c2c6e0520ee98a7c0cf2a78018bc69d82670918570e90e709d4bbe322dfeb03a",
       "make_icon.pyc": "720c5fa6f219fed87eaf56656308988a32c5600d28a8aa1c9d451a67fdb3ba15",
       "panel.pyc": "f34bdd3825c481ccce2935c8e2c5eed64144bc1da2e2d517da6f1669b614a61e",
-      "play.pyc": "0b17a6f8183fec9553dee1fcd3662d18ac21cfad66b00f34e07447ed6d383818",
+      "play.pyc": "03a780bd5fcc97c4d338688348d6ee2f5835e1b041eef4a7cba7ac3567b1ad36",
       "reward_choice.pyc": "606c4c1e5d377599b671b31d9491d6dda7fdef896e4017b1410a926945116a8c",
       "reward_received.pyc": "a0b5c0d4077ca077f51e499eb4cd0ed49d1c4bf443d1042236a965baaf2e50d4",
       "settings_schema.pyc": "4f8ba40b7775661906f876b511de59158ac59884f5dedf2223695369bfb1ae98",
@@ -60,6 +60,7 @@
       "static/js/training.js": "183f79c1aace86a89deff3510a25bca61789f84ae7df08383fc26a50b64bca99",
       "static/js/ui-session.js": "2b3e0128b773766fced45bbd015743f3e449510cb330342fae18f6d7eb699668",
       "static/js/updates.js": "675baa6e85fde806435befd4c404954df52f7b662db6f1fb60c6e61eb342fcaa",
+      "super_policy.pyc": "0bc34b58fbfff3c00a8adef5edc788c00d7430af7a82a4906d178724d1b4b75c",
       "team_panel.pyc": "ecef3bce59021d759f667e6cabbb7c601bea2b92d519380e0c0ba1eecf8a90e8",
       "templates/_marquee.html": "774b9361f2e21592fa231b874e3d443f4aa9186f679fa94ce280c7cb592b6421",
       "templates/_navigation.html": "5b6cd6d74da3517b40086694f966532e4e354ead28e924a46a38faf9e6973a3b",
@@ -89,5 +90,5 @@
       "work_modes.pyc": "5ec7b92ab19c81375eca35e12596626c5a7edfd64865b78a96033aea45336a0c"
     }
   },
-  "signature": "b0aaa4ee7c3015e183951c107983a4373de6a8da945c1e1c43cc86d998bbadef53cb74227ba062ae26dad55a161fc787df00f6f9a5b0dfc416fcd537af89c307"
+  "signature": "fa1a2ae9f618bcb350de1625ca59afa9e8b670b047217ca9278a3e53e6602dc3c2e794810c6ed5da7c064cfd173e78b05f282eb0c84b5a77a14ad725b5486b06"
 }
