@@ -16,6 +16,10 @@
   'Сохраняется отдельно для этого устройства':'Saved separately for this device',
   'Применяется в игре · газ и стены остаются запретом':'Applies during play · gas and walls stay blocked'
  });
+ Object.assign(catalog,{
+  'Запись создана прежней панелью. Проверьте кадры заново для всех классов: прежние рамки могли не сохраниться.':'This recording was created by an older panel. Review all classes again; previous boxes may not have been saved.',
+  'Набор классов расширен. Проверьте старые кадры заново; рамки сохранены.':'The class set has expanded. Review older frames again; existing boxes are preserved.'
+ });
  for(const v of Object.values(window.XlamSettingsFields||{})){catalog[v[0]]=v[1];catalog[v[2]]=v[3];}
  let language=document.documentElement.lang==='en'?'en':'ru';
  const normalized=s=>s.replace(/\s+/g,' ').trim();

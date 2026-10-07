@@ -83,18 +83,22 @@
         finally { state.busy = false; renderWorkMode(key); }
     }
     function openTuning(wrapper, open) {
-        if (open) {
+        const panel = wrapper.querySelector('.tuning-panel');
+        panel.style.removeProperty('max-height');
+        if (open && window.innerWidth > 760) {
             const rect = wrapper.getBoundingClientRect();
-            const height = wrapper.querySelector('.tuning-panel').offsetHeight;
-            wrapper.classList.toggle('opens-up', window.innerWidth > 640
-                && window.innerHeight - rect.bottom < height + 20 && rect.top > height + 20);
+            const above = Math.max(0, rect.top - 22);
+            const below = Math.max(0, window.innerHeight - rect.bottom - 22);
+            const opensUp = below < panel.offsetHeight && above > below;
+            wrapper.classList.toggle('opens-up', opensUp);
+            panel.style.maxHeight = Math.max(100, opensUp ? above : below) + 'px';
         }
         wrapper.classList.toggle('is-open',open);
         wrapper.querySelector('[data-tuning-trigger]').setAttribute('aria-expanded',String(open));
     }
     grid.addEventListener('pointerover', event => {
         const wrapper = event.target.closest('[data-tuning]');
-        if (wrapper && event.pointerType !== 'touch' && !wrapper.contains(event.relatedTarget)) openTuning(wrapper,true);
+        if (wrapper && window.innerWidth > 760 && event.pointerType !== 'touch' && !wrapper.contains(event.relatedTarget)) openTuning(wrapper,true);
     });
     grid.addEventListener('pointerout', event => {
         const wrapper = event.target.closest('[data-tuning]');
@@ -103,7 +107,7 @@
     });
     grid.addEventListener('focusin', event => {
         const wrapper = event.target.closest('[data-tuning]');
-        if (wrapper) openTuning(wrapper,true);
+        if (wrapper && window.innerWidth > 760) openTuning(wrapper,true);
     });
     grid.addEventListener('focusout', event => {
         const wrapper = event.target.closest('[data-tuning]');
@@ -973,11 +977,13 @@
     // The roster, once, for every device. It used to be fetched and thrown away,
     // which is why the panel could not show a brawler at all.
     let brawlerCatalog = [];
+    let brawlerCatalogVersion = 0;
 
     async function loadBrawlers() {
         const { data } = await api('/api/devices/brawlers');
         if (data && Array.isArray(data.brawlers)) {
             brawlerCatalog = data.brawlers;
+            brawlerCatalogVersion += 1;
         }
         return brawlerCatalog;
     }
@@ -1003,7 +1009,7 @@
                 ? `Играет только на: ${brawlerLabel(locked)}`
                 : 'Боец выбирается автоматически по сортировке';
         }
-        const signature = `${locked}|${live}`;
+        const signature = `${locked}|${live}|${brawlerCatalogVersion}`;
         if (container.dataset.sig === signature) return;
         container.dataset.sig = signature;
         if (!brawlerCatalog.length) {

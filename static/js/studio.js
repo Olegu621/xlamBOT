@@ -107,12 +107,22 @@
         host.innerHTML=`<label for="personalDeviceSelect">${en?'Your emulator':'Твой эмулятор'}</label><select id="personalDeviceSelect" class="input">${list.map(d=>`<option value="${esc(d.key)}" ${d.key===settingsKey?'selected':''}>${esc(d.display_name||d.serial)}</option>`).join('')}</select><a class="btn btn-ghost" data-personal-panel href="/panel?device=${encodeURIComponent(settingsKey)}">${en?'Open bot panel →':'Панель этого бота →'}</a>`;
         document.querySelector('.studio-main').prepend(host);
         host.querySelector('select').addEventListener('change',event=>{
-            if(settingsDirty && !confirm(en?'Discard unsaved changes?':'Сбросить несохранённые изменения?')){event.target.value=settingsKey;return;}
+            if(settingsDirty && !confirm(document.documentElement.lang==='en'?'Discard unsaved changes?':'Сбросить несохранённые изменения?')){event.target.value=settingsKey;return;}
             settingsKey=event.target.value;settingsDirty=false;syncSelectedDevice();
             history.replaceState(null,'','/?device='+encodeURIComponent(settingsKey));
             host.querySelector('a').href='/panel?device='+encodeURIComponent(settingsKey);showTab(activeTab);
         });deviceSelectorReady=true;syncSelectedDevice();showTab(activeTab);
     }
+
+    window.addEventListener('xlam-language-changed', () => {
+        const host = document.querySelector('.device-select-bar');
+        if (host) {
+            const en = document.documentElement.lang === 'en';
+            host.querySelector('label').textContent = en ? 'Your emulator' : 'Твой эмулятор';
+            host.querySelector('a').textContent = en ? 'Open bot panel →' : 'Панель этого бота →';
+        }
+        if (activeTab === 'dashboard') loadDashboard();
+    });
 
     function showTab(name) {
         if (!loaders[name]) return;
