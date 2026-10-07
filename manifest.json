@@ -2,17 +2,17 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 48,
+    "revision": 49,
     "python": "3.13",
-    "size": 1299736,
-    "sha256": "b7f61c0bb79937b6cc3d67d8099ad9a0a45b66530b27ea594ddb45f509cf16b4",
+    "size": 1310549,
+    "sha256": "db07848099d3886e65ba3d2206bb24bbb64e4468a1985b877c551cc94d52ef92",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
       "api/api.pyc": "2f986ae10e73ff8674b1645ba8a9902e12e7e173d4849ded6a8310f8f54fb510",
       "battle_memory.pyc": "d6c9d845b40c44f2a27b6723a79fb15b2dd445b41a0b5ae56d47c0d285a31b27",
       "battle_perception.pyc": "20bad9617be9021a5170e1cc20357d732743bdda7f0340c72d6a5ce2d5200123",
-      "bot_instance.pyc": "fa6dfdf1e9ef13398ceb801d518a2431fcf1aea3306a250f8a781ada25385d86",
+      "bot_instance.pyc": "65e6748085691505fff23609a0b9f4b8eaaec9a7b59b04fe45dc84b8b38244bc",
       "brawler_calibration.pyc": "ac710c9060e4ce63ac7748182fdf1fa65deac9efba5642fa88a07b56f68d7fe7",
       "built_in_playstyles.pyc": "06f6086dc9f43b3dcc65f81e8066c6a5b895734dde928d5acc8be6bd067ffe54",
       "bush_cover.pyc": "4dd23ef5c6944422a442144f74b200483d022378aa8e20dc0149654a66f04fbc",
@@ -36,11 +36,11 @@
       "play.pyc": "03a780bd5fcc97c4d338688348d6ee2f5835e1b041eef4a7cba7ac3567b1ad36",
       "reward_choice.pyc": "606c4c1e5d377599b671b31d9491d6dda7fdef896e4017b1410a926945116a8c",
       "reward_received.pyc": "a0b5c0d4077ca077f51e499eb4cd0ed49d1c4bf443d1042236a965baaf2e50d4",
-      "screen_evidence.pyc": "ff36640e066e1696ffd95e001fbfc501857a1fb14ecb029c4830e4624a6dc55b",
+      "screen_evidence.pyc": "e34cac3a9d6e2210e4cf1eadc4a1a11904855d63575eac8a13dbbe16c1e946c0",
       "settings_schema.pyc": "4f8ba40b7775661906f876b511de59158ac59884f5dedf2223695369bfb1ae98",
       "setup_wizard.pyc": "9a29f57edaaa80bc5b1158929ae40b94c07970a09d1506de7db9f41c48ed26bc",
-      "stage_manager.pyc": "0ce9a55e72ca4d5b73e9c83757f3b9abaa9405c1025a1b95e6d8afb269444303",
-      "state_finder.pyc": "c13f2701db74a639c35c5abd3140c89cc06e6cf718bc5fe1f07246dd8f26e089",
+      "stage_manager.pyc": "390aca31db9162c00f3e6dd7fcfa04f1fbea8c3506495f0b1196fa44ba0b5a86",
+      "state_finder.pyc": "d51d854ee10e2a29e14ccb59380a6102915472b9b138b82ea86d3c2bfb00a7ca",
       "static/css/calibration.css": "c470e9e50cb1fa754678f4e449113ee5d852f70a1ab1d8efd54f5d4d37488eda",
       "static/css/device-experience.css": "27aee9b14e68e3eafa7decf22b684f140d91a48e1bfc15153510f07ffcf22736",
       "static/css/interface.css": "d72ff6c72b46321b7ce091b038919aa66a8883b6d938ae22c6e73823ffb5ac37",
@@ -92,5 +92,5 @@
       "work_modes.pyc": "5ec7b92ab19c81375eca35e12596626c5a7edfd64865b78a96033aea45336a0c"
     }
   },
-  "signature": "0f6826430c7b2016e8e288c2bb6f8bcf66df331d7b5593ec182b7b017bdf11947564f16ab050e618b873a1525d03d68b017af5834cf0e8bddccec7ea2de0980a"
+  "signature": "9e40efca1d53d306c5ff820b12d74585afdcdb302fe368d2eff9ee83ec7b041efe3d930d58f19ebd91825408ddfa7d85e5f67a43dfd9d03cde9cf25d2356ac07"
 }
