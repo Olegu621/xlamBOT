@@ -1002,6 +1002,40 @@ select.input {
 .thinking-track input:disabled { opacity:.55; cursor:wait; }
 .thinking-note { margin:10px 0 0; color:var(--text-dim); text-align:center; font-size:11px; min-height:16px; }
 
+/* Per-device controls: the trigger remains compact, both budgets live here. */
+.device-head-right { flex-wrap:wrap; }
+.device-tuning { position:relative; }
+.tuning-trigger { display:flex; align-items:center; gap:8px; padding:9px 12px; border:1px solid rgba(152,134,255,.3); border-radius:13px; color:var(--text); background:linear-gradient(130deg,rgba(147,91,247,.14),rgba(69,116,250,.1)); cursor:pointer; font:inherit; font-size:12px; font-weight:650; }
+.tuning-trigger > span:first-child { color:#b8a3ff; font-size:19px; }
+.tuning-divider,.tuning-chevron { color:var(--text-dim); }
+.tuning-trigger:focus-visible { outline:2px solid #b69aff; outline-offset:3px; }
+.tuning-panel { position:absolute; right:0; top:calc(100% + 10px); z-index:40; width:340px; max-width:calc(100vw - 36px); box-sizing:border-box; padding:17px; border:1px solid rgba(157,137,236,.3); border-radius:23px; background:var(--surface,#171c29); box-shadow:0 22px 65px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.07); opacity:0; visibility:hidden; pointer-events:none; transform:translateY(-9px) scale(.985); transform-origin:top right; transition:opacity .18s ease,transform .18s ease,visibility .18s; }
+.tuning-panel::before { content:""; position:absolute; inset:-12px 0 auto; height:14px; }
+.device-tuning.is-open .tuning-panel { opacity:1; visibility:visible; pointer-events:auto; transform:translateY(0) scale(1); }
+.device-card:has(.device-tuning.is-open) { z-index:45; position:relative; overflow:visible; }
+.tuning-panel-head { display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:12px; font-weight:700; margin-bottom:15px; }
+.tuning-device-name { color:var(--text-dim); max-width:135px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:10px; font-weight:400; }
+.tuning-panel .thinking-control { margin:0; padding:12px; border-radius:15px; }
+.tuning-panel .thinking-caption { font-size:12px; letter-spacing:.03em; }
+.work-mode-control { margin-top:16px; padding:14px 2px 0; border-top:1px solid var(--line); --mode-fill:25%; }
+.work-mode-head { display:flex; align-items:center; justify-content:space-between; font-size:12px; color:var(--text-dim); }
+.work-mode-count { padding:3px 8px; border-radius:8px; background:rgba(157,139,235,.12); font-size:10px; }
+.work-mode-name { display:block; margin-top:8px; font-size:19px; color:var(--mode-color,#a7c9a8); }
+.mode-track { position:relative; height:27px; margin-top:14px; border-radius:20px; background:linear-gradient(to right,var(--mode-color,#a7c9a8) 0%,var(--mode-color,#a7c9a8) var(--mode-fill),rgba(133,139,159,.15) var(--mode-fill),rgba(133,139,159,.15) 100%); }
+.mode-stops { position:absolute; inset:0 13px; display:flex; align-items:center; justify-content:space-between; pointer-events:none; }
+.mode-stops span { width:4px; height:4px; border-radius:50%; background:rgba(255,255,255,.35); }
+.app-page .mode-track input[type=range] { position:absolute; inset:0; width:100%; height:27px; min-height:0; appearance:none; -webkit-appearance:none; background:transparent; padding:0; margin:0; border:0; cursor:pointer; box-shadow:none; }
+.mode-track input::-webkit-slider-thumb { appearance:none; width:27px; height:27px; border-radius:50%; background:#f8f9ff; border:1px solid rgba(0,0,0,.12); box-shadow:0 2px 7px rgba(0,0,0,.3); }
+.mode-track input::-moz-range-thumb { width:25px; height:25px; border-radius:50%; background:#f8f9ff; border:1px solid rgba(0,0,0,.12); }
+.mode-track input:focus-visible { outline:2px solid #b69aff; outline-offset:4px; }
+.mode-track input:disabled { opacity:.5; cursor:wait; }
+.mode-scale { display:flex; justify-content:space-between; margin-top:6px; font-size:10px; color:var(--text-dim); }
+.work-mode-description { min-height:42px; font-size:12px; line-height:1.5; margin:12px 0 0; color:var(--text-dim); }
+.work-mode-status { min-height:15px; margin:7px 0 0; font-size:10px; color:var(--text-dim); }
+.tuning-footnote { margin:13px 0 0; padding-top:12px; border-top:1px solid var(--line); color:var(--text-dim); font-size:10px; text-align:center; }
+@media (max-width:640px) { .tuning-panel { position:fixed; left:18px; right:18px; top:auto; bottom:18px; width:auto; max-width:none; max-height:80vh; overflow-y:auto; transform:translateY(12px); } .device-tuning.is-open .tuning-panel { transform:translateY(0); } }
+@media (prefers-reduced-motion:reduce) { .tuning-panel { transition:none; transform:none; } }
+
 /* ── уведомление ──────────────────────────────────────────────────────────
    Появление задано через @starting-style, потому что класс .hidden меняет
    display, а на смене display переходы не запускаются. Браузер без поддержки
@@ -1020,3 +1054,5 @@ select.input {
        отрисоваться в начальном кадре и останутся невидимыми. */
     * { animation-delay: 0s !important; }
 }
+
+@media(min-width:641px){.device-tuning.opens-up .tuning-panel{top:auto;bottom:calc(100% + 10px)}.device-tuning.opens-up .tuning-panel:before{top:auto;bottom:-14px}}

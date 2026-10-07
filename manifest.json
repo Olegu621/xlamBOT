@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 41,
+    "revision": 42,
     "python": "3.13",
-    "size": 1271984,
-    "sha256": "8020979b4953b03ad9d425bbb8f5360572be8825b2e650e14139af8d1229f1b2",
+    "size": 1283354,
+    "sha256": "6a09a9ef5409cb4635b5430c38efa48611f388088e8d715921838afe7e4ce2bf",
     "files": {
       "ability_buttons.pyc": "a8593309852ecab7bd65a8f4b00cc3cdfdae0a522027cd93c47b9c7361229619",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
@@ -15,6 +15,7 @@
       "bot_instance.pyc": "fa6dfdf1e9ef13398ceb801d518a2431fcf1aea3306a250f8a781ada25385d86",
       "brawler_calibration.pyc": "ac710c9060e4ce63ac7748182fdf1fa65deac9efba5642fa88a07b56f68d7fe7",
       "built_in_playstyles.pyc": "06f6086dc9f43b3dcc65f81e8066c6a5b895734dde928d5acc8be6bd067ffe54",
+      "bush_cover.pyc": "6339b3c5ea69d015f7bf4ec0e27c30236dc0696be8041b4f53168bfad55a92de",
       "capture_transport.pyc": "0166217e02565382ecff6e575bb914f8633e8400db4c366449e83e048b08056b",
       "combat_behavior.pyc": "9d1594d87b4e9f5fe7d0bd7fc85ddd3235d13ae9149414eadb44b24264642b73",
       "debug_view.pyc": "b06d23f4a57e65ac41158a5eb9717af328da75e196d69599d5c6ee91e8672792",
@@ -26,12 +27,13 @@
       "disconnect_dialog.pyc": "eb8a859e95e6440333ed278e70cde233198a33fc47bf3c239a7d63ad83ae72a8",
       "discord_bot.pyc": "1be5d14158b89655e831c8ccce1518dea71b7b317b2703b0c617d58321805d95",
       "feature_defaults.pyc": "a756fb905577d1e27aa25e5584e3ed77ba828e45e4b7f6b0cba7a50047444ee2",
+      "incoming_damage.pyc": "d86c2365b3da03792909e2acc553a7b941fd58392d9a9f802c9375f7438aa63b",
       "lobby_automation.pyc": "9955bee4ae02414c6d1dbb6451ace91ab6747be6af4cb3d0b052056bcb044833",
-      "local_navigation.pyc": "838f0853d431fc1f3b2873b0de578382df14703cf87c8c1e6924cbfb4544e5b7",
+      "local_navigation.pyc": "bbfd89c1718a3d2bbff8665aad2ef0ac9bc3eed5195a132a2a51409dfb15c243",
       "main.pyc": "c2c6e0520ee98a7c0cf2a78018bc69d82670918570e90e709d4bbe322dfeb03a",
       "make_icon.pyc": "720c5fa6f219fed87eaf56656308988a32c5600d28a8aa1c9d451a67fdb3ba15",
       "panel.pyc": "f34bdd3825c481ccce2935c8e2c5eed64144bc1da2e2d517da6f1669b614a61e",
-      "play.pyc": "75604831c6ce7fa2f8a0b5406445dd894cd228f1289f7bff9f89b0a9bb9bd455",
+      "play.pyc": "c51d63156ec0c423af44fcc1074c55017f291000a278cbf5288bc37960bc1d12",
       "reward_choice.pyc": "606c4c1e5d377599b671b31d9491d6dda7fdef896e4017b1410a926945116a8c",
       "reward_received.pyc": "a0b5c0d4077ca077f51e499eb4cd0ed49d1c4bf443d1042236a965baaf2e50d4",
       "settings_schema.pyc": "4f8ba40b7775661906f876b511de59158ac59884f5dedf2223695369bfb1ae98",
@@ -47,13 +49,13 @@
       "static/css/studio.css": "4a36187b87a9148234a59b82e17e3fa0d1f7ff993578930fb8b72c10be074bd8",
       "static/css/training.css": "60f52e1784b71138b8b789b85746c126c055c385586b6776c9f2f3439ce1fb99",
       "static/js/calibration.js": "2110c54ed071deb7a13ae09d3d16c896fe7da57c34b57d530485548958741480",
-      "static/js/device-experience.js": "3f0570b87dbfabad4cabb8e93b07aa7b292292150ae36803dda6097b061979d2",
-      "static/js/i18n.js": "b82a2d37b49131628c5048f632d8f5af069a5b0aa292c0e0e609837c9c999393",
+      "static/js/device-experience.js": "8fe7fb8b587364008fd76ea14a41c42d5b26123167a91d7099521168fc94915c",
+      "static/js/i18n.js": "63d57b7e321edbc3c9f278921d933c2cd71c8a696544fd2bd4d94aa051b2c279",
       "static/js/marquee.js": "c11dccdf8fd2bc6aafc7f34218511e3784bc7fcc8517b719d804bde0ef99663c",
-      "static/js/panel.js": "82a3d08f17d4e96aed4ca5bd9f830da91b0f99d3a67189def70ed911a39a6cdf",
+      "static/js/panel.js": "e0c93d8d9679d7c8d48de36b5007af1ddc2c79e9ad443ffa5ea9505dc0b4bdca",
       "static/js/resource_updates.js": "631c34a4a0058122cc8ec0aa7b471e83ed771bbcc77bce0b65b0982b459526d6",
       "static/js/sessions.js": "1bff6df2937e7e03c4fc41f99c305a24618b690030593b99b65d790d1ca5e5ba",
-      "static/js/settings-fields.js": "057b691f575a71a1c0d2d8bc9a7a5a42aa5f81828bb8628b9604d289e051d466",
+      "static/js/settings-fields.js": "c66c412a1aeb2c32469dc05ab3cc7b2dc7ca05b064dbc2f56ae7013392bc08ad",
       "static/js/studio.js": "babefc621c0e8a2a33f50bd937ea305eaa35f26698a4a778ccfb6c8fec63be5a",
       "static/js/training.js": "183f79c1aace86a89deff3510a25bca61789f84ae7df08383fc26a50b64bca99",
       "static/js/ui-session.js": "2b3e0128b773766fced45bbd015743f3e449510cb330342fae18f6d7eb699668",
@@ -84,8 +86,8 @@
       "webui/services.pyc": "d5d4cb9aaece16a181938741a4f3755720bf5d6d28bef2559324a3f57c1ab94b",
       "webui/settings_schema.pyc": "9d052d260987c1c928f6ac19b355ec50b2d8995f91590f5778632607d9e726e9",
       "window_controller.pyc": "a8023e8cdfbfc5be28729fa8903214cd09de11ca4ec2edb3abfbae6b65660adb",
-      "work_modes.pyc": "72e01d3dc6833fda2c32b2ffd2fe94dca93ab13a8c956be3a749918dc47ca1c5"
+      "work_modes.pyc": "5ec7b92ab19c81375eca35e12596626c5a7edfd64865b78a96033aea45336a0c"
     }
   },
-  "signature": "b9bf7baba1ae2cc39c21b5d4743ca75ae0da31d0fbf67633882ee48279f48ecdd10344b362625498251c91a5a4a71c844ef6a3b7086ddb4cc0fed604f8c0990a"
+  "signature": "283e2412d9e15c9009317f18cf9baceb2a4e7ee6af9c7c86723d5c1ed2b25c919eb5064c35a08143d2a7cdf0bd4fcf7c479dc5a6da5804eec0dd6c1d40406907"
 }

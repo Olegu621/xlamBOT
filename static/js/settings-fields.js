@@ -1,15 +1,16 @@
 /* Plain-language labels. Kept together with English so settings stay complete. */
 window.XlamSettingsFields = {
+ work_mode:['Режим работы','Bot mode','1 — Сидеть в кустах, 2 — Выживание, 3 — Баланс, 4 — Агрессия, 5 — Натиск. Настраивается на карточке устройства.','1 Bush camping, 2 Survival, 3 Balanced, 4 Aggressive, 5 Onslaught. Configure this on the device card.'],
  brawler_switch_after_games:['Матчей до смены бойца','Matches before switching','0 — играть на одном бойце без смены.','0 keeps the same brawler.'],
  brawler_pick_mode:['Как выбирать бойца','Brawler selection','Игра сортирует список; бот выбирает первую карточку.','The game sorts the list; the bot picks the first card.'],
  brawler_rotation:['Порядок смены бойцов','Brawler rotation','Названия бойцов через запятую. Пусто — автоматический выбор.','Comma-separated brawler names. Leave empty for automatic selection.'],
- current_playstyle:['Стиль игры','Playstyle','Выберите файл поведения на вкладке «Плейстайлы».','Choose a behavior file in the Playstyles tab.'],
+ current_playstyle:['Базовое поведение','Base behavior','Основной режим работы выбирается на карточке устройства в /panel.','Choose the bot mode on its device card in /panel.'],
  game_mode:['Режим игры','Game mode','Должен совпадать с режимом выбранного стиля игры.','Must match the selected playstyle.'],
  locked_brawler:['Один выбранный боец','Fixed brawler','Пусто — автоматический выбор. Удобнее менять на вкладке «Боец».','Empty means automatic selection. Use the Brawler tab to choose one.'],
  preview_interval_ms:['Интервал обновления превью, мс','Preview refresh interval, ms','800 — примерно одно обновление в секунду. Больше — меньше нагрузка.','800 is about one update per second. A higher value reduces load.'],
  target_trophies:['Справочная цель по кубкам','Reference trophy goal','Автоостановка по этой цели отключена.','Automatic stopping at this goal is disabled.'],
  run_for_minutes:['Остановить через, мин','Stop after, min','0 — работать без ограничения времени.','0 runs without a time limit.'],
- thinking_mode:['Уровень думалки','Thinking level','Стандарт — прежние 8 направлений, 3 шага и интервалы из настроек. Низкий — 8 направлений и более редкие проверки стен/газа. Средний — 12, Высокий — 16, Максимальный — 32 направления и распознавание на каждом кадре. Все уровни сохраняют проверки безопасности. FPS зависит от ПК; рекомендация не меняет выбор.','Standard preserves the original 8 directions, 3 planning steps and configured detection intervals. Low checks 8 directions and refreshes walls/gas less often. Medium checks 12, High 16, Maximum 32 with detection on every frame. Safety checks stay enabled at every level. FPS depends on your PC; recommendations never change your choice.'],
+ thinking_mode:['Think','Think','Частота анализа для этого устройства: более высокий уровень чаще проверяет стены и газ и требует больше ресурсов. Стандарт сохраняет прежние интервалы. Рекомендация не меняет выбор.','Analysis frequency for this device: higher levels check walls and gas more often and need more resources. Standard preserves original intervals. Recommendations do not change your choice.'],
  max_fps:['Общий предел FPS бота','Bot FPS ceiling','auto или число от 1 до 120. Для нескольких устройств начните с 30.','auto or 1–120. Start with 30 for multiple devices.'],
  used_threads:['Потоки распознавания','Recognition threads','auto — 2 потока на модель. Увеличивайте только если хватает процессора.','auto uses 2 threads per model. Increase only with spare CPU capacity.'],
  cpu_or_gpu:['Устройство вычислений','Compute device','CPU — процессор. GPU требует совместимого драйвера; в Windows используется DirectML.','CPU uses the processor. GPU needs a compatible driver; Windows uses DirectML.'],
@@ -84,8 +85,6 @@ window.XlamSettingsFields = {
 };
 
 Object.assign(window.XlamSettingsFields, {
- trio_only:['Только Trio Showdown','Trio Showdown only','Запускать бой только после подтверждения режима Trio на экране. Выключите для других режимов.','Start only after confirming Trio on screen. Disable for other modes.'],
- gas_memory_ttl:['Память газа, с','Gas memory, s','Как долго помнить недавно замеченное облако при пропуске распознавания. 0,01–0,75 с; не меньше интервала детектора.','Retain recently detected clouds through brief misses. 0.01–0.75 s; at least the detector interval.'],
  scrcpy_max_fps:['Кадры видеопотока','Capture FPS','0 — использовать предел FPS бота (auto = 60). Снижает нагрузку захвата.','0 uses the bot FPS limit (auto = 60). Limits capture workload.'],
  scrcpy_max_width:['Ширина видеопотока, пикс','Capture width, px','0 — исходное разрешение. Меньше ширина — быстрее обработка, но менее точный OCR.','0 keeps the original resolution. Smaller frames process faster but reduce OCR detail.'],
  scrcpy_bitrate:['Битрейт видео, бит/с','Video bitrate, bits/s','По умолчанию 4 000 000. Выше — чётче картинка и больше нагрузка.','Default: 4,000,000. Higher values improve detail and increase load.'],
