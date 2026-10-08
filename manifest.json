@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 68,
+    "revision": 69,
     "python": "3.13",
-    "size": 1390755,
-    "sha256": "0752e710acb9c8622ddd0ab90a7984234506d25d54bd1881352f4a36561cb9e7",
+    "size": 1393982,
+    "sha256": "6fbdcb6389d1d522edac7ef6b12b5ef0448971c714baa9081e224d054394f515",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
@@ -37,10 +37,10 @@
       "panel.pyc": "d69d2bdba34dcc35cd0225cfde17dc9c8ffd9748ca9f02d9ad5d9fb22cedce6b",
       "play.pyc": "cb57a72f0b48dcaecd47f0550a79e357696d763a7dde9646d255250f81d7c910",
       "reward_choice.pyc": "606c4c1e5d377599b671b31d9491d6dda7fdef896e4017b1410a926945116a8c",
-      "reward_received.pyc": "5268441d7144faff77221d13fe061b49f1667415e55d5d9a49954e6fabdd6dc6",
+      "reward_received.pyc": "dfe22d758b8d880218bce9a1b955229fc6b9d58f2e458a647bfc16324a66d707",
       "runtime_observation.pyc": "c05858c7fc1cf20e4540551cd50556de24906915907602dfa88e22030c30445e",
       "screen_evidence.pyc": "684edc843633ee90584ebe87f50ebfab44f0090638dffe748ce7334b05a644cd",
-      "seasonal_rewards.pyc": "c9d92fb6832397ff277ed635967cbfe95d4ed9a81edd582d7e1d75e77f0adfcc",
+      "seasonal_rewards.pyc": "508f305797fa7580dcbaadde446bd412ccb4b8210cc04f5314eebbe627d9b415",
       "settings_schema.pyc": "46e9fbbb7f687b5c125d6f07eed314036ea97aa433532573beea8e3b3adef255",
       "setup_wizard.pyc": "0aa676556c3a096909625990cb26e11b1e3d40e940eff92d8872dd83f48d29af",
       "showdown_hud.pyc": "d77dd26549bbd9f399a9251d943579ccea700a43bf60d44c3574a33613a66c55",
@@ -101,5 +101,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "7d56b1884d039792a324c434e3d2de83f165e91e32d0b8da174e5a1f473ec3e685a07e200b765a7994539811011f04e8595f86b3349505e2152362735e6e8007"
+  "signature": "03bf844db0d13239c1b806204dd4f7f7ee710e921f83c19d0cf804332d0bbc7b6b711b2a151d0e78f81578f6b5dd64e253d3dd7b34861813e5fc13e458d0d205"
 }
