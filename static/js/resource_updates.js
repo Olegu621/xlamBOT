@@ -1,6 +1,7 @@
 /* Refresh the website after a verified server snapshot; keep unsaved forms. */
 (function () {
     'use strict';
+    if (document.querySelector('meta[name="xlam-remote-prefix"]')) return;
     const token = document.querySelector('meta[name="xlam-ui-token"]')?.content || '';
     const initialRevision = document.querySelector('meta[name="xlam-resource-version"]')?.content || '';
     const dirty = new Set();
