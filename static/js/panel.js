@@ -214,7 +214,7 @@
     const GAME_STATE_LABELS = {
         lobby: 'лобби', match: 'матч', match_making: 'поиск матча',
         frame_stale: 'ожидание кадра', side_menu: 'меню',
-        brawler_selection: 'выбор бойца', brawler_choice: 'выбор награды', shop: 'магазин', popup: 'окно',
+        brawler_detail: 'карточка бойца', brawler_selection: 'выбор бойца', brawler_choice: 'выбор награды', shop: 'магазин', popup: 'окно',
         connection_lost: 'нет связи', idle_disconnect: 'перезагрузка связи', prestige_milestone: 'престиж',
         trophy_reward: 'награда', reward_received: 'награда', star_drop_regular: 'звёздное дропание',
         star_drop_angelic: 'звёздное дропание', star_drop_demonic: 'звёздное дропание',
