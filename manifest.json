@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 67,
+    "revision": 68,
     "python": "3.13",
-    "size": 1390363,
-    "sha256": "fa444ee5f22d0b02b816a4c3a0e2f9776d46959ddddf333d9889171b650559f9",
+    "size": 1390755,
+    "sha256": "0752e710acb9c8622ddd0ab90a7984234506d25d54bd1881352f4a36561cb9e7",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
@@ -88,7 +88,7 @@
       "trio_templates.pyc": "58919a822d0620f6ec8a464fa50a36d2dfafdb65a442c42297f271f063c8532e",
       "trophy_observer.pyc": "203c33cc5a948475462fa459a5e331b212cb5fd19a4c6ee9d2de7b2ecef2be75",
       "trophy_reader.pyc": "836c7fa5e6adf20299cbf42270f755322e84b5a4c351e5f718b693b18ac17b8e",
-      "utils.pyc": "32a6abed71bb7f0c1386d306dd70c13c2498690b72e740c0f38c703db53b65a2",
+      "utils.pyc": "32b273c93e653d8f38970f2ddf727ecdaf3457e15c440693c3d085019d648dca",
       "webui/__init__.pyc": "c004a485dc68e2bb6d91ae4a54bd1ab87343869481cb413d2d0395b1618b92e5",
       "webui/app.pyc": "9f4c239dc1c4bebb5d07eb735a7e3b8d24a7c6a282b02b62c216bddb288c78da",
       "webui/device_manager.pyc": "e7883928341ffc243a4a0c2d01ad5149205e98396cd419671c840187da8646b4",
@@ -101,5 +101,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "5414129eb4987575efd8aaba45c3653403993c4267f3be6b7b5bd7c29a21ed8238bfbeb53c28424ec389dc129efcc554180fde138b99bf8b1a263a2c4cf0330f"
+  "signature": "7d56b1884d039792a324c434e3d2de83f165e91e32d0b8da174e5a1f473ec3e685a07e200b765a7994539811011f04e8595f86b3349505e2152362735e6e8007"
 }
