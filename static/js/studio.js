@@ -463,16 +463,33 @@
             else {const response=await window.XlamSession.fetch('/api/error-reports/download');if(!response.ok)throw new Error(reportText('Не удалось скачать отчёт','Unable to download report'));const url=URL.createObjectURL(await response.blob());const link=document.createElement('a');link.href=url;link.download='xlambot-error-reports.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
         }catch(error){toast(error.message,'error');}finally{button.disabled=false;await refreshReportsCard();}
     });
+    async function communityCard(){
+        try {
+            const data=await api('/api/community-statistics');
+            const state=data.state==='retrying'?reportText('Нет связи. Повторим позже','Offline. Will retry later'):data.enabled?reportText('Участие включено','Participation enabled'):reportText('Выключено','Disabled');
+            return `<div class="card" id="communityStatisticsCard"><div class="card-head"><h3 class="card-title">${reportText('Общая статистика','Community statistics')}</h3></div><div class="card-body"><p>${reportText('Добровольное участие в общей статистике xlamBOT. Отправляются обезличенное количество работающих устройств и результаты боёв, включая прошлую историю: время, исход и изменение трофеев. Без имён аккаунтов, бойцов, скриншотов и серийных номеров. Расчётные трофеи отмечаются отдельно.','Optional participation in global xlamBOT statistics. Sends anonymous active device counts and match results, including past history: time, outcome and trophy changes. No account names, brawler names, screenshots or device serials. Estimated trophies are marked separately.')}</p><label><input type="checkbox" id="communityStatisticsEnabled" ${data.enabled?'checked':''}> ${reportText('Участвовать в общей статистике','Participate in community statistics')}</label><p role="status">${state} · ${reportText('Передано боёв','Matches sent')}: ${Number(data.sent_matches)||0}</p><p><a href="https://t.me/xlambottt_bot" target="_blank" rel="noopener noreferrer">@xlambottt_bot</a> · /stats · /today · /hour · /alltime</p><p class="muted">${reportText('Можно добавить Telegram-бота в чат. Отключение прекращает передачу новых данных; ранее переданные обезличенные результаты остаются в общей сумме. Ошибки хранятся приватно и в Telegram не публикуются.','You can add the Telegram bot to a group. Disabling stops new uploads; previously shared anonymous results remain in the totals. Error reports are stored privately and never posted to Telegram.')}</p></div></div>`;
+        }catch(error){return '';}
+    }
+    async function refreshCommunityCard(){const card=document.getElementById('communityStatisticsCard');if(card)card.outerHTML=await communityCard();}
+    window.addEventListener('xlam-language-changed',refreshCommunityCard);
+    document.addEventListener('change',async event=>{
+        if(event.target.id!=='communityStatisticsEnabled')return;
+        const enabled=event.target.checked;event.target.disabled=true;
+        try{await api('/api/community-statistics',{method:'POST',body:{enabled}});}
+        catch(error){toast(error.message,'error');}
+        finally{await refreshCommunityCard();}
+    });
     async function loadSettings() {
         const reportCard=await reportsCard();
+        const statisticsCard=await communityCard();
         const devicesData=await api('/api/devices');
         const devices=(devicesData.devices||[]).filter(d=>d.key);
-        if(!devices.length){view('settings').innerHTML=languageCard()+reportCard+'<div class="card"><div class="card-body">Подключите эмулятор, чтобы настроить его профиль.</div></div>';return;}
+        if(!devices.length){view('settings').innerHTML=languageCard()+reportCard+statisticsCard+'<div class="card"><div class="card-body">Подключите эмулятор, чтобы настроить его профиль.</div></div>';return;}
         if(!devices.some(d=>d.key===settingsKey))settingsKey=devices[0].key;
         const data=await api(`/api/devices/${encodeURIComponent(settingsKey)}/settings`);
         settingsSections=data.settings||{};settingsDraft=JSON.parse(JSON.stringify(settingsSections));settingsDirty=false;
         const names=Object.keys(settingsSections).sort((a,b)=>Number(advancedKeys.has(a))-Number(advancedKeys.has(b)));
-        view('settings').innerHTML=languageCard()+reportCard+`
+        view('settings').innerHTML=languageCard()+reportCard+statisticsCard+`
         <div class="card"><div class="card-head"><div><h3 class="card-title">Настройки устройства</h3><p class="card-note">Каждый эмулятор имеет свой профиль. Изменения применяются при следующем запуске бота.</p></div><div class="card-actions"><button class="btn btn-primary" id="saveSettings">Сохранить</button><button class="btn btn-ghost" id="reloadSettings">Вернуть сохранённые</button></div></div>
         <div class="card-body"><label class="field-label" for="settingsDevice">Устройство</label><select class="input" id="settingsDevice">${devices.map(d=>`<option value="${esc(d.key)}" ${d.key===settingsKey?'selected':''}>${esc(d.display_name||d.key)} · ${esc(d.serial)}</option>`).join('')}</select><p class="muted">Начните с режима игры, смены бойцов и обхода газа. Распознавание и таймеры обычно можно оставить по умолчанию.</p><a class="btn btn-secondary" href="/calibration/${encodeURIComponent(settingsKey)}">Калибровка кнопок и кубков</a></div>
         <div class="card-body is-tight">${names.map(name=>`<div class="settings-group ${name==='bot_config'?'is-open':''}" data-group="${esc(name)}"><button type="button" class="settings-group-head" aria-expanded="${name==='bot_config'}"><span class="settings-group-title">${esc(SECTION_LABELS[name]||name)}</span><span class="eyebrow">${advancedKeys.has(name)?'Дополнительно':'Настроить'}</span></button><div class="settings-group-body">${renderSection(name,settingsSections[name])}</div></div>`).join('')}</div></div>
