@@ -439,15 +439,40 @@
     const advancedKeys=new Set(['buttons_config','lobby_config','modes_config','login','debug_settings']);
     const choices={thinking_mode:[['low','Низкий'],['standard','Стандарт'],['medium','Средний'],['high','Высокий'],['maximum','Максимальный']],cpu_or_gpu:[['auto','Автоматически'],['cpu','CPU — процессор'],['gpu','GPU — видеокарта']],interface_mode:[['browser','Веб-панель'],['desktop','Окно программы']]};
     function languageCard(){return `<div class="card"><div class="card-head"><div><h3 class="card-title">Language</h3><p class="card-note">Язык всех страниц, подсказок и сообщений панели. Общий для всех устройств.</p></div></div><div class="card-body"><label class="field-label" for="languageChoice">Language</label><select id="languageChoice" class="input"><option value="ru" ${document.documentElement.lang==='ru'?'selected':''}>Russian</option><option value="en" ${document.documentElement.lang==='en'?'selected':''}>English</option></select></div></div>`;}
+    const reportText=(ru,en)=>document.documentElement.lang==='en'?en:ru;
+    async function reportsCard(){
+        try {
+            const data=await api('/api/error-reports');
+            const states={disabled:['Отключено','Disabled'],not_configured:['Сервер отправки пока не подключён','Receiver is not configured'],ready:['Готово к отправке','Ready to send'],sent:['Отчёт отправлен','Report sent'],retrying:['Нет связи. Повторим позже','Offline. Will retry later'],storage_unavailable:['Не удалось сохранить отчёты','Unable to save reports']};
+            const state=states[data.state]||states.ready;
+            return `<div class="card" id="errorReportsCard"><div class="card-head"><h3 class="card-title">${reportText('Отчёты об ошибках','Error reports')}</h3></div><div class="card-body"><p>${reportText('Помогает разработчику исправлять ошибки. Отправляются код ошибки, версия, обезличенное устройство и очищенный стек. Без скриншотов, аккаунтов, сообщений исключений и личных файлов. По умолчанию выключено.','Helps the developer fix errors. Sends error code, version, anonymous device and sanitized stack. No screenshots, accounts, exception messages or personal files. Disabled by default.')}</p><label><input type="checkbox" id="errorReportsEnabled" ${data.enabled?'checked':''}> ${reportText('Отправлять разработчику','Send to developer')}</label><label class="field-label" for="errorReportsLevel">${reportText('Какие ошибки отправлять','Which errors to send')}</label><select class="input" id="errorReportsLevel"><option value="warning" ${data.min_level==='warning'?'selected':''}>${reportText('Повторные предупреждения и ошибки','Repeated warnings and errors')}</option><option value="error" ${data.min_level==='error'?'selected':''}>${reportText('Ошибки и критические сбои','Errors and critical failures')}</option><option value="critical" ${data.min_level==='critical'?'selected':''}>${reportText('Только критические сбои','Critical failures only')}</option></select><p role="status">${reportText(...state)} · ${reportText('В очереди','Pending')}: ${data.pending}</p><button class="btn btn-secondary" id="downloadErrorReports">${reportText('Скачать отчёт','Download report')}</button> <button class="btn btn-ghost" id="testErrorReports" ${data.enabled&&data.configured?'':'disabled'}>${reportText('Проверить отправку','Test delivery')}</button><p class="muted">${reportText('Отключение отменяет накопленную отправку. Обычные Стоп и Пауза не считаются ошибками.','Disabling cancels pending delivery. Normal Stop and Pause are not errors.')}</p></div></div>`;
+        } catch(error) {return `<div class="card"><div class="card-body">${reportText('Отчёты об ошибках временно недоступны','Error reports are temporarily unavailable')}</div></div>`;}
+    }
+    async function refreshReportsCard(){const card=document.getElementById('errorReportsCard');if(card)card.outerHTML=await reportsCard();}
+    window.addEventListener('xlam-language-changed',refreshReportsCard);
+    document.addEventListener('change',async event=>{
+        if(!['errorReportsEnabled','errorReportsLevel'].includes(event.target.id))return;
+        try{await api('/api/error-reports',{method:'POST',body:{enabled:document.getElementById('errorReportsEnabled').checked,min_level:document.getElementById('errorReportsLevel').value}});await refreshReportsCard();}
+        catch(error){toast(error.message,'error');await refreshReportsCard();}
+    });
+    document.addEventListener('click',async event=>{
+        const button=event.target.closest('#downloadErrorReports,#testErrorReports');if(!button)return;
+        button.disabled=true;
+        try{
+            if(button.id==='testErrorReports'){await api('/api/error-reports/test',{method:'POST'});toast(reportText('Проверочный отчёт в очереди','Test report queued'));}
+            else {const response=await window.XlamSession.fetch('/api/error-reports/download');if(!response.ok)throw new Error(reportText('Не удалось скачать отчёт','Unable to download report'));const url=URL.createObjectURL(await response.blob());const link=document.createElement('a');link.href=url;link.download='xlambot-error-reports.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+        }catch(error){toast(error.message,'error');}finally{button.disabled=false;await refreshReportsCard();}
+    });
     async function loadSettings() {
+        const reportCard=await reportsCard();
         const devicesData=await api('/api/devices');
         const devices=(devicesData.devices||[]).filter(d=>d.key);
-        if(!devices.length){view('settings').innerHTML=languageCard()+'<div class="card"><div class="card-body">Подключите эмулятор, чтобы настроить его профиль.</div></div>';return;}
+        if(!devices.length){view('settings').innerHTML=languageCard()+reportCard+'<div class="card"><div class="card-body">Подключите эмулятор, чтобы настроить его профиль.</div></div>';return;}
         if(!devices.some(d=>d.key===settingsKey))settingsKey=devices[0].key;
         const data=await api(`/api/devices/${encodeURIComponent(settingsKey)}/settings`);
         settingsSections=data.settings||{};settingsDraft=JSON.parse(JSON.stringify(settingsSections));settingsDirty=false;
         const names=Object.keys(settingsSections).sort((a,b)=>Number(advancedKeys.has(a))-Number(advancedKeys.has(b)));
-        view('settings').innerHTML=languageCard()+`
+        view('settings').innerHTML=languageCard()+reportCard+`
         <div class="card"><div class="card-head"><div><h3 class="card-title">Настройки устройства</h3><p class="card-note">Каждый эмулятор имеет свой профиль. Изменения применяются при следующем запуске бота.</p></div><div class="card-actions"><button class="btn btn-primary" id="saveSettings">Сохранить</button><button class="btn btn-ghost" id="reloadSettings">Вернуть сохранённые</button></div></div>
         <div class="card-body"><label class="field-label" for="settingsDevice">Устройство</label><select class="input" id="settingsDevice">${devices.map(d=>`<option value="${esc(d.key)}" ${d.key===settingsKey?'selected':''}>${esc(d.display_name||d.key)} · ${esc(d.serial)}</option>`).join('')}</select><p class="muted">Начните с режима игры, смены бойцов и обхода газа. Распознавание и таймеры обычно можно оставить по умолчанию.</p><a class="btn btn-secondary" href="/calibration/${encodeURIComponent(settingsKey)}">Калибровка кнопок и кубков</a></div>
         <div class="card-body is-tight">${names.map(name=>`<div class="settings-group ${name==='bot_config'?'is-open':''}" data-group="${esc(name)}"><button type="button" class="settings-group-head" aria-expanded="${name==='bot_config'}"><span class="settings-group-title">${esc(SECTION_LABELS[name]||name)}</span><span class="eyebrow">${advancedKeys.has(name)?'Дополнительно':'Настроить'}</span></button><div class="settings-group-body">${renderSection(name,settingsSections[name])}</div></div>`).join('')}</div></div>
