@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 55,
+    "revision": 56,
     "python": "3.13",
-    "size": 1338899,
-    "sha256": "bf555df9c20ae386f58edb1a233c46cb6efe2750322d4f55045769b5a5589ff9",
+    "size": 1348361,
+    "sha256": "731dafe834f15bf00ab8104cd7b229458ed5602ebf475495ce131d5ec7f84a36",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
@@ -13,6 +13,7 @@
       "battle_perception.pyc": "20bad9617be9021a5170e1cc20357d732743bdda7f0340c72d6a5ce2d5200123",
       "bot_instance.pyc": "801b514b3cd94f367a8b225c7be026de33c37f95ccd326ba0bf89157b7bbb234",
       "brawler_calibration.pyc": "ac710c9060e4ce63ac7748182fdf1fa65deac9efba5642fa88a07b56f68d7fe7",
+      "brawler_detail.pyc": "75cfb24fd62eb581614dab7f0e8692113a4eec6452e784e10936e8e47a91696b",
       "built_in_playstyles.pyc": "06f6086dc9f43b3dcc65f81e8066c6a5b895734dde928d5acc8be6bd067ffe54",
       "bush_cover.pyc": "4dd23ef5c6944422a442144f74b200483d022378aa8e20dc0149654a66f04fbc",
       "capture_transport.pyc": "0166217e02565382ecff6e575bb914f8633e8400db4c366449e83e048b08056b",
@@ -28,7 +29,7 @@
       "feature_defaults.pyc": "a756fb905577d1e27aa25e5584e3ed77ba828e45e4b7f6b0cba7a50047444ee2",
       "gas_guard.pyc": "beab12f59ce7b84019deb22e1941dba31d984c259067a1ba40778c8f4178c1f4",
       "incoming_damage.pyc": "d86c2365b3da03792909e2acc553a7b941fd58392d9a9f802c9375f7438aa63b",
-      "lobby_automation.pyc": "d4f429a23fc29462e00dd8438a48102ccc69fd2f44bf53aa369a26afda7146ae",
+      "lobby_automation.pyc": "20db735ceaf9d7720b066ccbb3b0e34dbaf7d6d247c34a2d37447aeed2592d3f",
       "local_navigation.pyc": "405378afeb9e027b5fe25fa550e37e058668f6935c69c1a9a65c77d410e9bf2b",
       "main.pyc": "c2c6e0520ee98a7c0cf2a78018bc69d82670918570e90e709d4bbe322dfeb03a",
       "panel.pyc": "d69d2bdba34dcc35cd0225cfde17dc9c8ffd9748ca9f02d9ad5d9fb22cedce6b",
@@ -40,8 +41,8 @@
       "settings_schema.pyc": "46e9fbbb7f687b5c125d6f07eed314036ea97aa433532573beea8e3b3adef255",
       "setup_wizard.pyc": "0aa676556c3a096909625990cb26e11b1e3d40e940eff92d8872dd83f48d29af",
       "side_menu.pyc": "7f55df2e9ae3eaa7b0b6f94ff4004d5ddb1f01fda3c5a189ad31c4ce32d7ab3a",
-      "stage_manager.pyc": "763c724d66dfe4ac7735abb6b423abf9fe2caa31d994ae3ca6e133aec129ab2b",
-      "state_finder.pyc": "420c795f1061dca43e3a2512f9a64c6c2d76621ed58cd1b01099b21b79ccaf09",
+      "stage_manager.pyc": "bfeb05aa3188cfbe257d9f33cbc8d1caef837f2d6741010cd1c2c9cb3286bbe1",
+      "state_finder.pyc": "8fa79a34522ac255da49fc9bcc906f87e1a9b66b9bc407da00374c1d902e55f4",
       "static/css/calibration.css": "c470e9e50cb1fa754678f4e449113ee5d852f70a1ab1d8efd54f5d4d37488eda",
       "static/css/device-experience.css": "27aee9b14e68e3eafa7decf22b684f140d91a48e1bfc15153510f07ffcf22736",
       "static/css/interface.css": "d72ff6c72b46321b7ce091b038919aa66a8883b6d938ae22c6e73823ffb5ac37",
@@ -54,9 +55,9 @@
       "static/css/training.css": "60f52e1784b71138b8b789b85746c126c055c385586b6776c9f2f3439ce1fb99",
       "static/js/calibration.js": "2110c54ed071deb7a13ae09d3d16c896fe7da57c34b57d530485548958741480",
       "static/js/device-experience.js": "dadb5e66fd3c6c425133a1c83254e7e2354094ae3f46261900d733e958e1d250",
-      "static/js/i18n.js": "3b68e3f48433500970cb130fbee7e0931c3541ed0a566dafd74fa14cd0684b3e",
+      "static/js/i18n.js": "28507d83d0a471091af947a5cc7d5574b8b68c957f66a36cf4fa2c2854f5bbf7",
       "static/js/marquee.js": "c11dccdf8fd2bc6aafc7f34218511e3784bc7fcc8517b719d804bde0ef99663c",
-      "static/js/panel.js": "3a108281b0419fb5516ac8544893e390e1f2ecdb8bfe7da3f44247d2f7c57b48",
+      "static/js/panel.js": "2076139a0a03e95083aaa2bb0f02458beefc1aff994c4d134adb9a16e27d6c89",
       "static/js/resource_updates.js": "631c34a4a0058122cc8ec0aa7b471e83ed771bbcc77bce0b65b0982b459526d6",
       "static/js/sessions.js": "1bff6df2937e7e03c4fc41f99c305a24618b690030593b99b65d790d1ca5e5ba",
       "static/js/settings-fields.js": "c66c412a1aeb2c32469dc05ab3cc7b2dc7ca05b064dbc2f56ae7013392bc08ad",
@@ -96,5 +97,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "011aa232f351d542bd3c0666a496572b5ecebec17e55f927e099a5232abbc07276f521a1a619878160aa9cce8dc572c1b1564ed2953aa6621bf6c6a0e6ce830c"
+  "signature": "201e3cf6d31e37f0a1d08f2ff85bf9b34e27a29a2e96f871b59e0848f5c914cabd590569a455fc2cd9187aa5a0c5855f5fe4a1d866b5d8147ed0511676377508"
 }
