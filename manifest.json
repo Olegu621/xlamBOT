@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 61,
+    "revision": 62,
     "python": "3.13",
-    "size": 1356329,
-    "sha256": "4f6492f1f66b7d4153c7693860435db21eeab2370963a9f8cca5c781cff8f91e",
+    "size": 1356355,
+    "sha256": "7eb74949b9d63acf621be16caa0dc3dd937263b765a8ec2bfbaadcfd5c4f5224",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
@@ -81,7 +81,7 @@
       "templates/training.html": "6c92df3ffce647525777247715a7ebd976866f3654008224d62d5969b5024f18",
       "thinking_levels.pyc": "273e27e416b4d84a397afc4e9eee3158fac9fe534b42e1c31c8415dff8241c12",
       "time_management.pyc": "8d8a86b3b57bd565ce20b1cfd7544dd9ada082c105484224ea1f7b3e6c2aaf68",
-      "training_capture.pyc": "8fb1fba0fca6bd9e0098167d6791a5d5abd9b47ec9971eb11f0515a3f0aeeaf6",
+      "training_capture.pyc": "6d4ea902cb59e24c2ce6ad0007a6a0b28da53e016105cbd82963c77aa946525b",
       "training_models.pyc": "12563a8d5fc56f591e8a1989e310e14c914306d927dc6cb1e96f6c055beb1806",
       "trio_templates.pyc": "58919a822d0620f6ec8a464fa50a36d2dfafdb65a442c42297f271f063c8532e",
       "trophy_observer.pyc": "203c33cc5a948475462fa459a5e331b212cb5fd19a4c6ee9d2de7b2ecef2be75",
@@ -99,5 +99,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "0a45eeaddc7c293173c746c2f2731c29efe0ccf2746050807b7dae97e33a5da33d1a9080a876211e0b2975730049bf44db3b9b151b6c27cd2e6fb4a9c3528f0f"
+  "signature": "06a531ed185046ab947e204249f17f79e82984283a7bc2f62d1bc1c52080f280855f6f95ecd32a225d1b9e8889769e3556974635d11fc471183f6df59adf8207"
 }
