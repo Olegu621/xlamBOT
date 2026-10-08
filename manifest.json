@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 74,
+    "revision": 75,
     "python": "3.13",
-    "size": 1426794,
-    "sha256": "33603a455d977aad3e7f1a8af747333122acbc5968555aa7a9d0d5b6797fe47b",
+    "size": 1427172,
+    "sha256": "2af6a58f0b9721ce2256b1453d7c8f6d2dab9278ae2a79651836838a7b8f5e35",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
@@ -27,7 +27,7 @@
       "diagnostics.pyc": "572b6430502c223282dac0d01a5d2292ae7b3a303cdf781c242dc4e29bef0b11",
       "disconnect_dialog.pyc": "eb8a859e95e6440333ed278e70cde233198a33fc47bf3c239a7d63ad83ae72a8",
       "discord_bot.pyc": "1be5d14158b89655e831c8ccce1518dea71b7b317b2703b0c617d58321805d95",
-      "error_telemetry.pyc": "5e048c85ccd3d579e00e83127acff2a15b605be96e0e8046a4a735eee20f14b1",
+      "error_telemetry.pyc": "773ef78f2f4f5a9ff3329cccd22182932cb6d86e1fe12a409dba7439593fc3d3",
       "feature_defaults.pyc": "a756fb905577d1e27aa25e5584e3ed77ba828e45e4b7f6b0cba7a50047444ee2",
       "gas_guard.pyc": "ac8067bbae2777c6f73f85d03b05c6e8c4a077540a6aeda1ebe371cd0fe93d3a",
       "incoming_damage.pyc": "d86c2365b3da03792909e2acc553a7b941fd58392d9a9f802c9375f7438aa63b",
@@ -103,5 +103,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "eb9f2548420809238d31a065083b8b0619f881e4922006e1195a2df9f7b1d8159d79760148ac69762bea997afc85a954bd3b6d47e7eea7474740c3569490f801"
+  "signature": "9d417d2d1d26e6ba43a55b52cbdd4787517d68815e4d21ca6334903df65e50e73a6a8ec4ee6f847e3e6d4895eb9cb094437b4961efc7b2ca1f8ee02d065a8303"
 }
