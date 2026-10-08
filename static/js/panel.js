@@ -213,6 +213,7 @@
     // raw string is fine, but "brawler_selection" tells an operator nothing.
     const GAME_STATE_LABELS = {
         lobby: 'лобби', match: 'матч', match_making: 'поиск матча',
+        frame_stale: 'ожидание кадра', side_menu: 'меню',
         brawler_selection: 'выбор бойца', brawler_choice: 'выбор награды', shop: 'магазин', popup: 'окно',
         connection_lost: 'нет связи', idle_disconnect: 'перезагрузка связи', prestige_milestone: 'престиж',
         trophy_reward: 'награда', reward_received: 'награда', star_drop_regular: 'звёздное дропание',
@@ -631,7 +632,7 @@
         if (!gas) return 'нет данных';
         // "выключен" reads like a setting the operator chose. It actually means
         // the detector is not loaded, which is a fault, not a preference.
-        if (!gas.available) return 'детектор недоступен';
+        if (!gas.available || gas.detection_ok === false) return window.XlamI18n?.language === 'en' ? 'detector unavailable' : 'детектор недоступен';
         if (!gas.boxes) return 'чисто';
         const share = Math.round((gas.coverage || 0) * 100);
         const danger = (gas.danger || 0) > 0;
@@ -648,7 +649,7 @@
 
     function gasTitle(gas) {
         if (!gas) return 'Данных о газе нет.';
-        if (!gas.available) {
+        if (!gas.available || gas.detection_ok === false) {
             return 'Детектор газа не загружен. Облака на карте он не видит, '
                 + 'поэтому бот не может уходить из опасного газа.';
         }
