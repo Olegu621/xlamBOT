@@ -49,7 +49,7 @@
   const maximum=Math.max(1,...payload.series.map(p=>p.matches));$('statsActivity').replaceChildren();
   for(const p of payload.series){const bar=document.createElement('div');bar.className='stats-bar';bar.tabIndex=0;bar.title=dateLabel(p.date)+' · '+num(p.matches)+' '+t('matches');bar.innerHTML=`<span style="height:${Math.max(1,p.matches/maximum*100)}%"></span><small>${escape(dateLabel(p.date))}</small>`;$('statsActivity').append(bar);}
   $('statsTable').replaceChildren();for(const row of payload.fighters){const tr=document.createElement('tr');tr.innerHTML=`<td>${escape(row.brawler)}</td><td>${num(row.matches)}</td><td>${num(row.wins)}</td><td class="${row.delta>=0?'stats-positive':'stats-negative'}">${signed(row.delta,1)}</td>`;$('statsTable').append(tr);}
-  $('statsEmpty').hidden=s.matches>0;$('statsQuality').textContent=(s.estimated_matches?`${t('estimated')} ${num(s.estimated_matches)}. ${t('quality')}`:'')+(payload.skipped_rows?' '+t('skipped')+' '+num(payload.skipped_rows):'');
+  $('statsEmpty').hidden=s.matches>0;$('statsQuality').textContent=(s.estimated_matches?`${t('estimated')} ${num(s.estimated_matches)}. ${t('quality')}`:'')+(payload.skipped_rows?' '+t('skipped')+' '+num(payload.skipped_rows):'')+(payload.unreadable_devices?.length?' '+(lang()==='en'?'Unreadable device histories: ':'Не удалось прочитать историю устройств: ')+num(payload.unreadable_devices.length):'');
  }
  async function load(){
   const id=++requestId;controller?.abort();controller=new AbortController();const current=controller;
