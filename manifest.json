@@ -2,16 +2,16 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 84,
+    "revision": 85,
     "python": "3.13",
-    "size": 1486915,
-    "sha256": "4da8783ad1cb38e52e2e53322e2949aa47ecfac0dbf2879e82e1b3c80631632f",
+    "size": 1486629,
+    "sha256": "23de16256837c660193ee508306248afa4a8842b24e4925daafea644cb084ce9",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
       "battle_memory.pyc": "d6c9d845b40c44f2a27b6723a79fb15b2dd445b41a0b5ae56d47c0d285a31b27",
       "battle_perception.pyc": "20bad9617be9021a5170e1cc20357d732743bdda7f0340c72d6a5ce2d5200123",
-      "bot_instance.pyc": "f75b5bf8676a1182fe550bdf48ebca8324d750255daf33c99bc0c5b95e30ea6c",
+      "bot_instance.pyc": "e44394f3dcce421f9f563813b1d9b9e991c426f64b3f98c2a9b62d5e69489abc",
       "brawler_calibration.pyc": "ac710c9060e4ce63ac7748182fdf1fa65deac9efba5642fa88a07b56f68d7fe7",
       "brawler_detail.pyc": "bb09145bcf08a69f4323534c35a1b623c074ae9f5865a19f470cbe8df6a4e410",
       "built_in_playstyles.pyc": "d0278792f096ae8b3553682283d00c6df6b3b571e0194849a1c63210ad66352c",
@@ -103,7 +103,7 @@
       "utils.pyc": "092d42cec07e9ae0ce405282b05947c296b165e4f0976c37b911af7437420da4",
       "webui/__init__.pyc": "c004a485dc68e2bb6d91ae4a54bd1ab87343869481cb413d2d0395b1618b92e5",
       "webui/app.pyc": "a0b855ee44bd4e3845dc24b44bf0a6abc0357405492f683e0ee2fac819696c13",
-      "webui/device_manager.pyc": "afb9d3e38a8da4faaed0be216b5225f58527fe52a9523a4466b8e2b02b99d62e",
+      "webui/device_manager.pyc": "427c66930b08ba04decb7a383d194c2c7c9135a1cd7255fcf007636dfcf3a38d",
       "webui/preferences.pyc": "ea8348e42d596711b4dc1feb674fc942a9864c73e00d40c6eeca3f9c637af5ca",
       "webui/resource_updates.pyc": "2f31ce4c0a59486e64f74bd161e702dd607d28157e1912ef8f3c3a307a7618c9",
       "webui/runtime.pyc": "c5b4045af223b4af90d34d3409a8e30f61745e368ac974f290f31b4b000345ec",
@@ -113,5 +113,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "57b4a86d1bd426c1f98dea79900291e5f479a35e74bb6b9b3076ed7a18ea99ab8660e138dfacf60f09403d150ecaf4fef7c70a4e2c4c90933b33b002b8608507"
+  "signature": "105559eab067a623420f53abaf3101ef0e18a2920a915a24251d359e2cab46167402fa61d9420a63720d9a22879e91277ffc4ba9d74692bae3b8c872813a280e"
 }
