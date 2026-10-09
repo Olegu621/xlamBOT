@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 81,
+    "revision": 83,
     "python": "3.13",
-    "size": 1457679,
-    "sha256": "4474195c7f7183d64302cc7e944409d9455e8f51f42925e7c82758b551b95ccc",
+    "size": 1457712,
+    "sha256": "e3d5c5f3eab644a1807adb40162675686aeff186e69b8179e179eb2ddc90da68",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
@@ -55,7 +55,7 @@
       "static/css/interface.css": "d72ff6c72b46321b7ce091b038919aa66a8883b6d938ae22c6e73823ffb5ac37",
       "static/css/marquee.css": "3364fdbe150e555ff1a764ed9f563658c970d552d755216f620040150b1dcfce",
       "static/css/panel.css": "b0bbb9c4c6aae8f8bc0e3ac1fd376e334a0ff597767254004121be9340c5345b",
-      "static/css/polish.css": "0dc693e916fdef70cd84f540f2d079363d5703d63bb7c8a74c2496bc341b3ff0",
+      "static/css/polish.css": "7402afc19c4ec849f01169c93ea6f0a4c1a89b644ff09a7173c4ca05e11f7893",
       "static/css/sprites.css": "1777e7b9a99d6b62b10c26525b156a92929285cb32088f26c55150b2bf3cbcce",
       "static/css/statistics.css": "56d4df1b3edff64f0492e5016942d72a766e765e2ce55b095d12691e97efa9b3",
       "static/css/studio.css": "4a36187b87a9148234a59b82e17e3fa0d1f7ff993578930fb8b72c10be074bd8",
@@ -107,5 +107,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "ed84ea055af8b95fe9c59903112db62a7325d676871cb60b32f582a0accba8d17a2ffedb6c751e80da0550c2be7fa1ee1ad0aeb731368a1ac4d011db4bbf430e"
+  "signature": "838ed55c4275f1b2ff4d23f7083e3f8bf43598eec9a97dd4c0a8a707acad11bdbfbbdb7ba0ed2b4f8f5e8a5d40371153ed0bd74a62b003b0c0f4c036a3fd5305"
 }
