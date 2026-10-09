@@ -183,7 +183,9 @@ body.app-page, body.tr-body { background: #101318; }
 .panel-header .page-topline { position: absolute; top: 32px; right: 34px; margin: 0; }
 .panel-header .page-topline > span:first-child { display: none; }
 .panel-overview { gap: 16px; }
-.panel-overview .stat-chip, .panel-overview .stat-chip.is-live { background: none; border: 0; border-radius: 0; min-width: 0; min-height: 44px; padding: 0; }
+.panel-overview .stat-chip { flex: 0 0 auto; }
+.device-detail-page .panel-header .page-topline { position: static; justify-content: flex-end; min-height: 24px; }
+.panel-overview .stat-chip, .panel-overview .stat-chip.is-live { background: none; border: 0; border-radius: 0; min-width: max-content; min-height: 44px; padding: 0; }
 .panel-overview .stat-chip-value { font-size: 22px; }
 .panel-overview .stat-chip-label { font-size: 12px; }
 .device-card, .device-card:hover, .personal-device-card, .card, .session-card,
