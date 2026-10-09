@@ -11,7 +11,7 @@ window.XlamSettingsFields = {
  target_trophies:['Справочная цель по кубкам','Reference trophy goal','Автоостановка по этой цели отключена.','Automatic stopping at this goal is disabled.'],
  run_for_minutes:['Остановить через, мин','Stop after, min','0 — работать без ограничения времени.','0 runs without a time limit.'],
  thinking_mode:['Think','Think','Частота анализа для этого устройства: более высокий уровень чаще проверяет стены и газ и требует больше ресурсов. Стандарт сохраняет прежние интервалы. Рекомендация не меняет выбор.','Analysis frequency for this device: higher levels check walls and gas more often and need more resources. Standard preserves original intervals. Recommendations do not change your choice.'],
- max_fps:['Общий предел FPS бота','Bot FPS ceiling','auto или число от 1 до 120. Для нескольких устройств начните с 30.','auto or 1–120. Start with 30 for multiple devices.'],
+ max_fps:['Предел FPS для устройства','Device processing FPS limit','auto или число от 1 до 120. Для нескольких устройств начните с 30.','auto or 1–120. Start with 30 for multiple devices.'],
  used_threads:['Потоки распознавания','Recognition threads','auto — 2 потока на модель. Увеличивайте только если хватает процессора.','auto uses 2 threads per model. Increase only with spare CPU capacity.'],
  cpu_or_gpu:['Устройство вычислений','Compute device','CPU — процессор. GPU требует совместимого драйвера; в Windows используется DirectML.','CPU uses the processor. GPU needs a compatible driver; Windows uses DirectML.'],
  default_trophy_target:['Цель для нового бойца','New brawler goal','Начальное значение при добавлении в очередь; само по себе бот не останавливает.','Initial goal when adding to the queue; it does not stop the bot on its own.'],
