@@ -136,3 +136,32 @@ button, a, summary, input, select { touch-action: manipulation; }
 }
 
 .personal-tuning .flyout-body input[type=range] { padding: 0; border: 0; background: transparent; min-height: 30px; }
+
+/* Settings controls keep their labels and actions readable at every width. */
+.studio-header .studio-tabs { flex: 1 1 540px; min-width: 0; }
+.studio-header-right { max-width: 100%; }
+.studio-header .studio-tab { white-space: normal; }
+.card-body > p { line-height: 1.65; overflow-wrap: anywhere; }
+.report-preferences { display: flex; align-items: start; flex-wrap: wrap; gap: 20px 32px; margin: 22px 0; }
+.check-option { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; }
+.check-option input { flex: none; width: 18px; height: 18px; accent-color: var(--accent); }
+.report-level { display: grid; gap: 8px; flex: 1 1 280px; max-width: 420px; min-width: 0; }
+.report-level .field-label { margin: 0; }
+.report-level select { width: 100%; }
+#communityStatisticsCard label { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; }
+#communityStatisticsCard input { width: 18px; height: 18px; accent-color: var(--accent); }
+#view-settings #languageChoice { width: min(100%, 260px); margin-left: 12px; }
+.telegram-settings-card[hidden] { display: none !important; }
+.telegram-settings-card summary { cursor: pointer; min-height: 54px; }
+#telegramControl .row { display: flex; gap: 12px; flex-wrap: wrap; margin: 18px 0; }
+#telegramControl .row input { flex: 1 1 220px; min-width: 0; }
+#telegramControl .card-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+#telegramControl h3 { margin-top: 0; }
+@media(max-width: 760px) {
+  .studio-header .studio-tabs { flex-basis: 100%; }
+  .studio-header-right { margin-left: 0; }
+  .report-level { max-width: none; }
+  #view-settings #languageChoice { display: block; width: 100%; margin: 8px 0 0; }
+  #telegramControl .row .btn, #telegramControl .card-actions .btn { flex: 1 1 100%; }
+  #errorReportsCard .card-body > .btn { margin: 0 6px 10px 0; white-space: normal; }
+}
