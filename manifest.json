@@ -2,16 +2,16 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 94,
+    "revision": 95,
     "python": "3.13",
-    "size": 1541451,
-    "sha256": "f0ba3d107a8780de5dab84baee314fc847fdcddc288abfc8442e94cd002738ae",
+    "size": 1542134,
+    "sha256": "6f40158fa341821a302100bdbd0839a7a08e45bb1724a1ab7a4fabdd6361dc96",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
       "battle_memory.pyc": "d6c9d845b40c44f2a27b6723a79fb15b2dd445b41a0b5ae56d47c0d285a31b27",
       "battle_perception.pyc": "20bad9617be9021a5170e1cc20357d732743bdda7f0340c72d6a5ce2d5200123",
-      "bot_instance.pyc": "2a395295a3d53a42742ad6a78bb4fc8163662dfd0f6bf4990d6a2b200ed0e922",
+      "bot_instance.pyc": "f9ea55dacf1fc6c1da553804d5ec0e9b8b38cfae606ab38e01b0943e13ed8894",
       "brawler_calibration.pyc": "ac710c9060e4ce63ac7748182fdf1fa65deac9efba5642fa88a07b56f68d7fe7",
       "brawler_detail.pyc": "7e1afec19c7b20e0c286c55c0679de385b172e2355243828c4c8df3c637cdff6",
       "built_in_playstyles.pyc": "d0278792f096ae8b3553682283d00c6df6b3b571e0194849a1c63210ad66352c",
@@ -103,7 +103,7 @@
       "training_capture.pyc": "6d4ea902cb59e24c2ce6ad0007a6a0b28da53e016105cbd82963c77aa946525b",
       "training_models.pyc": "12563a8d5fc56f591e8a1989e310e14c914306d927dc6cb1e96f6c055beb1806",
       "trio_templates.pyc": "58919a822d0620f6ec8a464fa50a36d2dfafdb65a442c42297f271f063c8532e",
-      "trophy_observer.pyc": "69ace614fb55b8d187f84d61b1324646913c3856b4a20510ca13eba394f9e080",
+      "trophy_observer.pyc": "6aae62372822c83069915e45f8df4a8845d6d1d0652d2675d99cac76c240da17",
       "trophy_reader.pyc": "c3a30618d8aeb0d260b0f41472d70a6510e4e93441f2817cc75b8ea85dc7883c",
       "utils.pyc": "092d42cec07e9ae0ce405282b05947c296b165e4f0976c37b911af7437420da4",
       "webui/__init__.pyc": "c004a485dc68e2bb6d91ae4a54bd1ab87343869481cb413d2d0395b1618b92e5",
@@ -118,5 +118,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "5360b4f30a851630bae812ed4324e1c12f22ce7638ca36205064c7a0ca6f333523ad6e5a05acbba6ccdf48bd36b8640f12c62b6455aff751f9b67ab59a06c00c"
+  "signature": "a39c67950983471ab1a2d3381f250a5412f4e1adf82423fa1dbf34df9f096337d470469a1c9c65750554aae39ebb9ccdebb54d380a00cc440e19c933528ae80a"
 }
