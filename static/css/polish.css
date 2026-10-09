@@ -165,3 +165,77 @@ button, a, summary, input, select { touch-action: manipulation; }
   #telegramControl .row .btn, #telegramControl .card-actions .btn { flex: 1 1 100%; }
   #errorReportsCard .card-body > .btn { margin: 0 6px 10px 0; white-space: normal; }
 }
+
+/* Quiet surfaces: keep controls and status prominent, remove decorative chrome. */
+:root { --r: 12px; --r-sm: 10px; --shadow: none; --line: #2b303a; --line-soft: #222730; }
+body.app-page, body.tr-body { background: #101318; }
+.app-rail { background: #13171d; backdrop-filter: none; }
+.app-brand { margin-bottom: 28px; }
+.app-wordmark small, .rail-label, .rail-tip, .page-kicker, .heading-dot,
+.hero-art, .studio-decoration, .tools-summary-note { display: none; }
+.app-avatar { box-shadow: none; }
+.app-nav > a.is-current { background: #b8a1ff10; border-color: transparent; }
+.page-heading { margin-bottom: 20px; }
+.page-heading h1, .panel-hero h1 { font-size: 26px; font-weight: 600; letter-spacing: -.5px; }
+.panel-hero { padding: 0; min-height: 0; border: 0; border-radius: 0; background: none; overflow: visible; }
+.panel-hero::after { display: none; }
+.panel-header { position: relative; }
+.panel-header .page-topline { position: absolute; top: 32px; right: 34px; margin: 0; }
+.panel-header .page-topline > span:first-child { display: none; }
+.panel-overview { gap: 16px; }
+.panel-overview .stat-chip, .panel-overview .stat-chip.is-live { background: none; border: 0; border-radius: 0; min-width: 0; min-height: 44px; padding: 0; }
+.panel-overview .stat-chip-value { font-size: 22px; }
+.panel-overview .stat-chip-label { font-size: 12px; }
+.device-card, .device-card:hover, .personal-device-card, .card, .session-card,
+.library-stats > div, .kpi, .workspace-tools, .settings-group,
+.calibration-body > main > aside { background: #15191f; border-radius: 12px; box-shadow: none; }
+.device-card { border-color: var(--line); }
+.device-card:hover { border-color: #424955; }
+.device-card.is-running { border-color: #65d9b33b; }
+.stat-box { background: transparent; border: 0; padding: 8px; }
+.stat-box-value { font-size: 19px; }
+.device-head { padding: 16px 20px; margin-bottom: 16px; }
+.device-main { padding: 0 20px; }
+.device-body { padding: 16px 20px 20px; }
+.preview-wrap { border-radius: 8px; }
+.preview-placeholder { background: #101318; }
+.preview-placeholder::before { display: none; }
+.app-page .btn, .tr-body .btn, .calibration-body button { box-shadow: none; border-radius: 8px; }
+.app-page .btn-danger, .app-page .btn-warn, .app-page .btn-train { background: transparent; }
+.device-tuning > button, .personal-tuning > summary { background: #1b2029; }
+.flyout-body, .tuning-panel, .confirm-dialog { background: #1a1f27; border-radius: 12px; box-shadow: 0 8px 24px #0005; }
+.thinking-control { background: none; border: 0; border-radius: 0; box-shadow: none; margin: 12px 0; padding: 0; }
+.thinking-bolt { display: none; }
+.thinking-head > div { text-align: left; }
+.thinking-level { font-size: 16px; font-weight: 600; color: var(--text); }
+.thinking-track { background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--thinking-fill), #313641 var(--thinking-fill), #313641 100%); }
+.work-mode-name { color: var(--text); font-size: 18px; }
+.studio-header { gap: 12px; padding-top: 24px; padding-bottom: 18px; }
+.studio-header .page-heading { padding-right: 0; margin-bottom: 6px; }
+.studio-header-right a[href^="/panel"] { display: none; }
+.studio-tabs { background: transparent; border: 0; border-radius: 0; padding: 0; }
+.studio-tab { border-radius: 7px; }
+.card-head, .card-body { padding: 16px 20px; }
+.card:has(#languageChoice) .card-note { display: none; }
+.card:has(#languageChoice) .field-label { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+#view-settings #languageChoice { margin-left: 0; }
+.settings-explanation { margin: 0 0 16px; color: var(--text-dim); }
+.settings-explanation summary { cursor: pointer; padding: 8px 0; font-size: 13px; }
+.settings-explanation p { line-height: 1.65; margin: 8px 0; }
+.report-preferences { margin: 14px 0; }
+.telegram-settings-card summary { min-height: 44px; }
+.personal-device-card { padding: 20px; }
+.personal-device-card h3 { font-size: 18px; }
+.library-stats strong, .kpi-value { font-size: 26px; }
+@media(max-width: 760px) {
+  .app-brand { margin-bottom: 0; }
+  .page-heading h1, .panel-hero h1 { font-size: 24px; }
+  .panel-hero { padding: 0; min-height: 0; }
+  .panel-header .page-topline { top: 22px; right: 16px; }
+  .panel-overview .stat-chip { flex: 1; }
+  .panel-overview .page-tools { gap: 8px; }
+  .studio-header { padding-top: 18px; }
+  .device-head { padding: 16px; }
+  .device-main { padding: 0 16px; }
+  .device-body, .card-head, .card-body { padding: 16px; }
+}
