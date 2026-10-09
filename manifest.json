@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 88,
+    "revision": 89,
     "python": "3.13",
-    "size": 1512973,
-    "sha256": "1da6b53b17fd452660011870d2e34fa92840bb77208403177a9583a8215f4984",
+    "size": 1513803,
+    "sha256": "5a31862a494dd74cfb0c74f442aac79d7aed4b8d424cacba4a15b3cd87d7056c",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
@@ -42,8 +42,8 @@
       "play.pyc": "c747157d2ffebfbd72dadceff67ba723a21c644fd179397ab9351685f9add08d",
       "presentation_preferences.pyc": "44b6f4a209754d26e951325ba57f5a836a401f038a933d3724c725b5196a3c04",
       "reward_choice.pyc": "606c4c1e5d377599b671b31d9491d6dda7fdef896e4017b1410a926945116a8c",
-      "reward_receipts.pyc": "a518af70f394eed0ee99e0303f2edc616a2f545f6445aa711c2e46344e2f38aa",
-      "reward_received.pyc": "8b4065597e21c3a05a003ec1cf6fc2e94b903c144223445f9b73b005b029cc81",
+      "reward_receipts.pyc": "e21ecb6bd017ae6146f34ac6fbcabe4e6676c1b1d09b65384b44409677e947fe",
+      "reward_received.pyc": "ef6ba158f9d6f5af703366a01b1e07b2b6d86c917b43ac8a2d8b9d06b9eb6ed1",
       "runtime_observation.pyc": "c05858c7fc1cf20e4540551cd50556de24906915907602dfa88e22030c30445e",
       "screen_evidence.pyc": "684edc843633ee90584ebe87f50ebfab44f0090638dffe748ce7334b05a644cd",
       "seasonal_rewards.pyc": "c270820fcd51815c0f35a8d3ca1a03d13449eed2f3ea340a65cbfaa3b3a863c0",
@@ -116,5 +116,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "1cac76c4dd46ca708b8014d17049c0f6b41e44619c3bdcd5507d19f468742062c7d3a0db299d0437ba0b5c1af264b27b8eb16fae1c011f0962b13410e6b2600a"
+  "signature": "919c52d9e836b0325446d5d3e183a33e5b3e054d91a7b0595c8ddfb3067d7c6ff0c3ed242f2a50e355e49c01b52b290faaa74bda6c2268f510c8b73f55b52502"
 }
