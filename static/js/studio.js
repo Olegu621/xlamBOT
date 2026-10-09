@@ -121,6 +121,15 @@
             host.querySelector('label').textContent = en ? 'Your emulator' : 'Твой эмулятор';
             host.querySelector('a').textContent = en ? 'Open bot panel →' : 'Панель этого бота →';
         }
+        document.querySelectorAll('[data-field-key]').forEach(label => {
+            const meta = window.XlamSettingsFields[label.dataset.fieldKey];
+            if (!meta) return;
+            const en = document.documentElement.lang === 'en';
+            label.querySelector('span').textContent = meta[en ? 1 : 0];
+            label.querySelector('small').textContent = meta[en ? 3 : 2];
+        });
+        const guide = document.querySelector('.setup-shortcut');
+        if (guide) guide.textContent = document.documentElement.lang === 'en' ? 'Setup guide' : 'Мастер настройки';
         if (activeTab === 'dashboard') loadDashboard();
     });
 
@@ -502,23 +511,29 @@
         const simple=Object.entries(values).filter(([k,v])=>!v||typeof v!=='object'||['gas_classes','wall_model_classes'].includes(k));
         const structured=Object.entries(values).filter(([k,v])=>v&&typeof v==='object'&&!['gas_classes','wall_model_classes'].includes(k));
         if(section==='bot_config'){
-            const groups=[['Основное',simple.filter(([key])=>!key.startsWith('gas_')&&!['target_trophies','training_classes'].includes(key)&&!/(confidence|pixels_minimum|movement|perceived_tile|seconds_to_hold)/.test(key))],['Обход газа',simple.filter(([key])=>key.startsWith('gas_'))],['Распознавание и готовность способностей',simple.filter(([key])=>/(confidence|pixels_minimum)/.test(key)&&!key.startsWith('gas_'))],['Движение и атака',simple.filter(([key])=>/(movement|perceived_tile|seconds_to_hold)/.test(key))],['Обучение и справочные цели',simple.filter(([key])=>['target_trophies','training_classes'].includes(key))]];
+            const primary=new Set(['work_mode','game_mode','brawler_pick_mode','brawler_switch_after_games','locked_brawler','play_again_on_win','preview_interval_ms']);
+            const groups=[['Основное',simple.filter(([key])=>primary.has(key))],['Обход газа',simple.filter(([key])=>key.startsWith('gas_'))],['Распознавание и готовность способностей',simple.filter(([key])=>/(confidence|pixels_minimum)/.test(key)&&!key.startsWith('gas_'))],['Движение и атака',simple.filter(([key])=>/(movement|perceived_tile|seconds_to_hold)/.test(key))],['Обучение и справочные цели',simple.filter(([key])=>['target_trophies','training_classes'].includes(key))]];
+            const grouped=new Set(groups.flatMap(([,items])=>items.map(([key])=>key)));
+            groups.push(['Дополнительно',simple.filter(([key])=>!grouped.has(key))]);
             return groups.map(([title,items],i)=>i===0?items.map(([k,v])=>renderField(section,k,v)).join(''):`<details class="settings-subgroup"><summary>${esc(title)}</summary>${items.map(([k,v])=>renderField(section,k,v)).join('')}</details>`).join('');
         }
         return simple.map(([k,v])=>renderField(section,k,v)).join('')+(structured.length?`<div class="field is-wide"><div><strong>Калибровка и параметры модели</strong><p class="muted">Координаты и области меняйте в калибровке устройства. Здесь показаны сохранённые значения для диагностики.</p><details><summary>Показать технические значения</summary><pre class="settings-json">${esc(JSON.stringify(Object.fromEntries(structured),null,2))}</pre></details></div></div>`:'');
     }
     function renderField(section,key,value){
-        const hint=HINTS[key]||[key,'Дополнительный параметр. Меняйте только если знаете его назначение.'];
+        const translated=window.XlamSettingsFields[key],english=document.documentElement.lang==='en';
+        const hint=translated?[translated[english?1:0],translated[english?3:2]]:HINTS[key]||[key,'Дополнительный параметр. Меняйте только если знаете его назначение.'];
         const attrs=`data-setting="${esc(key)}" data-section="${esc(section)}"`,id=`set-${section}-${key}`;
-        const caption=`<label class="field-label" for="${id}">${esc(hint[0])}<small>${esc(hint[1])}</small></label>`;
+        const caption=`<label class="field-label" for="${id}" ${translated?`data-field-key="${esc(key)}" data-i18n-skip`:''}><span>${esc(hint[0])}</span><small>${esc(hint[1])}</small></label>`;
         let control;
+        const slider=window.XlamSliders?.html(key,value,attrs,id,hint[1]);
         if(typeof value==='boolean'||['yes','no'].includes(value))control=`<label class="switch"><input id="${id}" type="checkbox" ${attrs} ${typeof value==='boolean'?'':'data-boolean-string="yes"'} ${value===true||value==='yes'?'checked':''}><span class="switch-track"></span></label>`;
+        else if(slider)control=slider;
         else if(key==='brawler_pick_mode'||key==='game_mode'||choices[key]){
             const list=key==='game_mode'?GAME_MODES:key==='brawler_pick_mode'?PICK_MODES:choices[key];
             control=`<select class="input" id="${id}" ${attrs}>${!list.some(([v])=>v===value)?`<option value="${esc(value)}" selected>${esc(value)}</option>`:''}${list.map(([v,label])=>`<option value="${esc(v)}" ${v===value?'selected':''}>${esc(label)}</option>`).join('')}</select>`;
         }else if(Array.isArray(value))control=`<input class="input" id="${id}" ${attrs} data-array="yes" value="${esc(value.join(', '))}">`;
         else control=`<input class="input" id="${id}" ${attrs} type="${secretKeys.has(key)?'password':typeof value==='number'?'number':'text'}" ${typeof value==='number'?'min="0" step="any"':''} autocomplete="${secretKeys.has(key)?'new-password':'off'}" value="${esc(value)}" ${secretKeys.has(key)?'placeholder="Сохранённое значение скрыто"':''}>`;
-        return `<div class="field">${caption}<div class="field-control">${control}</div></div>`;
+        return `<div class="field ${slider?'field-slider':''}">${caption}<div class="field-control">${control}</div></div>`;
     }
     document.addEventListener('change',async event=>{
         if(event.target.id==='languageChoice'){
@@ -531,8 +546,9 @@
         }
         const field=event.target.closest('[data-setting]');if(!field)return;
         const section=field.dataset.section,key=field.dataset.setting;
-        let value=field.type==='checkbox'?(field.dataset.booleanString?(field.checked?'yes':'no'):field.checked):field.type==='number'?Number(field.value):field.dataset.array?field.value.split(',').map(v=>v.trim()).filter(Boolean):field.value;
-        if(field.type==='number'&&(field.value===''||!Number.isFinite(value)||value<0)){field.setCustomValidity(window.XlamI18n.t('Введите неотрицательное число'));field.reportValidity();return;}
+        let value=field.dataset.presets?window.XlamSliders.value(field):field.type==='checkbox'?(field.dataset.booleanString?(field.checked?'yes':'no'):field.checked):field.type==='number'?Number(field.value):field.dataset.array?field.value.split(',').map(v=>v.trim()).filter(Boolean):field.value;
+        if(['max_fps','used_threads'].includes(key)&&typeof value==='string')value=value.trim()==='auto'?'auto':Number(value);
+        if((field.type==='number'||['max_fps','used_threads'].includes(key)&&value!=='auto')&&(field.value===''||!Number.isFinite(value)||value<0)){field.setCustomValidity(window.XlamI18n.t('Введите неотрицательное число'));field.reportValidity();return;}
         field.setCustomValidity('');settingsDraft[section][key]=value;settingsDirty=true;
         document.getElementById('settingsState').textContent='Есть несохранённые изменения';
     });
