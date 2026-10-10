@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 102,
+    "revision": 103,
     "python": "3.13",
-    "size": 1557905,
-    "sha256": "c6af4ad353e5df94837208c65437f1db9b8732d2ad85b355d675d0d2137ec12f",
+    "size": 1557904,
+    "sha256": "978ddd338af25a8f50cae27d7174df82a4abdbcbbfec9a48cba1d334cb082168",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
@@ -38,7 +38,7 @@
       "local_navigation.pyc": "405378afeb9e027b5fe25fa550e37e058668f6935c69c1a9a65c77d410e9bf2b",
       "loony_loot.pyc": "a7baa7281487bf31cfe8c7a93e86c59cda34f6e5dbba2626bac6ba5d73da9e40",
       "main.pyc": "c2c6e0520ee98a7c0cf2a78018bc69d82670918570e90e709d4bbe322dfeb03a",
-      "mega_quest_drop.pyc": "2b3b473e9a439d6e7f769dba5a12e4f20672e568f61b396ab9d009775f495926",
+      "mega_quest_drop.pyc": "a82a6986130b025b25c308fb6eb800b3c08029a70f74367d435bdf46154c8d01",
       "menu_controls.pyc": "eaf00eb13e9c6ef7e3437c84cacfdf39869df43f8d886f486ba5cd57e43add74",
       "new_brawler_receipt.pyc": "0e865fe39faba1eb48b3153a1ce2f9d51c56beae8add99404ff4a46fa2ec3804",
       "owned_cards.pyc": "216a809701acc7464a5bfb5623e2ed6b0d92ba02313f76c68341262137bdb450",
@@ -121,5 +121,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "869e60be7dbc30d02f58617d510a9cbb7840bea280b55d27f3d3b68561de25ba5d776d555395a321ef9aab2e5de7e65f3a471a87c88812e5530c6fba47ee250a"
+  "signature": "23f49741956a18f25e4f9985359ef05833c21d3a0d60eb47a333aa1f584010e5576658236ef63d9aee747bc8b51d25f2097665f5c1670f2a8e85013a52161b0b"
 }
