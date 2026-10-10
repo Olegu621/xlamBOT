@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 105,
+    "revision": 106,
     "python": "3.13",
-    "size": 1564004,
-    "sha256": "656f68fd3a3442914675ef61417b8cbe2c790ba3b426947e7e5e0d9caef0ee6d",
+    "size": 1564048,
+    "sha256": "17b0a0b07bcb5412f3542d4247d9674e3cff716d0d20a4ef7f349cd437b91292",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
@@ -58,7 +58,7 @@
       "showdown_hud.pyc": "9cfd54b6842291a488ba0aff5f4af051544d3e69dd536ab5a3137342dc0d3102",
       "side_menu.pyc": "7f55df2e9ae3eaa7b0b6f94ff4004d5ddb1f01fda3c5a189ad31c4ce32d7ab3a",
       "stage_manager.pyc": "5a7e2be6e75ec0f89d481a225730dbed51b0d63b72174ff732bbba09c5bae17c",
-      "state_finder.pyc": "59affb4329130519bf4d60a70e554204217e6cf4ef04158f03ff33660f7da662",
+      "state_finder.pyc": "7a62158dba646560997b523da207c5d97acd88ab0955f3c768d86fc1f0390bac",
       "static/css/calibration.css": "c470e9e50cb1fa754678f4e449113ee5d852f70a1ab1d8efd54f5d4d37488eda",
       "static/css/device-experience.css": "27aee9b14e68e3eafa7decf22b684f140d91a48e1bfc15153510f07ffcf22736",
       "static/css/interface.css": "d72ff6c72b46321b7ce091b038919aa66a8883b6d938ae22c6e73823ffb5ac37",
@@ -122,5 +122,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "3cce81af8e03a19f89a749eb12a442fe0c22d293149e943b290e06c0d50c3cf5afbf4915e10785d7863ba4a0454da8779e2fb438817375b2209b64e57638c80e"
+  "signature": "834f3ffd8579c9d3881edce7428bf112c2ca6b3c1adcc4def655a6b08ad3fa752d6f39d27474b5ea75efa5f811bdc47f502469af7b20df19d5a8a529f6606004"
 }
