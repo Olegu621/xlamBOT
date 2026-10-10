@@ -1,0 +1,9 @@
+{
+  "version": "0.8.22.2",
+  "runtime_revision": 107,
+  "bootstrap": "runtime/bootstrap-107/bootstrap.json",
+  "source_repository": "Olegu621/xlamBOT-source",
+  "source_tag": "installer-0.8.22.2",
+  "source_commit": "af878de6c42aec5662edd32a5a631054786c9815",
+  "installer_sha256": "b98d6168988b839749b3b9c1d4bd111d6dc2de06e96107dcd993ac9d1d306a94"
+}
