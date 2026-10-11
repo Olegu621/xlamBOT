@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 116,
+    "revision": 117,
     "python": "3.13",
-    "size": 2259759,
-    "sha256": "107221324e94cf3b3d704ff67ab92b55a305d185478427a22c1ab60098073078",
+    "size": 2260065,
+    "sha256": "8ecca6cf59197099144e0ef20b6ab6e35ecfe90a7a027dc94bb65e7a498ba7e0",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
@@ -22,7 +22,7 @@
       "coin_receipt.pyc": "98248f7fc8c38eb112091b42e123d29a1ca5d552ab3c7a6c6b54f4dbd942f7eb",
       "combat_behavior.pyc": "b9c271d69e2e0265399f3d91d37bea86b64ead3fa37111bafbe62e8d3919eef1",
       "community_statistics.pyc": "c991dc130465c4b72ef11ce3b74def5992a6f68e9331ef8bb280a4c6a0e2c7ad",
-      "current_results.pyc": "a37dc8f61eca8ed4c068d64be6aabedaab335d7ad5e0541e0e9533911b567126",
+      "current_results.pyc": "2d8020364340dc67b7a9e01f2a02fc211b7feeee3dc65a8f586bd9243934a21f",
       "debug_view.pyc": "4e85225fd2bf5763baf7f57ce9fdbecac79d1b9fcd4205b126600cadccd94a51",
       "desktop.pyc": "188eaba33196b4d7c5a9dc986d2c9f8de1acd88610a633a03a57cb63b9fe44b9",
       "desktop_shell.pyc": "4438331be7ac877bdcbf2d98ec0ed338e49e5ef6adbc46e6d0f62a310f5bf171",
@@ -67,7 +67,7 @@
       "showdown_mode.pyc": "bfb56fb7387da63db2db2e5939b9f619ef55115c1281683c85ea8250f9ee2c11",
       "side_menu.pyc": "7f55df2e9ae3eaa7b0b6f94ff4004d5ddb1f01fda3c5a189ad31c4ce32d7ab3a",
       "stage_manager.pyc": "6cf6d6785224482849cf65dbafedc52ae6af2cdf9c04e91401f69f67be2cef3e",
-      "state_finder.pyc": "58b0e4712e3e99161748229d2919392ea645d044447927921daa49b471c123a7",
+      "state_finder.pyc": "b15e03a126276a94e88aaa74c0e1df23fcbea7713103f0ac68837a5ee7297f08",
       "static/css/calibration.css": "c470e9e50cb1fa754678f4e449113ee5d852f70a1ab1d8efd54f5d4d37488eda",
       "static/css/device-experience.css": "27aee9b14e68e3eafa7decf22b684f140d91a48e1bfc15153510f07ffcf22736",
       "static/css/emulators.css": "784520d5df51e2d6a44595cf1271212a32b1c208943cc422012f3b479ba1e075",
@@ -138,5 +138,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "8c45e4592bb50219374898431c8a15cc9d4d5231b38e1e07dda873c4f10a88781a02b33b98416ccab0c9447bf2756f4bf3f4c75c4c5150ff596db426df866306"
+  "signature": "94a68a2f73cd3daa82d096f061ae57a1c92c68db9bc80e5d5911d4b7b2686dfa76a38fbe582f1d281bc04b6433bf633d786417c50b1df503155b87b08719d40c"
 }
