@@ -2,18 +2,18 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 130,
+    "revision": 131,
     "python": "3.13",
-    "size": 2327204,
-    "sha256": "7a47729096dc3c32e512129a81baa9bb07f09dd63359d6713412a7902b8f93af",
+    "size": 2330018,
+    "sha256": "f9701a6cad3957507263921ea85dccddd2e233bcdac2c859660bf0ff0d494d55",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
       "battle_memory.pyc": "d6c9d845b40c44f2a27b6723a79fb15b2dd445b41a0b5ae56d47c0d285a31b27",
       "battle_perception.pyc": "20bad9617be9021a5170e1cc20357d732743bdda7f0340c72d6a5ce2d5200123",
       "bot_instance.pyc": "4affa24ce18ef44080d88e4705cdf67c5186a12e7655809e74f9ea92e13434b1",
-      "brawler_blast.pyc": "cd63a01c544cbbf538a3ba3359a4ce79efc7ced5a83233f277ee6c14f66fc405",
-      "brawler_blast_glyphs.pyc": "5dcaeafc161590895c7f6274759b9b6aabfabb7e29566153948a2033c553e144",
+      "brawler_blast.pyc": "628661d79aefa7865a7ba9e3ec1cccd058d2e65f4f92abba59f24f6ab3aa1637",
+      "brawler_blast_glyphs.pyc": "d996a5e305282772c5744d9729e46b1a5ff02ab545744cfd9a829e8bd32ebd05",
       "brawler_calibration.pyc": "ac710c9060e4ce63ac7748182fdf1fa65deac9efba5642fa88a07b56f68d7fe7",
       "brawler_detail.pyc": "7e1afec19c7b20e0c286c55c0679de385b172e2355243828c4c8df3c637cdff6",
       "brawler_offer.pyc": "fe7de2c208b3747dcbe44a20a0a2ddf6756b910bd3139c3c1c586471795ee772",
@@ -75,7 +75,7 @@
       "spray_receipt.pyc": "65ca0caad1c8d552a66050deff473da23fbe15f25a4ab2e3d2f52e1714d37502",
       "spray_receipt_glyph.pyc": "5be0b296eb722e0b7443247f4b2aecef68dd8ff1d40b7f9e352bce5c6cbd0afd",
       "stage_manager.pyc": "0357ba88f2040b475e5c570b9c6c36b820832fb3e79d65ae6af5ccaf157e8e22",
-      "state_finder.pyc": "1c43695c7762e09dd3fc13483d08bc333660afff2d5b05588a5b0a4aba4a489a",
+      "state_finder.pyc": "96408c73487d3110d1108f00245171db890d740a11249b6db3c303abb30e3118",
       "static/css/calibration.css": "c470e9e50cb1fa754678f4e449113ee5d852f70a1ab1d8efd54f5d4d37488eda",
       "static/css/device-experience.css": "27aee9b14e68e3eafa7decf22b684f140d91a48e1bfc15153510f07ffcf22736",
       "static/css/emulators.css": "784520d5df51e2d6a44595cf1271212a32b1c208943cc422012f3b479ba1e075",
@@ -150,5 +150,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "c480a11cea2ab7a59b5735a6d755dff675cf9bb518c0e4b4227e4d9a0cd48eeb077a5891cdffeee37d185be89046555c594e9f6c7e88682d9eaf57529eb40805"
+  "signature": "8746c20ae3659c772f4f01ea6c2d6b6a59959dae77da1f7b6e57343d6c4618e93fed9d68a44610e9c61815ce0a4f3152f46bdc54a33d64b15c9e93f25e2d0b02"
 }
