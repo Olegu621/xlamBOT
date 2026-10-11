@@ -2,18 +2,18 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 123,
+    "revision": 124,
     "python": "3.13",
-    "size": 2310443,
-    "sha256": "d818576986a2d42db0c0fa94201b87c9b34190cb30d71b20b7b0abf650106cae",
+    "size": 2312488,
+    "sha256": "d1405326947bf9b165bf8f51238d8697f00cd4f7a16c559aefc2f4f500b94d5c",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
       "battle_memory.pyc": "d6c9d845b40c44f2a27b6723a79fb15b2dd445b41a0b5ae56d47c0d285a31b27",
       "battle_perception.pyc": "20bad9617be9021a5170e1cc20357d732743bdda7f0340c72d6a5ce2d5200123",
       "bot_instance.pyc": "dc86bd0144d4fb9f9897c5b14ad99a8302eca0a8a7260062f84e09caee60c086",
-      "brawler_blast.pyc": "9266fafe1363cc876e9d9bfb5e13be3240cf3132e897236b5bc99e69bc2ea056",
-      "brawler_blast_glyphs.pyc": "ba8d924d57a3b1c29743b171cd22e5eeea7a329c2ce64bef1e7843ff54507619",
+      "brawler_blast.pyc": "cd63a01c544cbbf538a3ba3359a4ce79efc7ced5a83233f277ee6c14f66fc405",
+      "brawler_blast_glyphs.pyc": "5dcaeafc161590895c7f6274759b9b6aabfabb7e29566153948a2033c553e144",
       "brawler_calibration.pyc": "ac710c9060e4ce63ac7748182fdf1fa65deac9efba5642fa88a07b56f68d7fe7",
       "brawler_detail.pyc": "7e1afec19c7b20e0c286c55c0679de385b172e2355243828c4c8df3c637cdff6",
       "brawler_offer.pyc": "fe7de2c208b3747dcbe44a20a0a2ddf6756b910bd3139c3c1c586471795ee772",
@@ -144,5 +144,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "fa70284dcb8a53bf21324ba07ff2e1d96bb0e3e93a5ad6676e9032ef744a060ee066bce13bfc9ca4e8bd48cfbf630ef9663779005e3f71b2f54ab1ef265f300b"
+  "signature": "9493669a70073d87c5e4792b338db86a813012d7cff2228e297d4c71a3c0c723c9dfcc707c637dfea84229e89b095b3b57cf7352e84bdde6d242b375ff4db606"
 }
