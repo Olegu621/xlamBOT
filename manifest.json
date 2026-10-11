@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 127,
+    "revision": 129,
     "python": "3.13",
-    "size": 2326924,
-    "sha256": "9f434c1bfc5c472a68e1afad8a78ac6b7a12d881b5e056e21f740694f1cfc901",
+    "size": 2327173,
+    "sha256": "b47242719ad7175cef2e5d3b286815d11136d2d0e4c7b2989f125582beb3b096",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
@@ -128,8 +128,8 @@
       "time_management.pyc": "8d8a86b3b57bd565ce20b1cfd7544dd9ada082c105484224ea1f7b3e6c2aaf68",
       "training_capture.pyc": "6d4ea902cb59e24c2ce6ad0007a6a0b28da53e016105cbd82963c77aa946525b",
       "training_models.pyc": "12563a8d5fc56f591e8a1989e310e14c914306d927dc6cb1e96f6c055beb1806",
-      "transition_glyphs.pyc": "f44d5c31fa0d2b787874b5f4ba9aef73dbaf14fffe05e1d192bf134262343626",
-      "transition_screen.pyc": "40f24ca83291387ecaedc1c3b9aeb14c4c7a44e1c9c0963bf0b9789bc39b38c6",
+      "transition_glyphs.pyc": "d0c0d95e42ae2e6436a225e0fc45d85c57fd90631a9f55a48e3a28a3edbbb7f3",
+      "transition_screen.pyc": "75b1dd4ea0a245a7641a0f8211302d7974242c85c3a496dd3a9b3deaef36b8d0",
       "trio_templates.pyc": "58919a822d0620f6ec8a464fa50a36d2dfafdb65a442c42297f271f063c8532e",
       "trophy_observer.pyc": "4f0edbcd3768129a4b608c5b5f67d5ea878e6f17c56b6cef5f1c051426bdb962",
       "trophy_reader.pyc": "c3a30618d8aeb0d260b0f41472d70a6510e4e93441f2817cc75b8ea85dc7883c",
@@ -150,5 +150,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "dfaa2344b66e6bdb489062e6a56ce54c803ce89a47505f6e22cc2f7a3bd09f670dde65ae20533537a5e017be05d5f89a3b2f624728a88d8e2c37cca84af4ba02"
+  "signature": "03dd2d2607e4c72ffdc9d4c2e16dc3e2e1fb45f9fb765bb0e5a41a4501952ca1dc985b544c7b41c9e6ff1a778ac509a48292e4e86657ba65748460d32e69010b"
 }
