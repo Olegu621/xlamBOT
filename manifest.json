@@ -2,16 +2,16 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 111,
+    "revision": 113,
     "python": "3.13",
-    "size": 2248068,
-    "sha256": "a678fa3ee6e0a8c013efbfdbe7fc5ffbb481d56a3c0edeb57bda663f7273006b",
+    "size": 2248147,
+    "sha256": "3a0805c59c16b88a3684f680f88d42ee237eee24c8273b7e927d24cfd36e0916",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
       "battle_memory.pyc": "d6c9d845b40c44f2a27b6723a79fb15b2dd445b41a0b5ae56d47c0d285a31b27",
       "battle_perception.pyc": "20bad9617be9021a5170e1cc20357d732743bdda7f0340c72d6a5ce2d5200123",
-      "bot_instance.pyc": "9a353793551a537b7d34eb38b209f42a144be6b94783a5217f0e0491f4deb661",
+      "bot_instance.pyc": "dc86bd0144d4fb9f9897c5b14ad99a8302eca0a8a7260062f84e09caee60c086",
       "brawler_calibration.pyc": "ac710c9060e4ce63ac7748182fdf1fa65deac9efba5642fa88a07b56f68d7fe7",
       "brawler_detail.pyc": "7e1afec19c7b20e0c286c55c0679de385b172e2355243828c4c8df3c637cdff6",
       "brawler_offer.pyc": "fe7de2c208b3747dcbe44a20a0a2ddf6756b910bd3139c3c1c586471795ee772",
@@ -132,9 +132,9 @@
       "webui/runtime.pyc": "c5b4045af223b4af90d34d3409a8e30f61745e368ac974f290f31b4b000345ec",
       "webui/services.pyc": "a2bf5fb26f4c59b8f69a3a24358e9a7c766e91abb42c1f9408534a7d8bd8581b",
       "webui/statistics.pyc": "b5da7249a8811b669a71e7d4a2a03571ba6f80cc4ec201e293ef645f065a9a18",
-      "window_controller.pyc": "cc9b253f04cca973844a1d5351035e009c40c60658dc2acede9b2b42a5be63c2",
+      "window_controller.pyc": "1c9a95392b34afde8707034c688ca85d8c6c8703519e517f529b8357a2a790a5",
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "1d0238a9c5ffec05fb13252209ed37eef22e75031f7942d3671ce784b58b9ed91b02ebbd76e57d86eee181a06e76c45844b3355c984fdd382e63c3d7ad8b8704"
+  "signature": "dc2114434a7add8e1eb8099ac8e81283574fde56f4a156cb81ceb77bce0957ba8f42d8055edae546b959a64c33c7893f82be59c360572155fec06c7e08514304"
 }
