@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 145,
+    "revision": 146,
     "python": "3.13",
-    "size": 2363583,
-    "sha256": "40c4b078e9ec655309b537e03724277692a9ca1a0d514095c43bb714a3b07802",
+    "size": 2365340,
+    "sha256": "aacd9253c0de4f8806a22c8bf5185812c7704880c1f1798839e4776baf0e5b81",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
@@ -17,14 +17,15 @@
       "brawler_blast.pyc": "628661d79aefa7865a7ba9e3ec1cccd058d2e65f4f92abba59f24f6ab3aa1637",
       "brawler_blast_glyphs.pyc": "d996a5e305282772c5744d9729e46b1a5ff02ab545744cfd9a829e8bd32ebd05",
       "brawler_calibration.pyc": "ac710c9060e4ce63ac7748182fdf1fa65deac9efba5642fa88a07b56f68d7fe7",
+      "brawler_catalog.pyc": "0a7b30ad1098f7510765171fd17974653db133911e270d5275b8386b3b6e0875",
       "brawler_detail.pyc": "7e1afec19c7b20e0c286c55c0679de385b172e2355243828c4c8df3c637cdff6",
       "brawler_offer.pyc": "fe7de2c208b3747dcbe44a20a0a2ddf6756b910bd3139c3c1c586471795ee772",
-      "built_in_playstyles.pyc": "d0278792f096ae8b3553682283d00c6df6b3b571e0194849a1c63210ad66352c",
+      "built_in_playstyles.pyc": "ddffd29492b8e43a5da5f3006fa31aad5dee572f1c167c7a26f4ec5defb1147a",
       "bush_cover.pyc": "4dd23ef5c6944422a442144f74b200483d022378aa8e20dc0149654a66f04fbc",
       "capture_transport.pyc": "de40522f9960a1e641f5918800f89f01d43e9aeb5de812b6b4401bbea2b444a7",
       "club_suggestion.pyc": "26073887361c517ad1a3bc9ae7b7136f9a438c7ef20ca3392786442090e61f75",
       "coin_receipt.pyc": "98248f7fc8c38eb112091b42e123d29a1ca5d552ab3c7a6c6b54f4dbd942f7eb",
-      "combat_behavior.pyc": "b9c271d69e2e0265399f3d91d37bea86b64ead3fa37111bafbe62e8d3919eef1",
+      "combat_behavior.pyc": "afe2fa6aaa8a6fb61031f8b5cc86768ef7de9cddd4c8ef67602a929004fb3a94",
       "community_statistics.pyc": "c991dc130465c4b72ef11ce3b74def5992a6f68e9331ef8bb280a4c6a0e2c7ad",
       "current_results.pyc": "2d8020364340dc67b7a9e01f2a02fc211b7feeee3dc65a8f586bd9243934a21f",
       "debug_view.pyc": "4e85225fd2bf5763baf7f57ce9fdbecac79d1b9fcd4205b126600cadccd94a51",
@@ -57,7 +58,7 @@
       "onboarding_assets_en.pyc": "e929f2bd3dceda392dec656f10f00f2359acd754dc265a22e3acd1cf00adc147",
       "owned_cards.pyc": "216a809701acc7464a5bfb5623e2ed6b0d92ba02313f76c68341262137bdb450",
       "panel.pyc": "d69d2bdba34dcc35cd0225cfde17dc9c8ffd9748ca9f02d9ad5d9fb22cedce6b",
-      "play.pyc": "3df321b62aa2e63de69f39a4163dd6120c395b3794c20870d95476309e0c97af",
+      "play.pyc": "614c5b075dd09483c298e1453b17b21b501d57b2e644366debc135ee7f996917",
       "power_cubes.pyc": "b1589c9ef0316cd47fdb96dad789d313e850b3bc9fa8400ba7f38a88293c055a",
       "presentation_preferences.pyc": "44b6f4a209754d26e951325ba57f5a836a401f038a933d3724c725b5196a3c04",
       "projectile_dodge.pyc": "a51795b4d202b6a4793e2756f70735adb7e68f84ac196e5bc3048ac5b4303f5c",
@@ -143,7 +144,7 @@
       "trophy_reader.pyc": "c3a30618d8aeb0d260b0f41472d70a6510e4e93441f2817cc75b8ea85dc7883c",
       "unlocked_receipt.pyc": "9d84d052af0dd03e5b19871bc51aef89ba6ab7f52c2d79aef64cb04292b873f1",
       "unlocked_receipt_glyphs.pyc": "fe231bf3bea5376ae021849162075621f341c3542adae19f310cc7607c4586d4",
-      "utils.pyc": "092d42cec07e9ae0ce405282b05947c296b165e4f0976c37b911af7437420da4",
+      "utils.pyc": "05421d7df9966a2b8a0e8ebee2e1bfd0eae7a7a016e537700f61b5f379c1b279",
       "webui/__init__.pyc": "c004a485dc68e2bb6d91ae4a54bd1ab87343869481cb413d2d0395b1618b92e5",
       "webui/app.pyc": "4f78eaebcac62b9ac359c34251be5eb6fc464ddced47e656f9f2dcb92d8736f8",
       "webui/device_manager.pyc": "265c9d10efec430d36a084eb9b5c48d5e827349dbe93f29567d5f2846a99acc7",
@@ -160,5 +161,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "304c1160676d896b037a6a446f09a04433656c8893decd4fa0a5e074894dc01624963f2d7230bad816253568534b362072383f609edb88c27f59ef2a6e2d100f"
+  "signature": "4e909f6d8e9bec13a42a9bfa48799aa5b16f26f157c3f73fc00e2dd16c1988bd778677cac24cf6d7e31303ca388c222e03e5b2c31c810a24c0d2c54f91592b08"
 }
