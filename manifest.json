@@ -2,13 +2,15 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 139,
+    "revision": 140,
     "python": "3.13",
-    "size": 2347243,
-    "sha256": "19f7ad3975f230f746784ef1df5847748cb72793952fc14c4d3930e7b8fc5cc2",
+    "size": 2354244,
+    "sha256": "4afd55dc21b5d583cfea6dafbe74499995aac84173c7ae1404e82d22b3946ceb",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
+      "alternative_reward.pyc": "39287c4d5c286d33ad5b5a0bb1bc2815e8b45090e23252ca47fced6bfee23f88",
+      "alternative_reward_glyphs.pyc": "b9c5fa6fd9a266746d5f1be33f19613be41924d562b0f02078b584ba6c199996",
       "battle_memory.pyc": "d6c9d845b40c44f2a27b6723a79fb15b2dd445b41a0b5ae56d47c0d285a31b27",
       "battle_perception.pyc": "20bad9617be9021a5170e1cc20357d732743bdda7f0340c72d6a5ce2d5200123",
       "bot_instance.pyc": "4affa24ce18ef44080d88e4705cdf67c5186a12e7655809e74f9ea92e13434b1",
@@ -67,7 +69,7 @@
       "reward_received.pyc": "4453f2312adf45fa2a7e5986cb1b1e93dcd7bc500eb0765956270140b19e9d47",
       "runtime_observation.pyc": "c05858c7fc1cf20e4540551cd50556de24906915907602dfa88e22030c30445e",
       "screen_evidence.pyc": "8e77511f9e3d31edf340eaf9dad16d5be5e9415414d1f774923f82c3c1f235a5",
-      "seasonal_rewards.pyc": "bd272dd681c8a17e2e0ff6a12fa6544b3ee5b002eede78559af66fddd8e9aca2",
+      "seasonal_rewards.pyc": "6ce28e1bec43374f040cb91a41e39ea0a2c799edf677a3e1de173c1840165ea3",
       "settings_schema.pyc": "46e9fbbb7f687b5c125d6f07eed314036ea97aa433532573beea8e3b3adef255",
       "setup_wizard.pyc": "0aa676556c3a096909625990cb26e11b1e3d40e940eff92d8872dd83f48d29af",
       "showdown_hud.pyc": "d6f41dd6d3a13ac2e22ccb3ff0975ad0bf308c94cfc586ffe35e95ee64688aec",
@@ -155,5 +157,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "26ec7f669003de53a6766a15605c1e302bde7cdf8ba8e70068007a5f68b8dac0988d08e560b464878482986f33b1796fc38f80824b3f7fba1fdf10e800449105"
+  "signature": "b74824de539b7479af5ac3f6c8502c38752e60ce198f578109fad511d5bd99e7db8294dee113c3ae661e68fac0e3420c4e5a7a02ed423865b1b3cc23de929404"
 }
