@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 142,
+    "revision": 143,
     "python": "3.13",
-    "size": 2360022,
-    "sha256": "5ffccbae9b3c8f231e160a67afe97f75f6bf0aace985c0074e22aa1fe4d05335",
+    "size": 2362803,
+    "sha256": "772e6a3a953452508e67743187e2e2dcaa96a38ec9cdb0d74acb4a99db751b09",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
@@ -66,7 +66,7 @@
       "rejoin_dialog.pyc": "1cbd97970a6940589847f8fa3c116651118c8c176280fb6aedd857f176c7bbbe",
       "reward_choice.pyc": "606c4c1e5d377599b671b31d9491d6dda7fdef896e4017b1410a926945116a8c",
       "reward_receipts.pyc": "0be2fb568710a5bdb0a5c1981b180fd669fea4a9e303604a6344f79787ae5de8",
-      "reward_received.pyc": "dcb6efcf34ff079faa244187834ce87e548b6627ab2477ed7cc84d7c92146098",
+      "reward_received.pyc": "05de8638292bd90ab0cbc73d199177f02ca52a8bf9602dc1a02029a8c16659fa",
       "runtime_observation.pyc": "c05858c7fc1cf20e4540551cd50556de24906915907602dfa88e22030c30445e",
       "screen_evidence.pyc": "8e77511f9e3d31edf340eaf9dad16d5be5e9415414d1f774923f82c3c1f235a5",
       "seasonal_rewards.pyc": "6ce28e1bec43374f040cb91a41e39ea0a2c799edf677a3e1de173c1840165ea3",
@@ -75,9 +75,10 @@
       "showdown_hud.pyc": "d6f41dd6d3a13ac2e22ccb3ff0975ad0bf308c94cfc586ffe35e95ee64688aec",
       "showdown_mode.pyc": "bfb56fb7387da63db2db2e5939b9f619ef55115c1281683c85ea8250f9ee2c11",
       "side_menu.pyc": "f4dc2d8db8803baba3f8eecef2c08a0c23a53bcbc99742d7a06b5ae5c608c6df",
+      "single_star_power_receipt.pyc": "7b4887179a39925def88dbac55d7c69c17daeb533d7c9589fe3d6bdf4abd282e",
       "spray_receipt.pyc": "65ca0caad1c8d552a66050deff473da23fbe15f25a4ab2e3d2f52e1714d37502",
       "spray_receipt_glyph.pyc": "5be0b296eb722e0b7443247f4b2aecef68dd8ff1d40b7f9e352bce5c6cbd0afd",
-      "stage_manager.pyc": "609077620bc07dc985e5b8e4ad3d2eea16f654e51134ff56e6a3e7ec2d30c708",
+      "stage_manager.pyc": "57efa207dc9d28dd2a3766e8fe51d2631cb1fbef096bada5aeda3b6e22eccf96",
       "star_power_glyph.pyc": "be52f895551a635da9a38dbbf96fe14ed37e0b052b1559ebdd1e808269828a9c",
       "star_power_receipt.pyc": "70a73bcf36513110b1359858a96f48a035db4781b521589cd4e22419936c4e04",
       "state_finder.pyc": "0ecfaa1f8ee6579d552d7cbb744d41e522ae01a81c7696f5f2d7cc6680d3a905",
@@ -159,5 +160,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "33056789649f556b5075baaa4034c163f0cb387a64cfd1bb2836fe801d754e48e6b784d4cc1e15e8d619b63352e130400d3dae2b65a73c7d5cd696c9e00f780d"
+  "signature": "615950e38c2b4d1f8177c51e0b9b843a1a6b192d213df7e0baa7a4db812c97425cb2cc166d306699503aec2a8c8a6fe7bf597f1a85ff11729d04acff6822a90d"
 }
