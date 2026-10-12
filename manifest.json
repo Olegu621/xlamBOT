@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 144,
+    "revision": 145,
     "python": "3.13",
-    "size": 2363403,
-    "sha256": "e12297705890ca5800d7e8c1347e713e5e9c83962cf3e0716a44fccb46cbfa7e",
+    "size": 2363583,
+    "sha256": "40c4b078e9ec655309b537e03724277692a9ca1a0d514095c43bb714a3b07802",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
@@ -13,7 +13,7 @@
       "alternative_reward_glyphs.pyc": "b9c5fa6fd9a266746d5f1be33f19613be41924d562b0f02078b584ba6c199996",
       "battle_memory.pyc": "d6c9d845b40c44f2a27b6723a79fb15b2dd445b41a0b5ae56d47c0d285a31b27",
       "battle_perception.pyc": "20bad9617be9021a5170e1cc20357d732743bdda7f0340c72d6a5ce2d5200123",
-      "bot_instance.pyc": "4010fb8fc4b7a332f736ef33949ffdcc925d0f6567615f07f73647dccefbd5eb",
+      "bot_instance.pyc": "fb8e635aa13d835bd853da9143aeb98ee248e120e114d55415d9b30617cbe268",
       "brawler_blast.pyc": "628661d79aefa7865a7ba9e3ec1cccd058d2e65f4f92abba59f24f6ab3aa1637",
       "brawler_blast_glyphs.pyc": "d996a5e305282772c5744d9729e46b1a5ff02ab545744cfd9a829e8bd32ebd05",
       "brawler_calibration.pyc": "ac710c9060e4ce63ac7748182fdf1fa65deac9efba5642fa88a07b56f68d7fe7",
@@ -160,5 +160,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "3a6548f358665e8e390f5e4ddc1705b26ac3786c66793781d3a78f28800cb3e1939ceaf27460a44371964551ff6f36fac356e5b28742cf2bfbf59b0e0593300f"
+  "signature": "304c1160676d896b037a6a446f09a04433656c8893decd4fa0a5e074894dc01624963f2d7230bad816253568534b362072383f609edb88c27f59ef2a6e2d100f"
 }
