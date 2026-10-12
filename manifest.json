@@ -2,10 +2,10 @@
   "manifest": {
     "repository": "Olegu621/xlamBOT",
     "bootstrap": 1,
-    "revision": 133,
+    "revision": 134,
     "python": "3.13",
-    "size": 2335111,
-    "sha256": "935f26c5de110132f5a577092766b4adc4abff99a66b9c34326a11838e8d8f80",
+    "size": 2335900,
+    "sha256": "fc1a375a6eca8e8f122c055ba3de5706458dd13a3b6fe947069a4701381d9722",
     "files": {
       "ability_buttons.pyc": "e66c007ace6007f2e17e461c6260d6a1a82bf93dcc147cc4ccae596746e698eb",
       "adb_connection.pyc": "f98136a8e4c24e9d4b59768935774b5b80596544ff4e0b745ede17239e09fcd3",
@@ -49,7 +49,7 @@
       "new_brawler_receipt.pyc": "143d8d8e1c3b74898d09cdb917ce19147edb71b51a1e8ce6c86751a668d9d595",
       "new_skin_glyphs.pyc": "185cdd9387c094cf275429d5107ec7451a53c34c6fb734b40c9f3721ac0c72e9",
       "new_skin_receipt.pyc": "d291d81ac0ff928daa8e1dc22bcd21963446c57af1dc491c5ead5aa8a69ae4ad",
-      "onboarding.pyc": "81877cd12e2c59e973a9c8362e68a2e2357abb5345ba107b7d23562d712dd94a",
+      "onboarding.pyc": "2b3d72be43bbbb63aac2c7bc68c76f502936de88daeedae7817fcdba26707df5",
       "onboarding_assets.pyc": "34e123bfd30d7ca3a3e87ffe8ddd7e5e8fb69444dee842f74cfda8974c7c3d6c",
       "onboarding_assets_en.pyc": "e929f2bd3dceda392dec656f10f00f2359acd754dc265a22e3acd1cf00adc147",
       "owned_cards.pyc": "216a809701acc7464a5bfb5623e2ed6b0d92ba02313f76c68341262137bdb450",
@@ -75,7 +75,7 @@
       "spray_receipt.pyc": "65ca0caad1c8d552a66050deff473da23fbe15f25a4ab2e3d2f52e1714d37502",
       "spray_receipt_glyph.pyc": "5be0b296eb722e0b7443247f4b2aecef68dd8ff1d40b7f9e352bce5c6cbd0afd",
       "stage_manager.pyc": "839dc55c78dbec01bc06b4716ec32135b9e10d25f3df461572b67617350982e7",
-      "state_finder.pyc": "9a7d2dd4b0a54135ed2e0ad9b9b238067df0afa35514ac914a318e308b9f5354",
+      "state_finder.pyc": "0ecfaa1f8ee6579d552d7cbb744d41e522ae01a81c7696f5f2d7cc6680d3a905",
       "static/css/calibration.css": "c470e9e50cb1fa754678f4e449113ee5d852f70a1ab1d8efd54f5d4d37488eda",
       "static/css/device-experience.css": "27aee9b14e68e3eafa7decf22b684f140d91a48e1bfc15153510f07ffcf22736",
       "static/css/emulators.css": "784520d5df51e2d6a44595cf1271212a32b1c208943cc422012f3b479ba1e075",
@@ -152,5 +152,5 @@
       "work_modes.pyc": "13fff3b8006cdf3373d9c1b76d37ade1d70ad861fc0d3f8e1c0f0daf489ea808"
     }
   },
-  "signature": "f47a6064191aa73101cf2b11f088a9213a40d7192a78b5d87e0d6c33fda2eede381a253efa88be0566fcfbe8dca7362eacd959a5bd9f5ed73ac2a47d404e5f0b"
+  "signature": "450961880f7a00f1ba2e22dc0ecefc7d450cd0bd5b7a2df2c2841dbc2728a58ecf23831e8d5504d0b6a2d93b2e605888c81ed1700b8f9e3fc40da1b4d4d43a06"
 }
